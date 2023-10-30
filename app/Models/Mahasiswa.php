@@ -21,18 +21,17 @@ class Mahasiswa extends Model
         'kabkota',
         'provinsi',
         'username',
-        'password',
         'noHandphone'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'username', 'username');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'iduser', 'id');
+    // }
 
-    public function dosen_wali()
-    {
-        return $this->belongsTo(Dosen::class, 'nip', 'nip');
-    }
+    // public function dosen_wali()
+    // {
+    //     return $this->belongsTo(Dosen::class, 'nip', 'nip');
+    // }
 }
 

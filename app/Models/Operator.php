@@ -17,8 +17,8 @@ class Operator extends Model
         'username',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'username', 'username');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'username', 'username');
+    // }
 }

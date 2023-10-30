@@ -41,12 +41,11 @@ class OperatorController extends Controller
     {   
         $validated = $request->validate([
             'nama' => 'required',
-            'nim' => 'required|numeric',
-            'angkatan' => 'required|numeric',
+            'nim' => 'required|numeric|max:20',
+            'angkatan' => 'required|max:4|integer',
             'status' => 'required',
             'nip' => 'required|exists:dosen_wali,nip',
         ]);
-
         $username = strtolower(str_replace(' ', '', $request->nama));
         // Cek apakah username sudah digunakan, jika ya, tambahkan angka acak
         if (User::where('username', $username)->exists()) {
