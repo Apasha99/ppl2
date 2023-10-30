@@ -11,6 +11,7 @@ class Departemen extends Model
     use SoftDeletes;
     protected $table = 'departemen';
     protected $fillable = [
+        'nama',
         'username',
     ];
 

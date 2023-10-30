@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class OperatorController extends Controller
 {
@@ -81,47 +82,74 @@ class OperatorController extends Controller
         return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
     }
 
-    public function edit($nip)
+    public function edit(Request $request): View
     {
-        $operators = Operator::where('nip', $nip)->first();
-        $users = User::all();
-        return view('profilOperator', ['users' => $users, 'operators' => $operators]);
+        $user = $request->user();
+        $operators = Operator::join('users', 'operator.iduser', '=', 'users.id')
+                ->select('operator.nama', 'operator.nip', 'users.id', 'users.username')
+                ->first();
+        return view('profilOperator', ['user' => $user,'operators'=>$operators]);
     }
 
-    public function update(Request $request, $nip)
+    public function showEdit(Request $request): View
     {
-        $operators = Operator::where('nip', $nip)->first();
-        $user = User::where('username', $operators->username)->first();
+        $user = $request->user();
+        $operators = Operator::join('users', 'operator.iduser', '=', 'users.id')
+                ->select('operator.nama', 'operator.nip', 'users.id', 'users.username','users.password')
+                ->first();
+        return view('profilOperator-edit', ['user' => $user,'operators'=>$operators]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = $request->user();
 
         $validated = $request->validate([
-            'username' => 'required',
-            'current_password' => 'required',
-            'new_password' => 'required|min:8',
-            'new_confirm_password' => 'required|same:new_password',
-            'foto' => 'required|max:10240|image|mimes:jpeg,png,jpg',
+            'username' => 'nullable|string',
+            'current_password' => 'nullable|string',
+            'new_password' => 'nullable|string|min:8',
+            'new_confirm_password' => 'nullable|same:new_password',
+            'foto' => 'max:10240|image|mimes:jpeg,png,jpg',
         ]);
 
-        if (Hash::check($request->current_password, $user->password)) {
-            // Jika password lama benar
-            $user->fill([
-                'password' => Hash::make($request->new_password), // Menggunakan Hash::make() untuk mengenkripsi password baru
-            ])->save();
+        if ($request->has('foto')) {
+            $fotoPath = $request->file('foto')->store('profile', 'public');
+            $validated['foto'] = $fotoPath;
 
-            //$validated['password'] = Hash::make($validated['password']);
+            $user->update([
+                'foto' => $validated['foto'],
+            ]);
+        }
 
-            $operators->update($validated);
-            $user->update($validated);
+        if ($validated['new_password'] !== null) {
+            if (!Hash::check($validated['current_password'], $user->password)) {
+                return redirect()->route('operator.showEdit')->with('error', 'Password lama tidak cocok.');
+            }
+        }
 
-            if ($request->hasFile('fotoProfil') && $request->file('fotoProfil')->isValid()) {
-                $fotoProfil = $request->file('fotoProfil');
-                $fotoProfilPath = $fotoProfil->store('fotoProfil', 'public');
-                $operators->fotoProfil = $fotoProfilPath;
-                $operators->save();
+        DB::beginTransaction();
+
+        try {
+            $user->update([
+                'username' => $validated['username'],
+            ]);
+
+            Operator::where('iduser', $user->id)->update([
+                'username' => $validated['username'],
+            ]);
+
+            if ($validated['new_password'] !== null) {
+                $user->update([
+                    'password' => Hash::make($validated['new_password'])
+                ]);
             }
 
-            return redirect('profilOperator')->with('status', 'Profil berhasil diupdate');
-        } else {
-            return redirect()->route('operator.edit', $nip)->withErrors($validated)->withInput();
+            DB::commit();
+
+            return redirect()->route('operator.edit')->with('success', 'Profil berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('operator.showEdit')->with('error', 'Gagal memperbarui profil.');
         }
     }
 }

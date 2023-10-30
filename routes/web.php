@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardOperatorController;
 use App\Http\Controllers\DashboardDepartemenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OperatorController;
+use App\Models\Operator;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +39,10 @@ Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboa
 Route::get('daftar_akun', [UserController::class,'daftar_akun'])->middleware(['auth','only_operator']);
 
 
-Route::controller(OperatorController::class)->middleware(['auth', 'only_operator'])->group(function() {
-    Route::get('mahasiswa-create', 'create')->name('mahasiswa.create');
-    Route::post('mahasiswa-create', 'store')->name('mahasiswa.store');
-    Route::get('dashboardOperator/profilOperator/{nip}', 'edit')->name('operator.edit');
-    Route::post('dashboardOperator/profilOperator/{nip}/{username}','update')->name('operator.update');
+Route::middleware(['auth', 'only_operator'])->group(function () {
+    Route::get('mahasiswa-create', [OperatorController::class,'create'])->name('mahasiswa.create');
+    Route::post('mahasiswa-create', [OperatorController::class,'store'])->name('mahasiswa.store');
+    Route::get('/profilOperator', [OperatorController::class, 'edit'])->name('operator.edit');
+    Route::get('/profilOperator-edit', [OperatorController::class, 'showEdit'])->name('operator.showEdit');
+    Route::post('/profilOperator-edit', [OperatorController::class, 'update'])->name('operator.update');
 });

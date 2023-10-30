@@ -11,6 +11,7 @@ class Dosen extends Model
     use SoftDeletes;
     protected $table = 'dosen_wali';
     protected $fillable = [
+        'nama',
         'username',
     ];
 

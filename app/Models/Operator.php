@@ -14,6 +14,7 @@ class Operator extends Model
     protected $table = 'operator';
     protected $primaryKey = 'nip';
     protected $fillable = [
+        'nama',
         'username',
     ];
 
