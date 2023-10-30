@@ -20,7 +20,7 @@ class OnlyMahasiswa
             return redirect('home');
         }
 
-        //kalau yang login departemen
+        //kalau yang login mahasiswa
         return $next($request);
     }
 }

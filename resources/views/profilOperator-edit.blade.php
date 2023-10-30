@@ -59,21 +59,20 @@
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        <div class="col-md-5 text-center d-none d-md-block">
+                            <div class="avatar flex items-center justify-center mt-[100px]">
+                                <div class="w-48 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                    <img src="{{ Auth::user()->getImageURL() }}" />
+                                </div>
+                            </div>
+                            <input type="file" class="form-control mt-3" id="foto" name="foto" accept=".jpg, .jpeg, .png">
+                            @error('foto')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-success">Save</button>
                         <a href="profilOperator" class="btn btn-secondary">Cancel</a>
                     </form>
-                </div>
-                <div class="col-md-5 text-center d-none d-md-block">
-                    <div class="avatar flex items-center justify-center mt-[100px]">
-                        <div class="w-48 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                            <img src="{{ Auth::user()->getImageURL() }}" />
-                        </div>
-                    </div>
-                    <input type="file" class="form-control mt-3" id="foto" name="foto" accept=".jpg, .jpeg, .png">
-                    @error('foto')
-                    <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
                 </div>
             </div>
         </div>

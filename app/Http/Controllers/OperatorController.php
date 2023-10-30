@@ -7,6 +7,7 @@ use App\Models\Dosen;
 use App\Models\User;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -115,10 +116,11 @@ class OperatorController extends Controller
         if ($request->has('foto')) {
             $fotoPath = $request->file('foto')->store('profile', 'public');
             $validated['foto'] = $fotoPath;
-
+            
             $user->update([
                 'foto' => $validated['foto'],
             ]);
+            
         }
 
         if ($validated['new_password'] !== null) {

@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Schema;
 class DashboardOperatorController extends Controller
 {
     public function dashboardOperator(Request $request){
-        // if(!Schema::hasTable('mahasiswa')){
-        //     return "Error: Table 'mahasiswa' does not exist in the database.";
-        // }
-        
         $mahasiswaCount = Mahasiswa::count();
         $dosenCount = Dosen::count();
         $departemenCount = Departemen::count();
