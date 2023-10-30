@@ -13,8 +13,8 @@
     </style>
 <body>
     <section class="vh-100 mt-5" style="background: #000">
-        <h3 class="custom-h3 text-center">Sistem Monitoring Mahasiswa</h3>
         <div class="container py-5 h-100">
+            <h3 class="custom-h3 text-center">Sistem Monitoring Mahasiswa</h3>
             <div class="row d-flex align-items-center justify-content-center h-100">
                 <div class="col-md-8 col-lg-7 col-xl-6">
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"

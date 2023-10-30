@@ -4,7 +4,7 @@
     <section>
         <div class="container-lg my-5">
             <div class="text-center text-light">
-                <div class="display-6">Welcome, {{Auth::user()}}</div>
+                <div class="display-6">Welcome, {{Auth::user()->username}}</div>
             </div>
 
             <div class="row justify-content-center align-items-center gy-3 mt-5">
