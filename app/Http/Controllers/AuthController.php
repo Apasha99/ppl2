@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash; 
 use App\Models\Operator;
+use App\Http\Requests\LoginRequest;
 
 
 class AuthController extends Controller
@@ -16,46 +17,32 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function authenticating(Request $request) {
-        $request->validate([
+    public function authenticate(LoginRequest $request)
+    {
+        $credentials = $request->validate([
             'username' => 'required',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
-        $credentials = $request->only('username', 'password');
-        // Cek login valid
         if (Auth::attempt($credentials)) {
-            if (Auth::user()->role_id == 1 && Auth::user()->status == 'inactive') {
-                Auth::logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                return redirect('/login')
-                    ->with('status', 'failed')
-                    ->with('message', 'Your account is not active yet, please contact admin!');
-            }
-
             $request->session()->regenerate();
-            if (Auth::user()->role_id == 1) {
-                return redirect('dashboardMahasiswa');
-            }
 
-            if (Auth::user()->role_id == 2) {
-                return redirect('dashboardDosen');
+            $user = $request->user(); 
+        
+            if ($user->role_id === 1) {
+                return redirect()->intended('/dashboardMahasiswa');
+            } else if ($user->role_id === 2) {
+                return redirect()->intended('/dashboardDosen');
+            } else if ($user->role_id === 3) {
+                return redirect()->intended('/dashboardOperator');
+            } else if ($user->role_id === 4) {
+                return redirect()->intended('/dashboardDepartemen');
             }
-
-            if (Auth::user()->role_id == 3) {
-                return redirect('dashboardOperator');
-            }
-
-            if (Auth::user()->role_id == 4) {
-                return redirect('dashboardDepartemen');
-            }
+            
         }
+        ;
 
-        Session::flash('status', 'failed');
-        Session::flash('message', 'Login gagal. Periksa username dan password Anda.');
-        return redirect('/login');
+        return back()->with('loginError', 'Login Gagal');
     }
 
     public function logout(Request $request) {

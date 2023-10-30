@@ -31,7 +31,7 @@
             <a class="navbar-brand me-5">
                 <span class="fw-bold">
                     {{-- insert image here --}}
-                    Dashboard {{ Auth::user()->username }}
+                    
                 </span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -44,7 +44,10 @@
                         <a class="nav-link active me-2" aria-current="page" href="dashboardMahasiswa"><i
                                 class="bi bi-house-door-fill"></i> Home</a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link active me-2" aria-current="page" href="{{route('irs.irs')}}"><i
+                                class="bi bi-house-door-fill"></i> IRS</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle justify-content-end" href=""
                             id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
