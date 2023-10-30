@@ -1,135 +1,126 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Mahasiswa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-</head>
-<body>
-<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand me-5">
-                <span class="fw-bold">
-                    Dashboard Operator
-                </span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active me-2" aria-current="page" href="dashboardOperator"><i
-                                class="bi bi-house-door-fill"></i> Home</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle justify-content-end" href="#" id="navbarDropdownMenuLink"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-fill"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                            <li><a class="dropdown-item" href="logout">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
+@extends('layouts.layout')
+
+@section('content')
+    <section>
+        <div class="container-lg my-5">
+            <div class="text-center text-light">
+                <h2>Tambah Mahasiswa Baru</h2>
             </div>
+
+            {{-- <input type="file" class="form-control mt-3" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  />   --}}
+
+            <div class="row justify-content-center my-5 text-light">
+                <div class="col-lg-6">
+                    <form action="{{ route('mahasiswa.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        @error('nama')
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="nama" class="form-label">Nama:</label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" id="nama" name="nama"
+                                placeholder="Masukkan Nama Mahasiswa" required>
+                        </div>
+
+                        @error('nim')
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="nim" class="form-label">NIM:</label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" id="nim" name="nim"
+                                placeholder="Masukkan NIM Mahasiswa" required>
+                        </div>
+
+                        @error('angkatan')
+                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="angkatan" class="form-label">Angkatan:</label>
+                        <div class="input-group mb-4">
+                            <select class="form-select" name="angkatan" id="angkatan" required>
+                                <option selected value="">-- Pilih Angkatan --</option>
+                                @for ($i = 18; $i <= 23; $i++)
+                                    <option value="20{{ $i }}">20{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        @error('status')
+                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="status" class="form-label">Status:</label>
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="active" name="status" value="active" checked>
+                                <label class="form-check-label" for="active">Aktif</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="inactive" name="status"
+                                    value="inactive">
+                                <label class="form-check-label" for="inactive">Tidak aktif</label>
+                            </div>
+                        </div>
+
+                        @error('email')
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="email" class="form-label">Email:</label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" id="email" name="email"
+                                placeholder="Generate Email Mahasiswa" required disabled>
+                            <button type="button" class="btn btn-outline-warning"
+                                onclick="generateEmail()">Generate</button>
+                        </div>
+
+                        @error('password')
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="password" class="form-label">Password:</label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" id="password" name="password"
+                                placeholder="Generate Password Mahasiswa" required disabled>
+                            <button type="button" class="btn btn-outline-warning"
+                                onclick="generatePassword()">Generate</button>
+                        </div>
+
+                        @error('nip')
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                        @enderror
+                        <label for="nip" class="form-label">NIP Dosen Wali:</label>
+                        <div class="input-group mb-4">
+                            <input type="text" class="form-control" id="nip" name="nip"
+                                placeholder="Masukkan NIP Dosen Wali" required>
+                        </div>
+
+                        <div class="text-center my-5">
+                            <button type="submit" class="btn btn-success px-3">Tambah Data</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
         </div>
-    </nav>
 
-    <h1 style="text-align: center; color: #5D6D7E;">Tambah Mahasiswa Baru</h1>
-    <div class="mt-5 ">
-        <form action="{{ route('mahasiswa.store') }}" method="POST" enctype="multipart/form-data" style="width: 50%; margin: auto;">
-            @csrf
-            <!-- Form fields for mahasiswa attributes -->
-            <div style="margin-bottom: 10px;">
-                <label for="nama">Nama:</label>
-                <input type="text" name="nama" id="nama" required style="width: 100%;">
-                @error('nama')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="nim">NIM:</label>
-                <input type="text" name="nim" id="nim" required style="width: 100%;">
-                @error('nim')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="angkatan">Angkatan:</label>
-                <select name="angkatan" id="angkatan" required style="width: 100%;">
-                    <option value="">-- Pilih Angkatan --</option>
-                    @for ($i = 18; $i <= 23; $i++)
-                        <option value="20{{$i}}">20{{$i}}</option>
-                    @endfor
-                </select>
-                @error('angkatan')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="status">Status:</label><br>
-                <input type="radio" id="active" name="status" value="active">
-                <label for="active">Aktif</label><br>
-                <input type="radio" id="inactive" name="status" value="inactive">
-                <label for="inactive">Tidak aktif</label>
-                @error('status')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="username">Username:</label>
-                <input type="text" name="username" id="username" required style="width: 100%;">
-                <button type="button" class="btn btn-primary" onclick="generateUsername()" style=" margin-top:10px;">Generate</button>
-                @error('username')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="password">Password:</label>
-                <input type="text" name="password" id="password" required style="width: 100%;">
-                <button type="button" class="btn btn-primary"" onclick="generatePassword()" style="margin-top:10px">Generate</button>
-                @error('password')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="nip">Nama Doswal:</label>
-                <select name="nip" id="nip" required style="width: 100%;">
-                    <option value="">Pilih Dosen Wali</option>
-                    @foreach($dosens as $dosen)
-                        <option value="{{ $dosen->nip }}">{{ $dosen->nama }}</option>
-                    @endforeach
-                </select>
+    </section>
+@endsection
 
-                @error('nip')
-                    <div class="alert alert-danger">{{$message}}</div>
-                @enderror
-            </div>
-            <button type="submit" style="background-color: #1A5276; color: white; padding: 10px 20px; border: none; cursor: pointer;">Tambah Data</button>
-        </form>
-    </div>
-
+@section('script')
     <script>
-        // Function to generate a random username
-        function generateUsername() {
-            var usernameField = document.getElementById("username");
+        // Function to generate a random email
+        function generateEmail() {
+            var emailField = document.getElementById("email");
             var namaField = document.getElementById("nama");
             if (namaField.value) {
-                usernameField.value = namaField.value.replace(/\s/g, '');
+                emailField.value = namaField.value.replace(/\s/g, '') + '@example.com';
             }
         }
 
         // Function to generate a random password
         function generatePassword() {
             var passwordField = document.getElementById("password");
-            passwordField.value = Math.random().toString(36).substring(2, 10); // Generates an 8-character alphanumeric password
+            passwordField.value = Math.random().toString(36).substring(2,
+                10); // Generates an 8-character alphanumeric password
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-</body>
-</html>
+@endsection
