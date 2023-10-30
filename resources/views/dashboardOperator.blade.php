@@ -69,9 +69,9 @@
                             <td>{{ $mahasiswa->nim }}</td>
                             <td>{{ $mahasiswa->angkatan }}</td>
                             <td>{{ $mahasiswa->status }}</td>
-                            <td>{{ $mahasiswa->dosen_wali->nip }}</td>
-                            <td>{{ $mahasiswa->dosen_wali->nama}}</td>
-                            <td>{{ $mahasiswa->email }}</td>
+                            <td>{{ $mahasiswa->nip}}</td>
+                            <td>{{ $mahasiswa->dosen_nama}}</td>
+                            <td>{{ $mahasiswa->username }}</td>
                             <td>
                                 <button class="btn btn-warning btn-sm">Edit</button>
                                 <button class="btn btn-danger btn-sm">Delete</button>

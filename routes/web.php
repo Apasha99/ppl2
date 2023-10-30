@@ -27,17 +27,20 @@ Route::get('/', function () {
 Route::get('login', [AuthController::class,'login'])->name('login');
 Route::post('login', [AuthController::class, 'authenticating']);
 
-Route::middleware('auth')->group(function(){
-    Route::get('logout', [AuthController::class,'logout']);
-    Route::get('dashboardMahasiswa', [DashboardMahasiswaController::class,'dashboardMahasiswa'])->middleware('only_mahasiswa');
-    Route::get('dashboardDosen', [DashboardDosenController::class,'dashboardDosen'])->middleware('only_dosen');
+Route::controller(AuthController::class)->middleware('auth')->group(function(){
+    Route::get('logout', 'logout');
+});
 
-    Route::get('dashboardOperator', [DashboardOperatorController::class,'dashboardOperator'])->middleware('only_operator');
-    Route::get('mahasiswa-create', [OperatorController::class,'create'])->name('mahasiswa.create')->middleware('only_operator');
-    Route::post('mahasiswa-create', [OperatorController::class,'store'])->name('mahasiswa.store')->middleware('only_operator');
-    Route::get('dashboardOperator/profilOperator/{nip}', [OperatorController::class, 'edit'])->name('operator.edit')->middleware('only_operator');
-    Route::post('dashboardOperator/profilOperator/{nip}/{username}', [OperatorController::class, 'update'])->name('operator.update')->middleware('only_operator');
+Route::get('dashboardMahasiswa', [DashboardMahasiswaController::class,'dashboardMahasiswa'])->middleware(['auth','only_mahasiswa']);
+Route::get('dashboardDosen', [DashboardDosenController::class,'dashboardDosen'])->middleware(['auth','only_dosen']);
+Route::get('dashboardOperator', [DashboardOperatorController::class,'dashboardOperator'])->middleware(['auth','only_operator']);
+Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware(['auth','only_departemen']);
+Route::get('daftar_akun', [UserController::class,'daftar_akun'])->middleware(['auth','only_operator']);
 
-    Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware('only_departemen');
-    Route::get('daftar_akun', [UserController::class,'daftar_akun'])->middleware('only_operator');
+
+Route::controller(OperatorController::class)->middleware(['auth', 'only_operator'])->group(function() {
+    Route::get('mahasiswa-create', 'create')->name('mahasiswa.create');
+    Route::post('mahasiswa-create', 'store')->name('mahasiswa.store');
+    Route::get('dashboardOperator/profilOperator/{nip}', 'edit')->name('operator.edit');
+    Route::post('dashboardOperator/profilOperator/{nip}/{username}','update')->name('operator.update');
 });

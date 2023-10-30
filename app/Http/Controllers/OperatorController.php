@@ -17,7 +17,7 @@ class OperatorController extends Controller
     {
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.username', '=', 'users.username')
             ->join('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nip', 'dosen_wali.nama as dosen_nama')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'users.password','dosen_wali.nip', 'dosen_wali.nama as dosen_nama')
             ->get();
 
         $users = User::join('roles', 'users.role_id', '=', 'roles.id')
@@ -41,8 +41,12 @@ class OperatorController extends Controller
     {   
         $validated = $request->validate([
             'nama' => 'required',
-            'nim' => 'required|numeric|max:20',
-            'angkatan' => 'required|max:4|integer',
+            'nim' => [
+                'required',
+                'string',
+                'regex:/^\d{1,20}$/',
+            ],
+            'angkatan' => 'required|integer',
             'status' => 'required',
             'nip' => 'required|exists:dosen_wali,nip',
         ]);
@@ -54,11 +58,11 @@ class OperatorController extends Controller
 
         $password = Str::random(8);
 
-        DB::transaction(function () use ($request, $username) {
+        DB::transaction(function () use ($request, $username, $password) {
             // Membuat user baru
             $user = new User;
             $user->username = $username;
-            $user->password = $request->password;
+            $user->password = $password;
             $user->role_id = 1; // mengatur role_id menjadi 1
             $user->save();
 
@@ -94,7 +98,7 @@ class OperatorController extends Controller
             'current_password' => 'required',
             'new_password' => 'required|min:8',
             'new_confirm_password' => 'required|same:new_password',
-            'fotoProfil' => 'required|max:10240|image|mimes:jpeg,png,jpg',
+            'foto' => 'required|max:10240|image|mimes:jpeg,png,jpg',
         ]);
 
         if (Hash::check($request->current_password, $user->password)) {

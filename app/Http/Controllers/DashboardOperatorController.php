@@ -22,7 +22,7 @@ class DashboardOperatorController extends Controller
         $departemenCount = Departemen::count();
         $userCount = User::count();
         
-        $mahasiswas = Mahasiswa::join('users','mahasiswa.username', '=', 'users.username')
+        $mahasiswas = Mahasiswa::join('users','mahasiswa.iduser', '=', 'users.id')
                 ->join('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username','users.password','dosen_wali.nip','dosen_wali.nama as dosen_nama')
                 ->get();

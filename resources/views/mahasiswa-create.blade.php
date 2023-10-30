@@ -61,15 +61,15 @@
                             </div>
                         </div>
 
-                        @error('email')
+                        @error('username')
                             <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
                         @enderror
-                        <label for="email" class="form-label">Email:</label>
+                        <label for="username" class="form-label">Username:</label>
                         <div class="input-group mb-4">
-                            <input type="text" class="form-control" id="email" name="email"
-                                placeholder="Generate Email Mahasiswa" required disabled>
+                            <input type="text" class="form-control" id="username" name="username"
+                                placeholder="Generate Username Mahasiswa" required disabled>
                             <button type="button" class="btn btn-outline-warning"
-                                onclick="generateEmail()">Generate</button>
+                                onclick="generateUsername()">Generate</button>
                         </div>
 
                         @error('password')
@@ -83,13 +83,18 @@
                                 onclick="generatePassword()">Generate</button>
                         </div>
 
-                        @error('nip')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
-                        @enderror
-                        <label for="nip" class="form-label">NIP Dosen Wali:</label>
-                        <div class="input-group mb-4">
-                            <input type="text" class="form-control" id="nip" name="nip"
-                                placeholder="Masukkan NIP Dosen Wali" required>
+                        <div style="margin-bottom: 10px;">
+                            <label for="nip">Nama Dosen wali:</label>
+                            <select name="nip" id="nip" required style="width: 100%;">
+                                <option value="">Pilih Dosen Wali</option>
+                                @foreach($dosens as $dosen)
+                                    <option value="{{ $dosen->nip }}">{{ $dosen->nama }}</option>
+                                @endforeach
+                            </select>
+
+                            @error('nip')
+                                <div class="alert alert-danger">{{$message}}</div>
+                            @enderror
                         </div>
 
                         <div class="text-center my-5">
@@ -107,12 +112,12 @@
 
 @section('script')
     <script>
-        // Function to generate a random email
-        function generateEmail() {
-            var emailField = document.getElementById("email");
+        // Function to generate a random username
+        function generateUsername() {
+            var usernameField = document.getElementById("username");
             var namaField = document.getElementById("nama");
             if (namaField.value) {
-                emailField.value = namaField.value.replace(/\s/g, '') + '@example.com';
+                usernameField.value = namaField.value.replace(/\s/g, '');
             }
         }
 
