@@ -45,7 +45,7 @@
                                 class="bi bi-house-door-fill"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active me-2" aria-current="page" href="{{route('irs.irs')}}"><i
+                        <a class="nav-link active me-2" aria-current="page" href="{{route('irs.index')}}"><i
                                 class="bi bi-house-door-fill"></i> IRS</a>
                     </li>
                     <li class="nav-item dropdown">
@@ -65,7 +65,7 @@
 
     @yield('navbar')
 
-    <div class="container-lg py-2">
+    <div class="container-lg py-2 text-light">
         @yield('content')
     </div>
 

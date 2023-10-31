@@ -49,9 +49,9 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {
-    Route::get('/irs', 'index')->name('irs.irs');
-    Route::get('irs-create', 'create')->name('irs.create');
-    Route::post('irs/store', 'store')->name('irs.store');
+    Route::get('/irs', 'index')->name('irs.index');
+    Route::get('/irs-create', 'create')->name('irs.create');
+    Route::post('/irs-store', 'store')->name('irs.store');
 
 });
 

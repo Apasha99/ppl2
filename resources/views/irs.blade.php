@@ -7,18 +7,17 @@
     <br>
     <h2 style="color:#fff">Daftar IRS</h2>
     @if(session('success'))
-    <div class="alert alert-error">
+    <div class="alert alert-error text-light">
         {{ session('success') }}
     </div>
     @endif
     @if(session('error'))
-    <div class="alert alert-error">
+    <div class="alert alert-error text-light">
         {{ session('error') }}
     </div>
     @endif
     @if ($irsData->count() > 0)
-        <p>Mahasiswa: {{ $mahasiswa->first()->nama }} (NIM: {{ $mahasiswa->first()->nim }})</p>
-
+        <p> <span style="color:#fff"> Mahasiswa: {{ Auth::user()->mahasiswa->nama }} (NIM: {{ Auth::user()->mahasiswa->nim }})</p>
         <div class="dropdown">
             <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownSemester" data-bs-toggle="dropdown" aria-expanded="false">
                 Pilih Semester Aktif

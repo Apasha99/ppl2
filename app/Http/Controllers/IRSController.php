@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\IRS;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule; // Add this for validation rule
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 
 class IRSController extends Controller
 {
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-
         $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
 
         return view('irs', [
@@ -23,54 +24,51 @@ class IRSController extends Controller
 
     public function create(Request $request)
     {
-        $nim = $request->input('nim');
-        $mahasiswa = Mahasiswa::all();
-
-        // Get the active semesters for the given student
-        $semesterAktifIRS = IRS::where('nim', $nim)->pluck('semester_aktif')->all();
-
-        // Check if IRS is already filled for the given student and active semester
-        $irsSudahDiisi = IRS::where('nim', $nim)->where('semester_aktif', $semesterAktifIRS)->exists();
-
-        // Create an array of available semesters by diffing the full range and active semesters
-        $availableSemesters = array_diff(range(1, 14), $semesterAktifIRS);
-        
-        return view('irs-create', compact('availableSemesters', 'irsSudahDiisi'));
-    }
-
-    public function store(Request $request)
-    {
-        // Store the uploaded file
-        $scanIRSPath = $request->file('scanIRS')->store('scanIRS', 'local');
-
-        $validatedData = $request->validate([
-            'semester_aktif' => ['required', 'numeric', Rule::in(range(1, 14))],
-            'jumlah_sks' => 'required|numeric|between:1,24',
-            'scanIRS' => 'required|file|mimes:pdf|max:10240',
-            'nim' => ['required', 'exists:mahasiswa,nim'],
-        ]);
-
-        // Retrieve the 'nip' from the related Mahasiswa model based on the student's data
-        $nim = $request->input('nim');
+        $nim = $request->user()->mahasiswa->nim; // Use the logged-in user to get the nim
         $mahasiswa = Mahasiswa::where('nim', $nim)->first();
 
-        // Check if the Mahasiswa exists (you can add additional checks here)
         if ($mahasiswa) {
-            // Include the 'status' and 'dosen_wali' fields in the data
-            $validatedData['status'] = 'pending';
-            $validatedData['dosen_wali'] = $mahasiswa->nip;
+            // Get the active semesters for the given student
+            $semesterAktifIRS = IRS::where('nim', $nim)->pluck('semester_aktif')->toArray();
 
-            // Set the 'nim' field to match the provided 'nim'
-            $validatedData['nim'] = $nim;
-
-            // Store the file path in the database
-            $validatedData['scanIRS'] = $scanIRSPath;
-
-            IRS::create($validatedData);
-
-            return redirect()->route('irs.create')->with('success', 'Data IRS berhasil ditambahkan!');
+            // Create an array of available semesters by diffing the full range and active semesters
+            $availableSemesters = array_diff(range(1, 14), $semesterAktifIRS);
         } else {
-            return redirect()->route('irs.create')->with('error', 'Mahasiswa not found with the provided nim.');
+            // Handle the case where the Mahasiswa is not found
+            return redirect()->route('irs.index')->with('error', 'Mahasiswa not found with the provided nim.');
+        }
+        
+        return view('irs-create', compact('availableSemesters', 'mahasiswa'));
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'semester_aktif' => ['required', 'numeric','unique:irs'], // Correct the validation rule syntax
+            'jumlah_sks' => ['required', 'numeric', 'between:1,24'], // Correct the validation rule syntax
+            'scanIRS' => ['required', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
+        ]);
+
+        $PDFPath = null;
+
+        if ($request->hasFile('scanIRS') && $request->file('scanIRS')->isValid()) {
+            $PDFPath = $request->file('scanIRS')->store('file', 'public');
+        }
+
+        $irs = new IRS();
+        $irs->semester_aktif = $request->input('semester_aktif');
+        $irs->jumlah_sks = $request->input('jumlah_sks');
+        $irs->status = 'pending';
+        $irs->scanIRS = $PDFPath; // Assign the PDF path here
+        $irs->nim = $request->user()->mahasiswa->nim;
+        $irs->nip = $request->user()->mahasiswa->nip;
+        $saved = $irs->save();
+
+        if ($saved) {
+            return redirect()->route('irs.index')->with('success', 'IRS added successfully');
+        } else {
+            return redirect()->route('irs.create')->with('error', 'Failed to add IRS');
         }
     }
+
 }

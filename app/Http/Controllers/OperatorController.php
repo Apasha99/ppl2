@@ -128,7 +128,7 @@ class OperatorController extends Controller
                 return redirect()->route('operator.showEdit')->with('error', 'Password lama tidak cocok.');
             }
         }
-
+        
         DB::beginTransaction();
 
         try {
