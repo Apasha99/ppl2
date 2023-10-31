@@ -52,6 +52,7 @@ Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa'])-
     Route::get('/irs', 'index')->name('irs.irs');
     Route::get('irs-create', 'create')->name('irs.create');
     Route::post('irs/store', 'store')->name('irs.store');
+    Route::get('khs-create', [KHSController::class, 'create'])->name('khs.create');
 
 });
 
