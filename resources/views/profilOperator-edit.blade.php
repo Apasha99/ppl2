@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.layoutOperator')
 
 @section('content')
     <section id="profil-oper">
@@ -6,12 +6,12 @@
             <div class="text-center">
                 <h2>Edit Profil</h2>
             </div>
-            @if(session('error'))
-            <div class="alert alert-error">
-                {{ session('error') }}
+            @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
             @endif
-            <div class="row my-4 g-4 justify-content-around align-items-center">
+            <div class="row my-4 g-4 justify-content-center align-items-center">
                 <div class="col-md-5 text-center text-md-start">
                     <form action="{{ route('operator.update',[Auth::user()->id]) }}" method="POST" enctype="multipart/form-data">
                         @csrf
@@ -38,7 +38,7 @@
 
                         <label for="current_password" class="form-label">Password Lama</label>
                         <div class="input-group mb-3">
-                            <input type="password" class="form-control" id="current_password" name="current_password" >
+                            <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Masukkan Password Lama">
                             @error('current_password')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
@@ -53,27 +53,27 @@
                         </div>
                         
                         <label for="new_confirm_password" class="form-label">Konfirmasi Password Baru</label>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-5">
                             <input type="password" class="form-control" id="new_confirm_password" name="new_confirm_password" placeholder="Masukkan Konfirmasi Password Baru">
                             @error('new_confirm_password')
                             <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-5 text-center d-none d-md-block">
-                            <div class="avatar flex items-center justify-center mt-[100px]">
-                                <div class="w-48 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                    <img src="{{ Auth::user()->getImageURL() }}" />
-                                </div>
-                            </div>
-                            <input type="file" class="form-control mt-3" id="foto" name="foto" accept=".jpg, .jpeg, .png">
-                            @error('foto')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <button type="submit" class="btn btn-success">Save</button>
+
+                        <button type="submit" class="btn btn-success me-2">Save</button>
                         <a href="profilOperator" class="btn btn-secondary">Cancel</a>
                     </form>
                 </div>
+
+                <div class="col-md-4 ms-5 text-center d-none d-md-block">
+                    <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-50 w-50 mb-2" alt="foto-profil" />
+                    <h5>Foto Profil</h5>
+                    <input type="file" class="form-control mt-3" id="foto" name="foto" accept=".jpg, .jpeg, .png">
+                    @error('fotoProfil')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
             </div>
         </div>
     </section>
