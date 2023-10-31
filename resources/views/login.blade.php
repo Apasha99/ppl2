@@ -12,7 +12,7 @@
         }
     </style>
 <body>
-    <section class="vh-100 mt-5" style="background: #000">
+    <section class="vh-100" style="background: #000">
         <div class="container py-5 h-100">
             <h3 class="custom-h3 text-center">Sistem Monitoring Mahasiswa</h3>
             <div class="row d-flex align-items-center justify-content-center h-100">
