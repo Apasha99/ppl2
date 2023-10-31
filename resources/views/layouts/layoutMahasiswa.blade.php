@@ -31,7 +31,7 @@
             <a class="navbar-brand me-5">
                 <span class="fw-bold">
                     {{-- insert image here --}}
-                    
+                    Dashboard Mahasiswa
                 </span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -41,13 +41,10 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active me-2" aria-current="page" href="dashboardMahasiswa"><i
+                        <a class="nav-link active me-2" aria-current="page" href="#"><i
                                 class="bi bi-house-door-fill"></i> Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active me-2" aria-current="page" href="{{route('irs.irs')}}"><i
-                                class="bi bi-house-door-fill"></i> IRS</a>
-                    </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle justify-content-end" href=""
                             id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,10 +60,17 @@
         </div>
     </nav>
 
-    @yield('navbar')
-
-    <div class="container-lg py-2">
-        @yield('content')
+    <div class="d-flex align-items-start px-5 mt-2">
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</button>
+          <button class="nav-link" id="v-pills-irs-tab" data-bs-toggle="pill" data-bs-target="#v-pills-irs" type="button" role="tab" aria-controls="v-pills-irs" aria-selected="true">IRS</button>
+          <button class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" aria-controls="v-pills-profile" aria-selected="false">Profile</button>
+          <button class="nav-link" id="v-pills-messages-tab" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button" role="tab" aria-controls="v-pills-messages" aria-selected="false">Messages</button>
+          <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Settings</button>
+        </div>
+        <div class="container-lg px-5 text-light">
+            @yield('content')
+        </div>
     </div>
 
     <!-- Scripts -->
