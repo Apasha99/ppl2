@@ -6,21 +6,22 @@
         <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
             <div class="container-lg my-5 text-light">
                 <div class="text-center">
-                    <div class="display-6">Welcome, {{Auth::user()->username}} </div>
+                    <div class="display-6">Welcome, {{ Auth::user()->username }} </div>
                 </div>
 
-                <div class="row mt-5 py-5 justify-content-center align-items-center">
+                <div class="d-flex justify-content-center align-items-center">
+                <div class="row mt-5 py-5 d-flex justify-content-center align-items-center">
                     <!-- justify-content-around means spreading around the content if there's any empty space & the gaps stayed equal -->
                     <div class="col-6 col-lg-3">
-                        <img src="{{ Auth::user()->getImageURL() }}" class="img-fluid rounded" alt="foto-profil">
+                        <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-100 w-100" alt="foto-profil" />
                     </div>
-        
-                    <div class="col-lg-6">
+
+                    <div class="col-lg-6 ms-4">
                         <table>
                             <tr>
                                 <td>Nama</td>
                                 <td>:</td>
-                                <td>{{ $mahasiswa->nama}}</td>
+                                <td>{{ $mahasiswa->nama }}</td>
                             </tr>
                             <tr>
                                 <td>NIM</td>
@@ -55,42 +56,70 @@
                         </table>
                     </div>
                 </div>
+            </div>
 
                 {{-- irs khs --}}
-                <div class="row justify-content-around text-dark">
-                    <div class="col-lg-4 bg-light border border-dark border-2 rounded ps-5 pt-3">
-                            <h5 class="align-items-center">IRS</h5>
-                            <p>Semester Aktif 
-                                <br><span class="text-muted">insert sem aktif disini</span>
-                            </p>
+                <div class="container-lg d-flex justify-content-around">
+                <div class="row row-cols-1 row-cols-md-2 g-5 mt-3">
+                    <div class="col">
+                        <div class="card bg-dark text-light border-light border-5 h-100 w-100">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <!-- Replace the <img> with a large icon -->
+                                    <i class="bi bi-journals bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body ms-4">
+                                        <h5 class="card-title">IRS</h5>
+                                        <p class="card-text">Semester Aktif
+                                            <br><span class="small">insert sem aktif disini</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-4 bg-light border border-dark border-2 rounded ps-5 pt-3">
-                            <h5 class="align-items-center">KHS</h5>
-                            <p>SKS Kumulatif
-                                <br><span class="text-muted">insert sks kum disini</span>
-                            </p>
-                            <p>IP Kumulatif
-                                <br><span class="text-muted">insert ip kum disini</span>
-                            </p>
+                    <div class="col">
+                        <div class="card bg-dark text-light border-light border-5 h-100 w-100">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <!-- Replace the <img> with a large icon -->
+                                    <i class="bi bi-journal-medical bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body ms-4">
+                                        <h5 class="card-title">KHS</h5>
+                                        <p class="card-text">SKS Kumulatif
+                                            <br><span class="small">insert sem aktif disini</span>
+                                        </p>
+                                        <p class="card-text">IP Kumulatif
+                                            <br><span class="small">insert ip kum disini</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        {{-- IRS --}}
-        <div class="tab-pane fade" id="v-pills-irs" role="tabpanel" aria-labelledby="v-pills-irs-tab">
-            
-        </div>
+    {{-- IRS --}}
+    <div class="tab-pane fade" id="v-pills-irs" role="tabpanel" aria-labelledby="v-pills-irs-tab">
 
-        {{-- KHS --}}
-        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+    </div>
 
-        {{-- PKL --}}
-        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">...</div>
+    {{-- KHS --}}
+    <div class="tab-pane fade" id="v-pills-khs" role="tabpanel" aria-labelledby="v-pills-khs-tab">
+        
+    </div>
 
-        {{-- SKRIPSI --}}
-        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
+    {{-- PKL --}}
+    <div class="tab-pane fade" id="v-pills-pkl" role="tabpanel" aria-labelledby="v-pills-pkl-tab">...</div>
+
+    {{-- SKRIPSI --}}
+    <div class="tab-pane fade" id="v-pills-skripsi" role="tabpanel" aria-labelledby="v-pills-skripsi-tab">...</div>
     </div>
 @endsection
-
-
