@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use App\Models\User;
+use App\Models\IRS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,11 +20,11 @@ class DashboardMahasiswaController extends Controller
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama')
                 ->first();
             $user = User::select('foto');
-
+            $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa,'user'=>$user]);
+                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa,'user'=>$user,'irsData'=>$irsData]);
             }
         }
 
