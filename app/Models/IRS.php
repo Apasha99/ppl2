@@ -13,13 +13,7 @@ class IRS extends Model
 
     protected $table = 'irs';
 
-    protected $fillable = [
-        'semester_aktif',
-        'scanIRS',
-        'jumlah_sks',
-        'nim',
-        'nip',
-    ];
+    protected $fillable = ['semester_aktif', 'jumlah_sks', 'scan_irs', 'status'];
 
     public static function rules($semester, $nim)
     {
@@ -29,7 +23,7 @@ class IRS extends Model
                 'integer',
                 'between:1,14',
             ],
-            'scanIRS' => [
+            'scanIRS' => [  // Changed 'scanIRS' to 'scan_irs'
                 'required',
                 'file',
                 'mimes:pdf',
@@ -48,8 +42,24 @@ class IRS extends Model
             ],
             'nip' => [
                 'required',
-                'exists:dosen_wali,nip',
+                'exists:mahasiswa,nip',
+                new Exists('mahasiswa', 'nip', function ($query) use ($nim) {
+                    $query->where('nim', $nim);
+                }),
             ],
         ];
     }
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class, 'nim', 'nim');
+    }
+
+    public function dosenWali()
+    {
+        return $this->belongsTo(Dosen::class, 'dosen_wali', 'nip');
+    }
+
 }
+
+

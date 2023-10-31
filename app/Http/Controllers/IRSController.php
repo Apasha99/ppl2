@@ -5,114 +5,72 @@ namespace App\Http\Controllers;
 use App\Models\IRS;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule; // Add this for validation rule
 
 class IRSController extends Controller
 {
     public function index(Request $request)
     {
-        $mahasiswa = Mahasiswa::select('nama','nim')->get();
-        
-        $irsData = IRS::select('nim','status','jumlah_sks','semester_aktif')->get();
+        $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
+
+        $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
 
         return view('irs', [
             'mahasiswa' => $mahasiswa,
             'irsData' => $irsData,
         ]);
     }
+
     public function create(Request $request)
     {
         $nim = $request->input('nim');
-        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
-        $semesterSaatIni = $this->hitungSemesterSaatIni();
+        $mahasiswa = Mahasiswa::all();
 
-        return view('irs-create', [
-            'mahasiswa' => $mahasiswa,
-            'semesterSaatIni' => $semesterSaatIni,
-        ]);
+        // Get the active semesters for the given student
+        $semesterAktifIRS = IRS::where('nim', $nim)->pluck('semester_aktif')->all();
+
+        // Check if IRS is already filled for the given student and active semester
+        $irsSudahDiisi = IRS::where('nim', $nim)->where('semester_aktif', $semesterAktifIRS)->exists();
+
+        // Create an array of available semesters by diffing the full range and active semesters
+        $availableSemesters = array_diff(range(1, 14), $semesterAktifIRS);
+        
+        return view('irs-create', compact('availableSemesters', 'irsSudahDiisi'));
     }
+
     public function store(Request $request)
     {
+        // Store the uploaded file
+        $scanIRSPath = $request->file('scanIRS')->store('scanIRS', 'local');
+
+        $validatedData = $request->validate([
+            'semester_aktif' => ['required', 'numeric', Rule::in(range(1, 14))],
+            'jumlah_sks' => 'required|numeric|between:1,24',
+            'scanIRS' => 'required|file|mimes:pdf|max:10240',
+            'nim' => ['required', 'exists:mahasiswa,nim'],
+        ]);
+
+        // Retrieve the 'nip' from the related Mahasiswa model based on the student's data
         $nim = $request->input('nim');
+        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
 
-        // Validasi input sesuai kebutuhan
-        $validatedData = $request->validate(IRS::rules($request->input('semester_aktif'), $nim));
+        // Check if the Mahasiswa exists (you can add additional checks here)
+        if ($mahasiswa) {
+            // Include the 'status' and 'dosen_wali' fields in the data
+            $validatedData['status'] = 'pending';
+            $validatedData['dosen_wali'] = $mahasiswa->nip;
 
-        // Menyimpan data IRS
-        $irs = new IRS($validatedData);
-        $irs->save();
+            // Set the 'nim' field to match the provided 'nim'
+            $validatedData['nim'] = $nim;
 
-        return redirect()->route('irs.irs', ['nim' => $nim])->with('success', 'IRS berhasil ditambahkan.');
-    }
+            // Store the file path in the database
+            $validatedData['scanIRS'] = $scanIRSPath;
 
+            IRS::create($validatedData);
 
-
-    // public function create(Request $request)
-    // {
-    //     $nim = $request->irs;
-    //     $irs = IRS::where('nim', $nim)->first();
-        
-    //     if (!$irs) {
-    //         return redirect()->route('irs.create')->with('error', 'Mahasiswa tidak ditemukan.');
-    //     }
-
-    //     // Mendapatkan daftar IRS yang sudah diisi
-    //     $irsSudahDiisi = IRS::where('nim', $nim)->pluck('semester_aktif');
-
-    //     return view('irs-create', [
-    //         'irs' => $irs,
-    //         'irsSudahDiisi' => $irsSudahDiisi,
-    //     ]);
-    // }
-
-    // public function store(Request $request)
-    // {
-    //     // Validasi input sesuai kebutuhan
-
-    //     $nim = $request->irs;
-    //     $irs = IRS::where('nim', $nim)->first();
-        
-    //     if (!$irs) {
-    //         return redirect()->route('irs.create')->with('error', 'Mahasiswa tidak ditemukan.');
-    //     }
-
-    //     $irs = new IRS();
-    //     $irs->semester_aktif = $request->input('semester_aktif');
-    //     $irs->scanIRS = $request->input('scanIRS');
-    //     $irs->jumlah_sks = $request->input('jumlah_sks');
-    //     $irs->status = 'Pending';
-    //     $irs->nim = $nim;
-
-    //     // Anda perlu mendapatkan NIP dari data mahasiswa, Anda dapat melakukannya seperti ini
-    //     $mahasiswa = Mahasiswa::where('nim', $nim)->first();
-    //     if ($mahasiswa) {
-    //         $irs->nip = $mahasiswa->nip;
-    //     } else {
-    //         return redirect()->route('irs.create')->with('error', 'NIP tidak ditemukan.');
-    //     }
-
-    //     $irs->save();
-
-    //     return redirect()->route('irs.create')->with('success', 'IRS berhasil ditambahkan.');
-    // }
-
-    private function hitungSemesterSaatIni()
-    {
-        $bulanSekarang = date('m'); // Mengambil bulan saat ini (format 'm' adalah format angka bulan)
-        $tahunAngkatan = // Ambil tahun angkatan dari data mahasiswa (misalnya, $mahasiswa->angkatan);
-
-        // Menghitung tahun dan semester saat ini
-        $tahunSekarang = date('Y'); // Mengambil tahun saat ini
-        $selisihTahun = $tahunSekarang - $tahunAngkatan;
-
-        if ($bulanSekarang >= 1 && $bulanSekarang <= 7) {
-            // Semester ganjil (Januari - Juli)
-            return ($selisihTahun * 2) + 1;
+            return redirect()->route('irs.create')->with('success', 'Data IRS berhasil ditambahkan!');
         } else {
-            // Semester genap (Agustus - Desember)
-            return $selisihTahun * 2;
+            return redirect()->route('irs.create')->with('error', 'Mahasiswa not found with the provided nim.');
         }
     }
-
-    // Tambahkan fungsi pengiriman IRS ke dosen wali di sini
 }
-

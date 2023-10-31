@@ -24,14 +24,12 @@ class Mahasiswa extends Model
         'noHandphone'
     ];
 
-    // public function user()
-    // {
-    //     return $this->belongsTo(User::class, 'iduser', 'id');
-    // }
+    public function irs()
+    {
+        return $this->hasMany(IRS::class, 'nim', 'nim');
+    }
 
-    // public function dosen_wali()
-    // {
-    //     return $this->belongsTo(Dosen::class, 'nip', 'nip');
-    // }
+    
+
 }
 

@@ -6,6 +6,16 @@
     <a href="{{ route('irs.create') }}" class="btn btn-primary">Tambah IRS</a>
     <br>
     <h2 style="color:#fff">Daftar IRS</h2>
+    @if(session('success'))
+    <div class="alert alert-error">
+        {{ session('success') }}
+    </div>
+    @endif
+    @if(session('error'))
+    <div class="alert alert-error">
+        {{ session('error') }}
+    </div>
+    @endif
     @if ($irsData->count() > 0)
         <p>Mahasiswa: {{ $mahasiswa->first()->nama }} (NIM: {{ $mahasiswa->first()->nim }})</p>
 

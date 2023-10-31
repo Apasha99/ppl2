@@ -6,6 +6,16 @@
             <div class="text-center text-light">
                 <h2>Tambah Mahasiswa Baru</h2>
             </div>
+            @if(session('success'))
+            <div class="alert alert-error">
+                {{ session('success') }}
+            </div>
+            @endif
+            @if(session('error'))
+            <div class="alert alert-error">
+                {{ session('error') }}
+            </div>
+            @endif
 
             {{-- <input type="file" class="form-control mt-3" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  />   --}}
 
