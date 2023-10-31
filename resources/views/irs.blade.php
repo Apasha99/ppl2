@@ -1,3 +1,7 @@
+@extends('layouts.layoutMahasiswa')
+
+@section('content')
+
 <div class="container">
     <br>
     <a href="{{ route('irs.create') }}" class="btn btn-primary">Tambah IRS</a>
@@ -72,3 +76,4 @@
         document.getElementById('irsDetail').style.display = 'block';
     }
 </script>
+@endsection

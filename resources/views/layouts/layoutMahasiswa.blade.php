@@ -61,12 +61,12 @@
     </nav>
 
     <div class="d-flex align-items-start px-5 mt-2">
-        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">Home</button>
-          <button class="nav-link" id="v-pills-irs-tab" data-bs-toggle="pill" data-bs-target="#v-pills-irs" type="button" role="tab" aria-controls="v-pills-irs" aria-selected="true">IRS</button>
-          <button class="nav-link" id="v-pills-khs-tab" data-bs-toggle="pill" data-bs-target="#v-pills-khs" type="button" role="tab" aria-controls="v-pills-khs" aria-selected="false">KHS</button>
-          <button class="nav-link" id="v-pills-pkl-tab" data-bs-toggle="pill" data-bs-target="#v-pills-pkl" type="button" role="tab" aria-controls="v-pills-pkl" aria-selected="false">PKL</button>
-          <button class="nav-link" id="v-pills-skripsi-tab" data-bs-toggle="pill" data-bs-target="#v-pills-skripsi" type="button" role="tab" aria-controls="v-pills-skripsi" aria-selected="false">Skripsi</button>
+        <div class="nav flex-column nav-pills" aria-orientation="vertical">
+            <a class="nav-link" href="dashboardMahasiswa">Home</a>
+            <a class="nav-link" href="irs">IRS</a>
+            <a class="nav-link" href="#">KHS</a>
+            <a class="nav-link" href="#">PKL</a>
+            <a class="nav-link" href="#">Skripsi</a>
         </div>
         <div class="container-lg px-5 text-light">
             @yield('content')
