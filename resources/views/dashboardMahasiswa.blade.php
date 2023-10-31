@@ -113,7 +113,7 @@
 
     {{-- KHS --}}
     <div class="tab-pane fade" id="v-pills-khs" role="tabpanel" aria-labelledby="v-pills-khs-tab">
-        
+
     </div>
 
     {{-- PKL --}}
