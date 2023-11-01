@@ -35,14 +35,16 @@
                     <tr>
                         <th>Semester Aktif</th>
                         <th>Status PKL</th>
+                        <th>Nilai</th>
                         <th>Status</th>
-                        <th>Scan PKL</th>
+                        <th>Berita Acara Sidang PKL</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($pklData as $pkl)
                         <tr class="pkl-row" data-semester="{{ $pkl->semester_aktif }}">
                             <td>{{ $pkl->semester_aktif }}</td>
+                            <td>{{ $pkl->nilai }}</td>
                             <td>{{ $pkl->statusPKL }}</td>
                             <td>{{ $pkl->status }}</td>
                             <td>

@@ -34,6 +34,9 @@
                 <thead>
                     <tr>
                         <th>Semester Aktif</th>
+                        <th>Nilai</th>
+                        <th>Lama Studi</th>
+                        <th>Tanggal Sidang</th>
                         <th>Status Skripsi</th>
                         <th>Status</th>
                         <th>Scan Skripsi</th>
@@ -43,6 +46,9 @@
                     @foreach ($skripsiData as $skripsi)
                         <tr class="skripsi-row" data-semester="{{ $skripsi->semester_aktif }}">
                             <td>{{ $skripsi->semester_aktif }}</td>
+                            <td>{{ $skripsi->nilai }}</td>
+                            <td>{{ $skripsi->lama_studi }}</td>
+                            <td>{{ $skripsi->tanggal_sidang }}</td>
                             <td>{{ $skripsi->statusSkripsi }}</td>
                             <td>{{ $skripsi->status }}</td>
                             <td>
