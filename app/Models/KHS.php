@@ -13,7 +13,7 @@ class KHS extends Model
 
     protected $table = 'khs';
 
-    protected $fillable = ['semester_aktif', 'jumlah_sks', 'ip_semester','ip_kumulatif','scanKHS', 'status'];
+    protected $fillable = ['semester_aktif', 'jumlah_sks','jumlah_sks_kumulatif', 'ip_semester','ip_kumulatif','scanKHS', 'status'];
 
     public static function rules($nim)
     {
