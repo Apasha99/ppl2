@@ -83,7 +83,7 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <a href="/mahasiswa-create" class="btn btn-success">+ Tambah Mahasiswa</a>
+                <a href="/mahasiswa-create" class="btn btn-primary">+ Tambah Mahasiswa</a>
                 <!-- Ganti "/tambah-mahasiswa" dengan URL yang sesuai -->
             </div>
         </div>

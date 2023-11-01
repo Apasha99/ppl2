@@ -1,62 +1,59 @@
 @extends('layouts.layoutMahasiswa')
 
 @section('content')
-    <div class="tab-content mt-5" id="v-pills-tabContent">
-        {{-- HOME --}}
-        <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            <div class="container-lg my-5 text-light">
-                <div class="text-center">
-                    <div class="display-6">Welcome, {{ Auth::user()->username }} </div>
+    {{-- HOME --}}
+    <div class="container-lg my-5 text-light">
+        <div class="text-center">
+            <div class="display-6">Welcome, {{ Auth::user()->username }} </div>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="row mt-5 py-5 d-flex justify-content-center align-items-center">
+                <div class="col-6 col-lg-3">
+                    <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-100 w-100" alt="foto-profil" />
                 </div>
 
-                <div class="d-flex justify-content-center align-items-center">
-                <div class="row mt-5 py-5 d-flex justify-content-center align-items-center">
-                    <!-- justify-content-around means spreading around the content if there's any empty space & the gaps stayed equal -->
-                    <div class="col-6 col-lg-3">
-                        <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-100 w-100" alt="foto-profil" />
-                    </div>
-
-                    <div class="col-lg-6 ms-4">
-                        <table>
-                            <tr>
-                                <td>Nama</td>
-                                <td>:</td>
-                                <td>{{ $mahasiswa->nama }}</td>
-                            </tr>
-                            <tr>
-                                <td>NIM</td>
-                                <td>:</td>
-                                <td>{{ $mahasiswa->nim }}</td>
-                            </tr>
-                            <tr>
-                                <td>Angkatan</td>
-                                <td>:</td>
-                                <td>{{ $mahasiswa->angkatan }}</td>
-                            </tr>
-                            <tr>
-                                <td>Status</td>
-                                <td>:</td>
-                                <td>{{ $mahasiswa->status }}</td>
-                            </tr>
-                            <tr>
-                                <td>Program Studi</td>
-                                <td>:</td>
-                                <td>Teknik Informatika</td>
-                            </tr>
-                            <tr>
-                                <td>Fakultas</td>
-                                <td>:</td>
-                                <td>Sains dan Matematika</td>
-                            </tr>
-                            <tr>
-                                <td>Dosen Wali</td>
-                                <td>:</td>
-                                <td>{{ $mahasiswa->dosen_nama }}</td>
-                            </tr>
-                        </table>
-                    </div>
+                <div class="col-lg-6 ms-4">
+                    <table>
+                        <tr>
+                            <td>Nama</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->nama }}</td>
+                        </tr>
+                        <tr>
+                            <td>NIM</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->nim }}</td>
+                        </tr>
+                        <tr>
+                            <td>Angkatan</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->angkatan }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->status }}</td>
+                        </tr>
+                        <tr>
+                            <td>Program Studi</td>
+                            <td>:</td>
+                            <td>Teknik Informatika</td>
+                        </tr>
+                        <tr>
+                            <td>Fakultas</td>
+                            <td>:</td>
+                            <td>Sains dan Matematika</td>
+                        </tr>
+                        <tr>
+                            <td>Dosen Wali</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->dosen_nama }}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
+        </div>
 
                 {{-- irs khs --}}
                 <div class="container-lg d-flex justify-content-around">
