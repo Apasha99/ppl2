@@ -46,7 +46,7 @@
 
         <div class="d-flex justify-content-start">
             @if ($pklData->count() > 0)
-                <div class="dropdown">
+                <div class="dropdown id">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownSemester"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Pilih Semester Aktif
@@ -99,7 +99,7 @@
     @section('script')
         <script>
             // Handle dropdown item click
-            document.querySelectorAll('.dropdown-item').forEach(item => {
+            document.querySelectorAll('.dropdown-item .id').forEach(item => {
                 item.addEventListener('click', () => {
                     const selectedSemester = item.getAttribute('data-semester');
                     showPKLDetail(selectedSemester);
