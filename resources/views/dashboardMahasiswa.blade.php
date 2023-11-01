@@ -72,7 +72,7 @@
                                     <div class="card-body ms-4">
                                         <h5 class="card-title">IRS</h5>
                                         <p class="card-text">Semester Aktif
-                                            <br><span class="small">insert sem aktif disini</span>
+                                            <br><span class="small">{{$semesterAktif}}</span>
                                         </p>
                                     </div>
                                 </div>
@@ -90,10 +90,10 @@
                                     <div class="card-body ms-4">
                                         <h5 class="card-title">KHS</h5>
                                         <p class="card-text">SKS Kumulatif
-                                            <br><span class="small">insert sem aktif disini</span>
+                                            <br><span class="small">{{$SKSKumulatif}}</span>
                                         </p>
                                         <p class="card-text">IP Kumulatif
-                                            <br><span class="small">insert ip kum disini</span>
+                                            <br><span class="small">{{$IPKumulatif}}</span>
                                         </p>
                                     </div>
                                 </div>

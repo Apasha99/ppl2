@@ -16,24 +16,27 @@ class DashboardMahasiswaController extends Controller
         // Pastikan bahwa yang sedang login memiliki role_id 1 (mahasiswa)
         if (Auth::user()->role_id === 1) {
             // Ambil data mahasiswa yang sedang login
-            $mahasiswa = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
-                ->join('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
+            $mahasiswa = Mahasiswa::leftJoin('users', 'mahasiswa.iduser', '=', 'users.id')
+                ->leftJoin('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
                 ->where('mahasiswa.iduser', Auth::user()->id)
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama')
                 ->first();
-            $user = User::select('foto');
-            $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
-            $khsData = KHS::all();
-            $pklData = PKL::all();
+
+            $user = User::where('id', Auth::user()->id)->select('foto')->first();
+            $latestIRS = IRS::orderBy('created_at', 'desc')->first();
+            $semesterAktif = $latestIRS ? $latestIRS->semester_aktif : null;
+            $latestSKSKumulatif = KHS::orderBy('created_at', 'desc')->first();
+            $SKSKumulatif = $latestSKSKumulatif ? $latestSKSKumulatif->jumlah_sks_kumulatif : null;
+            $latestIPKumulatif = KHS::orderBy('created_at', 'desc')->first();
+            $IPKumulatif = $latestIPKumulatif ? $latestIPKumulatif->ip_kumulatif : null;
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa,'user'=>$user,'irsData'=>$irsData,'khsData'=>$khsData,'pklData'=>$pklData]);
+                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user, 'semesterAktif' => $semesterAktif,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
             }
         }
 
         // Jika user tidak memiliki role_id 1 atau tidak ditemukan data mahasiswa yang sesuai, Anda dapat mengirimkan tampilan yang sesuai.
         return view('dashboardMahasiswa'); // Misalnya, tampilan kosong.
     }
-  
 }
