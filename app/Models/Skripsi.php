@@ -13,7 +13,7 @@ class Skripsi extends Model
 
     protected $table = 'skripsi';
 
-    protected $fillable = ['semester_aktif', 'statusSkripsi','scanSkripsi', 'status'];
+    protected $fillable = ['semester_aktif', 'nilai','lama_studi','tanggal_sidang','statusSkripsi','scanSkripsi', 'status'];
 
     public static function rules($nim)
     {

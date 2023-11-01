@@ -13,7 +13,7 @@ class PKL extends Model
 
     protected $table = 'pkl';
 
-    protected $fillable = ['semester_aktif', 'statusPKL','scanPKL', 'status'];
+    protected $fillable = ['semester_aktif', 'nilai','statusPKL','scanPKL', 'status'];
 
     public static function rules($nim)
     {

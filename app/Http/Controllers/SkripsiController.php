@@ -14,7 +14,7 @@ class SkripsiController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $skripsiData = Skripsi::select('semester_aktif','statusSkripsi','nim','status','scanSkripsi')->get();
+        $skripsiData = Skripsi::select('semester_aktif','nilai','lama_studi','tanggal_sidang','statusSkripsi','nim','status','scanSkripsi')->get();
 
         return view('skripsi', [
             'mahasiswa' => $mahasiswa,
@@ -32,7 +32,7 @@ class SkripsiController extends Controller
             $semesterAktifSkripsi = Skripsi::where('nim', $nim)->pluck('semester_aktif')->toArray();
 
             // Create an array of available semesters by diffing the full range and active semesters
-            $availableSemesters = array_diff(range(1,14), $semesterAktifSkripsi);
+            $availableSemesters = array_diff(range(7,14), $semesterAktifSkripsi);
         } else {
             // Handle the case where the Mahasiswa is not found
             return redirect()->route('skripsi.index')->with('error', 'Mahasiswa not found with the provided nim.');
@@ -45,8 +45,11 @@ class SkripsiController extends Controller
     {
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric','unique:skripsi'], // Correct the validation rule syntax
-            'statusSkripsi' => [Rule::in(['belum', 'sedang', 'sudah'])],
-            'scanSkripsi' => ['nullable', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
+            'statusSkripsi' => [Rule::in(['lulus', 'tidak lulus'])],
+            'nilai'=>[Rule::in(['A', 'B','C','D','E'])],
+            'lama_studi'=>[Rule::in(['3', '4','5','6','7'])],
+            'tanggal_sidang'=>['required'],
+            'scanSkripsi' => ['required', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
         ]);
 
         $PDFPath = null;
@@ -58,6 +61,9 @@ class SkripsiController extends Controller
         $skripsi = new Skripsi();
         $skripsi->semester_aktif = $request->input('semester_aktif');
         $skripsi->statusSkripsi = $request->input('statusSkripsi');
+        $skripsi->nilai = $request->input('nilai');
+        $skripsi->lama_studi = $request->input('lama_studi');
+        $skripsi->tanggal_sidang = $request->input('tanggal_sidang');
         $skripsi->status = 'pending';
         $skripsi->scanSkripsi = $PDFPath; // Assign the PDF path here
         $skripsi->nim = $request->user()->mahasiswa->nim;

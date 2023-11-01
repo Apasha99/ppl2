@@ -14,7 +14,7 @@ class PKLController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $pklData = PKL::select('semester_aktif','statusPKL','scanPKL','nim','status')->get();
+        $pklData = PKL::select('semester_aktif','nilai','statusPKL','scanPKL','nim','status')->get();
         
         return view('pkl', [
             'mahasiswa' => $mahasiswa,
@@ -32,7 +32,7 @@ class PKLController extends Controller
             $semesterAktifPKL = PKL::where('nim', $nim)->pluck('semester_aktif')->toArray();
 
             // Create an array of available semesters by diffing the full range and active semesters
-            $availableSemesters = array_diff(range(1,14), $semesterAktifPKL);
+            $availableSemesters = array_diff(range(6,14), $semesterAktifPKL);
         } else {
             // Handle the case where the Mahasiswa is not found
             return redirect()->route('pkl.index')->with('error', 'Mahasiswa not found with the provided nim.');
@@ -45,8 +45,9 @@ class PKLController extends Controller
     {
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric','unique:pkl'], // Correct the validation rule syntax
-            'statusPKL' => [Rule::in(['belum', 'sedang', 'sudah'])],
-            'scanPKL' => ['nullable', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
+            'statusPKL' => [Rule::in(['lulus', 'tidak lulus'])],
+            'nilai'=>[Rule::in(['A', 'B','C','D','E'])],
+            'scanPKL' => ['required', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
         ]);
 
         $PDFPath = null;
@@ -58,6 +59,7 @@ class PKLController extends Controller
         $pkl = new PKL();
         $pkl->semester_aktif = $request->input('semester_aktif');
         $pkl->statusPKL = $request->input('statusPKL');
+        $pkl->nilai = $request->input('nilai');
         $pkl->status = 'pending';
         $pkl->scanPKL = $PDFPath; // Assign the PDF path here
         $pkl->nim = $request->user()->mahasiswa->nim;

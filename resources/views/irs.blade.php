@@ -38,7 +38,7 @@
                             <h5 class="card-title">{{ Auth::user()->mahasiswa->nama }}</h5>
                             <p class="card-text">{{ Auth::user()->mahasiswa->nim }}
                                 <br>
-                                <small>Semester #insert semester saat ini</small></p>
+                                <small>Semester #insert sem skrg disini</small></p>
                             <p class="card-text"><small class="text-muted">Program Studi S1 Informatika</small></p>
                         </div>
                     </div>

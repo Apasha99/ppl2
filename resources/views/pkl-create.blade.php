@@ -32,13 +32,24 @@
                     <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
                 @enderror
             </div>
+            @error('nilai')
+                <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                </div>
+            @enderror
+            <label for="nilai" class="form-label" style="color:#fff">Nilai:</label>
+            <select id="nilai" name="nilai"  class="form-control">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="E">E</option>
+            </select>
 
             <div class="mb-3">
                 <label for="statusPKL" class="form-label" style="color:#fff">Status PKL:</label>
                 <select id="statusPKL" name="statusPKL"  class="form-control">
-                    <option value="belum">Belum Pkl</option>
-                    <option value="sedang">Sedang Pkl</option>
-                    <option value="sudah">Sudah Pkl</option>
+                    <option value="lulus">Lulus</option>
+                    <option value="tidak lulus">Tidak Lulus</option>
                 </select>
                 @error('statusPKL')
                     <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
