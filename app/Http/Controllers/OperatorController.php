@@ -66,6 +66,7 @@ class OperatorController extends Controller
             $user->username = $username;
             $user->password = $password;
             $user->role_id = 1; // mengatur role_id menjadi 1
+
             $user->save();
 
             // Membuat mahasiswa baru
@@ -80,7 +81,7 @@ class OperatorController extends Controller
             $mahasiswa->save();
         });
 
-        return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
+        return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil ditambahkan. Username : '. $username . 'Password : '. $password)->withInput();
     }
 
     public function edit(Request $request): View

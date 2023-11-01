@@ -60,18 +60,17 @@
                             @enderror
                         </div>
 
+                        <div class="col-md-4 ms-5 text-center d-none d-md-block">
+                            <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-50 w-50 mb-2" alt="foto-profil" />
+                            <h5>Foto Profil</h5>
+                            <input type="file" class="form-control mt-3" id="foto" name="foto" accept=".jpg, .jpeg, .png">
+                            @error('fotoProfil')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-success me-2">Save</button>
                         <a href="profilOperator" class="btn btn-secondary">Cancel</a>
                     </form>
-                </div>
-
-                <div class="col-md-4 ms-5 text-center d-none d-md-block">
-                    <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-50 w-50 mb-2" alt="foto-profil" />
-                    <h5>Foto Profil</h5>
-                    <input type="file" class="form-control mt-3" id="foto" name="foto" accept=".jpg, .jpeg, .png">
-                    @error('fotoProfil')
-                        <div class="alert alert-danger">{{ $message }}</div>
-                    @enderror
                 </div>
 
             </div>
