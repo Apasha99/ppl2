@@ -36,9 +36,8 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">{{ Auth::user()->mahasiswa->nama }}</h5>
-                            <p class="card-text">{{ Auth::user()->mahasiswa->nim }}
-                                <br>
-                                <small>Status Skipsi #insert status disini</small></p>
+                            <p class="card-text">{{ Auth::user()->mahasiswa->nim }}</p>
+                            <hr>
                             <p class="card-text"><small class="text-muted">Program Studi S1 Informatika</small></p>
                         </div>
                     </div>
@@ -48,7 +47,7 @@
 
         <div class="d-flex justify-content-start">
             @if ($skripsiData->count() > 0)
-                <div class="dropdown">
+                <div class="dropdown id">
                     <button class="btn btn-primary dropdown-toggle" type of="button" id="dropdownSemester"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Pilih Semester Aktif
@@ -108,7 +107,7 @@
 @section('script')
     <script>
         // Handle dropdown item click
-        document.querySelectorAll('.dropdown-item').forEach(item => {
+        document.querySelectorAll('.dropdown-item .id').forEach(item => {
             item.addEventListener('click', () => {
                 const selectedSemester = item.getAttribute('data-semester');
                 showSkripsiDetail(selectedSemester);
