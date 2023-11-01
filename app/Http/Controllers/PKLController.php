@@ -2,149 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PKL;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
-use App\Models\PKL; // Import model PKL
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 
 class PKLController extends Controller
 {
-    public function create()
+    public function index(Request $request)
     {
-        $pkl = new PKL(); // Buat instansiasi objek PKL kosong
-        return view('pklcreate', compact('pkl')); // Kirimkan variabel $pkl ke view
+        $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
+        $pklData = PKL::select('semester_aktif','statusPKL','scanPKL','nim','status')->get();
+        
+        return view('pkl', [
+            'mahasiswa' => $mahasiswa,
+            'pklData' => $pklData,
+        ]);
     }
 
-    public function store(Request $request)
+    public function create(Request $request)
     {
-        $data = $request->validate([
-            'nim' => 'required',
-            'status_pkl' => 'required',
-            'scan_pkl' => 'required|file|mimes:pdf|max:2048', // Maksimum 2MB
+        $nim = $request->user()->mahasiswa->nim; // Use the logged-in user to get the nim
+        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+
+        if ($mahasiswa) {
+            // Get the active semesters for the given student
+            $semesterAktifPKL = PKL::where('nim', $nim)->pluck('semester_aktif')->toArray();
+
+            // Create an array of available semesters by diffing the full range and active semesters
+            $availableSemesters = array_diff(range(1,14), $semesterAktifPKL);
+        } else {
+            // Handle the case where the Mahasiswa is not found
+            return redirect()->route('pkl.index')->with('error', 'Mahasiswa not found with the provided nim.');
+        }
+        
+        return view('pkl-create', compact('availableSemesters', 'mahasiswa'));
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'semester_aktif' => ['required', 'numeric','unique:pkl'], // Correct the validation rule syntax
+            'statusPKL' => [Rule::in(['belum', 'sedang', 'sudah'])],
+            'scanPKL' => ['nullable', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
         ]);
 
-        if ($request->hasFile('scan_pkl')) {
-            $file = $request->file('scan_pkl');
-            $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/pkl', $fileName);
+        $PDFPath = null;
 
-            $data['scan_pkl'] = 'pkl/' . $fileName;
+        if ($request->hasFile('scanPKL') && $request->file('scanPKL')->isValid()) {
+            $PDFPath = $request->file('scanPKL')->store('file', 'public');
         }
 
-        PKL::create($data);
+        $pkl = new PKL();
+        $pkl->semester_aktif = $request->input('semester_aktif');
+        $pkl->statusPKL = $request->input('statusPKL');
+        $pkl->status = 'pending';
+        $pkl->scanPKL = $PDFPath; // Assign the PDF path here
+        $pkl->nim = $request->user()->mahasiswa->nim;
+        $pkl->nip = $request->user()->mahasiswa->nip;
+        $saved = $pkl->save();
 
-        return redirect()->route('pkl.index')->with('success', 'Data PKL berhasil ditambahkan');
-    }
-
-    public function showAllPKL()
-    {
-        $pklData = PKL::all(); // Mengambil semua data dari tabel PKL
-
-        foreach ($pklData as $pkl) {
-            echo "ID: " . $pkl->id . "<br>";
-            // Menampilkan nilai 'id' dari setiap entri PKL
+        if ($saved) {
+            return redirect()->route('pkl.index')->with('success', 'PKL added successfully');
+        } else {
+            return redirect()->route('pkl.create')->with('error', 'Failed to add PKL');
         }
-    }
-
-    public function index()
-    {
-        $dataPKL = PKL::all(); // Ambil semua data PKL dari tabel
-
-        return view('pklindex', compact('dataPKL')); // Nama view harus sesuai dengan file yang ada di direktori resources/views
-    }
-
-    public function edit($nim)
-    {
-        $pkl = PKL::where('nim', $nim)->first();
-
-        if (!$pkl) {
-            return redirect()->route('pklindex')->with('error', 'Data PKL tidak ditemukan');
-        }
-
-        return view('pkledit', compact('pkl'));
-    }
-
-    public function update(Request $request, $nim)
-    {
-        $data = $request->validate([
-            'nim' => 'required',
-            'status_pkl' => 'required',
-            'other_field' => 'required', // Tambahkan field ini jika diperlukan
-        ]);
-
-        $pkl = PKL::where('nim', $nim)->first();
-
-        if (!$pkl) {
-            return redirect()->route('pklindex')->with('error', 'Data PKL tidak ditemukan');
-        }
-
-        // Tambah logika untuk mengunggah file jika ada file yang diunggah
-        if ($request->hasFile('scan_pkl')) {
-            $file = $request->file('scan_pkl');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/pkl', $filename); // Simpan file ke direktori storage
-            $data['scan_pkl'] = 'pkl/' . $filename; // Simpan nama file ke dalam database
-        }
-
-        $pkl->update($data);
-
-        return redirect()->route('pkl.index')->with('success', 'Data PKL berhasil diperbarui');
-    }
-
-
-
-    public function destroy($nim)
-    {
-        // Temukan data PKL berdasarkan ID
-        $pkl = PKL::find($nim);
-
-        if ($pkl) {
-            // Hapus data PKL
-            $pkl->delete();
-
-            return redirect()->route('pklindex')->with('success', 'Data berhasil dihapus');
-        }
-
-        // Jika data tidak ditemukan, mungkin Anda ingin menangani kasus ini dengan pesan kesalahan atau tindakan lain sesuai kebutuhan.
-
-        return redirect()->route('pklindex')->with('error', 'Data tidak ditemukan');
-    }
-    
-	public function upload()
-    {
-        return view('upload'); // Sesuaikan dengan nama view yang Anda gunakan
-    }
-
-    public function proses_upload(Request $request)
-    {
-        $this->validate($request, [
-            'file' => 'required',
-            'keterangan' => 'required',
-        ]);
-
-        // menyimpan data file yang diupload ke variabel $file
-        $file = $request->file('file');
-
-        // nama file
-        echo 'File Name: ' . $file->getClientOriginalName();
-        echo '<br>';
-
-        // ekstensi file
-        echo 'File Extension: ' . $file->getClientOriginalExtension();
-        echo '<br>';
-
-        // real path
-        echo 'File Real Path: ' . $file->getRealPath();
-        echo '<br>';
-
-        // ukuran file
-        echo 'File Size: ' . $file->getSize();
-        echo '<br>';
-
-        // tipe mime
-        echo 'File Mime Type: ' . $file->getMimeType();
-
-        // isi dengan nama folder tempat kemana file diupload
-        $tujuan_upload = 'data_file';
-        $file->move($tujuan_upload, $file->getClientOriginalName());
     }
 
 }

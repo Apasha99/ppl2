@@ -9,13 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('pkl', function (Blueprint $table) {
-            $table->timestamp('updated_at')->useCurrent();
+            $table->string('nip');
         });
     }
-
 
     /**
      * Reverse the migrations.

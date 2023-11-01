@@ -12,14 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pkl', function (Blueprint $table) {
-            $table->id();
-            $table->bigIncrements('id');
+            $table->increments('idpkl');
+            $table->integer('semester_aktif');
+            $table->string('statusPKL');
+            $table->string('scanPKL');
+            $table->string('status');
             $table->string('nim');
-            $table->string('status_pkl');
-            $table->string('scan_pkl');
-
-            $table->timestamp('created_at')->userCurrent();
-            $table->timestamp('updated_at')->userCurrent();
+            $table->foreign('nim')->references('nim')->on('mahasiswa');
+            $table->timestamps();
         });
     }
 
@@ -28,8 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('pkl');
+        Schema::dropIfExists('pkl');
     }
 };
-
-?>

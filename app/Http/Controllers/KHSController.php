@@ -14,7 +14,7 @@ class KHSController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $khsData = KHS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
+        $khsData = KHS::select('nim', 'status', 'jumlah_sks', 'semester_aktif','jumlah_sks_kumulatif','ip_semester','ip_kumulatif','scanKHS')->get();
 
         return view('khs', [
             'mahasiswa' => $mahasiswa,
@@ -45,7 +45,8 @@ class KHSController extends Controller
     {
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric','unique:khs'], // Correct the validation rule syntax
-            'jumlah_sks' => ['required', 'numeric', 'between:1,24'], // Correct the validation rule syntax
+            'jumlah_sks' => ['required', 'numeric', 'between:18,24'], // Correct the validation rule syntax
+            'jumlah_sks_kumulatif' => ['required', 'numeric', 'between:18,144'],
             'ip_semester' => ['required'],
             'ip_kumulatif' =>['required'],
             'scanKHS' => ['required', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
@@ -60,8 +61,9 @@ class KHSController extends Controller
         $khs = new KHS();
         $khs->semester_aktif = $request->input('semester_aktif');
         $khs->jumlah_sks = $request->input('jumlah_sks');
-        $khs->jumlah_sks = $request->input('ip_semester');
-        $khs->jumlah_sks = $request->input('ip_kumulatif');
+        $khs->jumlah_sks_kumulatif = $request->input('jumlah_sks_kumulatif');
+        $khs->ip_semester = $request->input('ip_semester');
+        $khs->ip_kumulatif = $request->input('ip_kumulatif');
         $khs->status = 'pending';
         $khs->scanKHS = $PDFPath; // Assign the PDF path here
         $khs->nim = $request->user()->mahasiswa->nim;

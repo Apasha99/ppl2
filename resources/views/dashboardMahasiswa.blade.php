@@ -108,17 +108,17 @@
 
     {{-- IRS --}}
     <div class="tab-pane fade" id="v-pills-irs" role="tabpanel" aria-labelledby="v-pills-irs-tab">
-        @include('irs')
+        
     </div>
 
     {{-- KHS --}}
     <div class="tab-pane fade" id="v-pills-khs" role="tabpanel" aria-labelledby="v-pills-khs-tab">
-        @include('khs')
+        
     </div>
 
     {{-- PKL --}}
     <div class="tab-pane fade" id="v-pills-pkl" role="tabpanel" aria-labelledby="v-pills-pkl-tab">...</div>
-
+    @include('pkl')
     {{-- SKRIPSI --}}
     <div class="tab-pane fade" id="v-pills-skripsi" role="tabpanel" aria-labelledby="v-pills-skripsi-tab">...</div>
     </div>
