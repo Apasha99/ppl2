@@ -2,14 +2,16 @@
 
 @section('content')
     <div class="container-lg my-5 text-light">
-        <div class="text-center">
+        @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+        
+        <div class="text-center mt-5">
             <h2>Tambah IRS</h2>
         </div>
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <div class="row justify-content-center my-5">
             <div class="col-lg-6">
