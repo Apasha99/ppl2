@@ -1,9 +1,23 @@
 @extends('layouts.layoutMahasiswa')
 
 @section('content')
-
     <div class="container-lg my-5 text-light">
-        <div class="d-flex justify-content-end mb-4">
+
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-journal-check"></i> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ session('danger') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <div class="d-flex justify-content-end my-4">
             <a href="{{ route('irs.create') }}" class="btn btn-primary btn-sm">+ Tambah IRS</a>
         </div>
 
@@ -11,20 +25,9 @@
 
         <div class="d-flex justify-content-center my-3">
             <h2>Daftar IRS</h2>
-
-            @if (session('success'))
-                <div class="alert alert-error">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if (session('error'))
-                <div class="alert alert-error">
-                    {{ session('error') }}
-                </div>
-            @endif
         </div>
 
-        <div class="d-flex justify-content-center mb-3">
+        <div class="d-flex justify-content-center mb-5">
             <div class="card mb-3 w-50">
                 <div class="row g-0">
                     <div class="col-md-4">
@@ -42,7 +45,7 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-start ms-5">
+        <div class="d-flex justify-content-start">
             @if ($irsData->count() > 0)
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownSemester"
@@ -81,17 +84,19 @@
                         </tbody>
                     </table>
                 </div>
-                
             @else
-            <div class="d-flex justify-content-center">
-                <p class="lead">
-                    <span class="text-danger"><i class="bi bi-exclamation-circle-fill"></i></span> Belum ada IRS yang diisi.
-                </p>
-            </div>
+                <div class="d-flex justify-content-center">
+                    <p class="lead">
+                        <span class="text-danger"><i class="bi bi-exclamation-circle-fill"></i></span> Belum ada IRS yang
+                        diisi.
+                    </p>
+                </div>
             @endif
         </div>
     </div>
+@endsection
 
+@section('script')
     <script>
         // Handle dropdown item click
         document.querySelectorAll('.dropdown-item').forEach(item => {

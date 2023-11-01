@@ -80,7 +80,6 @@
                     <div class="card bg-dark text-light border-light border-5 h-100 w-100">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <!-- Replace the <img> with a large icon -->
                                 <i class="bi bi-journal-medical bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
                             </div>
                             <div class="col-md-8">
