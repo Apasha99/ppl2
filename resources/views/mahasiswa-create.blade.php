@@ -6,15 +6,15 @@
             <div class="text-center text-light">
                 <h2>Tambah Mahasiswa Baru</h2>
             </div>
-            @if(session('success'))
-            <div class="alert alert-error">
-                {{ session('success') }}
-            </div>
+            @if (session('success'))
+                <div class="alert alert-error">
+                    {{ session('success') }}
+                </div>
             @endif
-            @if(session('error'))
-            <div class="alert alert-error">
-                {{ session('error') }}
-            </div>
+            @if (session('error'))
+                <div class="alert alert-error">
+                    {{ session('error') }}
+                </div>
             @endif
 
             {{-- <input type="file" class="form-control mt-3" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  />   --}}
@@ -34,7 +34,8 @@
                         </div>
 
                         @error('nim')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                            </div>
                         @enderror
                         <label for="nim" class="form-label">NIM:</label>
                         <div class="input-group mb-4">
@@ -43,7 +44,8 @@
                         </div>
 
                         @error('angkatan')
-                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                            </div>
                         @enderror
                         <label for="angkatan" class="form-label">Angkatan:</label>
                         <div class="input-group mb-4">
@@ -56,12 +58,14 @@
                         </div>
 
                         @error('status')
-                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                            </div>
                         @enderror
                         <label for="status" class="form-label">Status:</label>
                         <div class="mb-4">
                             <div class="form-check">
-                                <input type="radio" class="form-check-input" id="active" name="status" value="active" checked>
+                                <input type="radio" class="form-check-input" id="active" name="status" value="active"
+                                    checked>
                                 <label class="form-check-label" for="active">Aktif</label>
                             </div>
                             <div class="form-check">
@@ -72,7 +76,8 @@
                         </div>
 
                         @error('username')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                            </div>
                         @enderror
                         <label for="username" class="form-label">Username:</label>
                         <div class="input-group mb-4">
@@ -83,7 +88,8 @@
                         </div>
 
                         @error('password')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                            </div>
                         @enderror
                         <label for="password" class="form-label">Password:</label>
                         <div class="input-group mb-4">
@@ -93,27 +99,27 @@
                                 onclick="generatePassword()">Generate</button>
                         </div>
 
-                        <div style="margin-bottom: 10px;">
-                            <label for="nip">Nama Dosen wali:</label>
-                            <select name="nip" id="nip" required style="width: 100%;">
+                        @error('nip')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
+                        <label for="nip" class="form-label">Nama Dosen wali:</label>
+                        <div class="input-group mb-4">
+                            <select class="form-select" name="nip" id="nip" required>
                                 <option value="">Pilih Dosen Wali</option>
-                                @foreach($dosens as $dosen)
+                                @foreach ($dosens as $dosen)
                                     <option value="{{ $dosen->nip }}">{{ $dosen->nama }}</option>
                                 @endforeach
                             </select>
-
-                            @error('nip')
-                                <div class="alert alert-danger">{{$message}}</div>
-                            @enderror
                         </div>
-
-                        <div class="text-center my-5">
-                            <button type="submit" class="btn btn-success px-3">Tambah Data</button>
-                        </div>
-
-                    </form>
                 </div>
+
+                <div class="text-center my-5">
+                    <button type="submit" class="btn btn-primary px-3">Tambah Data</button>
+                </div>
+
+                </form>
             </div>
+        </div>
 
         </div>
 
