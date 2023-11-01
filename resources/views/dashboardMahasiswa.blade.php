@@ -66,7 +66,7 @@
                                     <i class="bi bi-journals bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="card-body ms-4">
+                                    <div class="card-body ms-5">
                                         <h5 class="card-title">IRS</h5>
                                         <p class="card-text">Semester Aktif
                                             <br><span class="small">{{$semesterAktif}}</span>
@@ -84,7 +84,7 @@
                                     <i class="bi bi-journal-medical bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="card-body ms-4">
+                                    <div class="card-body ms-5">
                                         <h5 class="card-title">KHS</h5>
                                         <p class="card-text">SKS Kumulatif
                                             <br><span class="small">{{$SKSKumulatif}}</span>
