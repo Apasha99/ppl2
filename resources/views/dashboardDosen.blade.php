@@ -29,28 +29,22 @@
             <h1 class="display-6">Daftar Mahasiswa</h1>
         </div>
 
+        <div class="col-lg-6 mx-2">
+            <form class="d-flex" role="search">
+                <select id="filterAngkatan" class="form-select me-2">
+                    <option value="" selected>Semua Angkatan</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                </select>
 
-        <form class="d-flex" role="search">
-            <select id="filterAngkatan" class="form-select me-2">
-                <option value="" selected>Semua Angkatan</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-            </select>
-        </form>
-
-        <div class="navbar bg-body-tertiary justify-content-end">
-            <div class="container-fluid">
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" id="searchInput"
-                        placeholder="Cari mahasiswa berdasarkan nama" aria-label="Search">
-                    <button class="btn btn-outline-success" type="button" onclick="searchMahasiswa()">Search</button>
-                </form>
-            </div>
+                <input class="form-control me-2" type="search" id="searchInput"
+                    placeholder="Cari mahasiswa berdasarkan nama" aria-label="Search">
+                <button class="btn btn-outline-success" type="button" onclick="searchMahasiswa()">Search</button>
+            </form>
         </div>
-        <div id="searchError" class="alert alert-danger mt-2" style="display: none;"></div> <!-- Perubahan ini -->
 
         <div class="container-lg my-5 pb-4">
             @if (session('status'))
@@ -88,55 +82,41 @@
             </div>
         </div>
 
+        <div id="searchError" class="alert alert-danger mt-2" style="display: none;"></div>
+
         <script>
-            function searchMahasiswa() {
-                var input = document.getElementById('searchInput').value.toLowerCase();
-                var table = document.getElementById('mahasiswaTable');
-                var rows = table.getElementsByTagName('tr');
-                var errorDiv = document.getElementById('searchError');
-
-                errorDiv.style.display = 'none'; // Sembunyikan pesan kesalahan
-
-                for (var i = 0; i < rows.length; i++) {
-                    var nama = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
-                    if (nama.includes(input)) {
-                        rows[i].style.display = '';
-                    } else {
-                        rows[i].style.display = 'none';
-                    }
-                }
-
-                // Tampilkan pesan kesalahan jika tidak ada hasil yang sesuai
-                if ([...rows].every(row => row.style.display === 'none')) {
-                    errorDiv.innerHTML = 'Nama tidak ada di dalam daftar mahasiswa';
-                    errorDiv.style.display = 'block';
-                }
-            }
-
             function searchMahasiswa() {
                 var input = document.getElementById('searchInput').value.toLowerCase();
                 var filterAngkatan = document.getElementById('filterAngkatan').value;
                 var table = document.getElementById('mahasiswaTable');
                 var rows = table.getElementsByTagName('tr');
                 var errorDiv = document.getElementById('searchError');
-
+        
                 errorDiv.style.display = 'none';
-
+        
+                var resultFound = false;
+        
                 for (var i = 0; i < rows.length; i++) {
                     var nama = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+                    var nim = rows[i].getElementsByTagName('td')[1].textContent; // Dapatkan NIM dari kolom ke-2
                     var angkatan = rows[i].getElementsByTagName('td')[2].textContent;
-                    if (nama.includes(input) && (filterAngkatan === "" || angkatan === filterAngkatan)) {
-                        rows[i].style display = '';
+        
+                    if ((nama.includes(input) || nim.includes(input)) && (filterAngkatan === "" || angkatan === filterAngkatan)) {
+                        rows[i].style.display = '';
+                        resultFound = true;
                     } else {
                         rows[i].style.display = 'none';
                     }
                 }
-
-                if ([...rows].every(row => row.style.display === 'none')) {
-                    errorDiv.innerHTML = 'Nama tidak ada di dalam daftar mahasiswa';
+        
+                if (!resultFound) {
+                    errorDiv.innerHTML = 'Nama atau NIM tidak ada di dalam daftar mahasiswa';
                     errorDiv.style.display = 'block';
+                } else {
+                    errorDiv.style.display = 'none';
                 }
             }
-        </script>
+        </script>        
+
     </section>
 @endsection
