@@ -62,8 +62,7 @@
 
     <div class="d-flex align-items-start px-5 mt-2">
         <div class="nav flex-column nav-pills" aria-orientation="vertical">
-            <a class="nav-link" href="dashboardMahasiswa">Home</a>
-            <a class="nav-link" href="irs">IRS</a>
+            <a class="nav-link" href="/irs">IRS</a>
             <a class="nav-link" href="#">KHS</a>
             <a class="nav-link" href="#">PKL</a>
             <a class="nav-link" href="#">Skripsi</a>
