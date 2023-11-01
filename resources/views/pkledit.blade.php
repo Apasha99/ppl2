@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
@@ -26,7 +26,7 @@
                 </select>
             </div>
 
-            <!-- File Upload Section -->
+             File Upload Section 
             <div class="form-group">
                 <label for="scan_pkl">Scan PKL:</label>
                 @if (isset($pkl->scan_pkl))
@@ -44,17 +44,18 @@
 
 
 
-            <!-- Add more form fields as needed -->
+             Add more form fields as needed 
 
-            <!-- Submit Button -->
+            Submit Button
             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
         </form>
     </div>
 
-    <!-- Additional scripts and styles -->
+     Additional scripts and styles 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
-</html>
+</html> -->
+<!-- TIDAK FIX -->

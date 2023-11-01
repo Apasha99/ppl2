@@ -9,6 +9,9 @@ use App\Http\Controllers\DashboardDepartemenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\IRSController;
+use App\Http\Controllers\KHSController;
+use App\Http\Controllers\PKLController;
+use App\Http\Controllers\SkripsiController;
 use App\Models\Operator;
 
 /*
@@ -50,8 +53,25 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {
     Route::get('/irs', 'index')->name('irs.index');
-    Route::get('irs-create', 'create')->name('irs.create');
-    Route::post('irs/store', 'store')->name('irs.store');
+    Route::get('/irs-create', 'create')->name('irs.create');
+    Route::post('/irs-store', 'store')->name('irs.store');
+});
 
+Route::controller(KHSController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {
+    Route::get('/khs', 'index')->name('khs.index');
+    Route::get('/khs-create', 'create')->name('khs.create');
+    Route::post('/khs-store', 'store')->name('khs.store');
+});
+
+Route::controller(PKLController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {
+    Route::get('/pkl', 'index')->name('pkl.index');
+    Route::get('/pkl-create', 'create')->name('pkl.create');
+    Route::post('/pkl-store', 'store')->name('pkl.store');
+});
+
+Route::controller(SkripsiController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {
+    Route::get('/skripsi', 'index')->name('skripsi.index');
+    Route::get('/skripsi-create', 'create')->name('skripsi.create');
+    Route::post('/skripsi-store', 'store')->name('skripsi.store');
 });
 

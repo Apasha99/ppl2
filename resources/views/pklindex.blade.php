@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 
 <head>
@@ -17,7 +17,7 @@
                     <th>NIM</th>
                     <th>Status PKL</th>
                     <th>Scan PKL</th>
-                    <th>Action</th> <!-- Kolom untuk tombol edit dan delete -->
+                    <th>Action</th> Kolom untuk tombol edit dan delete
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@
                         <td>
                             <a href="{{ route('pkl.edit', ['nim' => $pkl->nim]) }}" class="btn btn-primary">Edit</a>
 
-                            <!-- Form untuk menghapus data -->
+                            Form untuk menghapus data
                             <form action="{{ route('pkl.destroy', ['nim' => $pkl->nim]) }}" method="POST"
                                 style="display: inline;">
                                 @csrf
@@ -50,7 +50,7 @@
             </tbody>
         </table>
 
-        <!-- Tombol untuk menambahkan data PKL -->
+        Tombol untuk menambahkan data PKL
         <a href="{{ route('pkl.create') }}" class="btn btn-success">+ Tambah Data PKL</a>
     </div>
 
@@ -59,4 +59,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
-</html>
+</html> -->
+
+<!-- TIDAK FIX -->

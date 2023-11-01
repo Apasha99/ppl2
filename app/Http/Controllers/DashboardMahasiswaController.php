@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use App\Models\User;
 use App\Models\IRS;
+use App\Models\KHS;
+use App\Models\PKL;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,10 +23,12 @@ class DashboardMahasiswaController extends Controller
                 ->first();
             $user = User::select('foto');
             $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
+            $khsData = KHS::all();
+            $pklData = PKL::all();
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa,'user'=>$user,'irsData'=>$irsData]);
+                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa,'user'=>$user,'irsData'=>$irsData,'khsData'=>$khsData,'pklData'=>$pklData]);
             }
         }
 

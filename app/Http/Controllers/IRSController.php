@@ -14,7 +14,7 @@ class IRSController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif')->get();
+        $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif','scanIRS')->get();
 
         return view('irs', [
             'mahasiswa' => $mahasiswa,

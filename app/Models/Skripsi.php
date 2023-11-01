@@ -7,38 +7,26 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\Exists;
 
-class KHS extends Model
+class Skripsi extends Model
 {
     use HasFactory;
 
-    protected $table = 'khs';
+    protected $table = 'skripsi';
 
-    protected $fillable = ['semester_aktif', 'jumlah_sks', 'ip_semester','ip_kumulatif','scanKHS', 'status'];
+    protected $fillable = ['semester_aktif', 'statusSkripsi','scanSkripsi', 'status'];
 
     public static function rules($nim)
     {
         return [
-            'ip_semester'=>['required'],
-            'ip_semester'=>['required'],
             'semester_aktif' => [
                 'required',
                 'integer',
-                'between:1,14',
+                'between:6,14',
             ],
-            'scanKHS' => [  // Changed 'scanIRS' to 'scan_irs'
-                'required',
+            'scanSkripsi' => [  // Changed 'scanIRS' to 'scan_irs'
+                'nullable',
                 'file',
                 'mimes:pdf',
-            ],
-            'jumlah_sks' => [
-                'required',
-                'integer','min:18',
-                'max:24',
-            ],
-            'jumlah_sks_kumulatif' => [
-                'required',
-                'integer','min:18',
-                'max:144',
             ],
             'nim' => [
                 'required',

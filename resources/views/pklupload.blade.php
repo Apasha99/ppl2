@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
 	<title>Tutorial Laravel #30 : Membuat Upload File Dengan Laravel</title>
@@ -39,4 +39,6 @@
 		</div>
 	</div>
 </body>
-</html>
+</html> -->
+
+<!-- TIDAK FIX -->
