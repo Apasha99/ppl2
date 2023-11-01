@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Operator;
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardMahasiswaController;
 use App\Http\Controllers\DashboardDosenController;
@@ -9,11 +11,20 @@ use App\Http\Controllers\DashboardDepartemenController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\MahasiswaController;
+=======
+>>>>>>> f36a36da7615ba2cb57beece2756254e92a1008d
 use App\Http\Controllers\IRSController;
 use App\Http\Controllers\KHSController;
 use App\Http\Controllers\PKLController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\SkripsiController;
-use App\Models\Operator;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\DashboardDosenController;
+use App\Http\Controllers\DashboardOperatorController;
+use App\Http\Controllers\DashboardMahasiswaController;
+use App\Http\Controllers\DashboardDepartemenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +63,15 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
     Route::post('/profilOperator-edit', [OperatorController::class, 'update'])->name('operator.update');
 });
 
+<<<<<<< HEAD
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {
+=======
+Route::middleware(['auth', 'only_dosen'])->group(function () {
+    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+});
+
+Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {
+>>>>>>> f36a36da7615ba2cb57beece2756254e92a1008d
     Route::get('/irs', 'index')->name('irs.index');
     Route::get('/irs-create', 'create')->name('irs.create');
     Route::post('/irs-store', 'store')->name('irs.store');
