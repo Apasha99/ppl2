@@ -79,7 +79,7 @@
                                 <td>{{ $mahasiswa->angkatan }}</td>
                                 <td>{{ $mahasiswa->status }}</td>
                                 <td>
-                                    <button class="btn btn-warning btn-sm">Detail</button>
+                                    <a href=" /mahasiswa-detail/{{$mahasiswa}} " class="btn btn-warning btn-sm">Detail</a>
                                 </td>
                             </tr>
                         @endforeach

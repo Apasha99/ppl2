@@ -1,18 +1,19 @@
 <?php
 
+use App\Models\Operator;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardMahasiswaController;
-use App\Http\Controllers\DashboardDosenController;
-use App\Http\Controllers\DashboardOperatorController;
-use App\Http\Controllers\DashboardDepartemenController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\OperatorController;
 use App\Http\Controllers\IRSController;
 use App\Http\Controllers\KHSController;
 use App\Http\Controllers\PKLController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\SkripsiController;
-use App\Models\Operator;
+use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\DashboardDosenController;
+use App\Http\Controllers\DashboardOperatorController;
+use App\Http\Controllers\DashboardMahasiswaController;
+use App\Http\Controllers\DashboardDepartemenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,10 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
     Route::get('/profilOperator', [OperatorController::class, 'edit'])->name('operator.edit');
     Route::get('/profilOperator-edit', [OperatorController::class, 'showEdit'])->name('operator.showEdit');
     Route::post('/profilOperator-edit', [OperatorController::class, 'update'])->name('operator.update');
+});
+
+Route::middleware(['auth', 'only_dosen'])->group(function () {
+    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {

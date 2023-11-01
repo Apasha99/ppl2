@@ -47,7 +47,7 @@
 
         <div class="d-flex justify-content-start">
             @if ($skripsiData->count() > 0)
-                <div class="dropdown id">
+                <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle" type of="button" id="dropdownSemester"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Pilih Semester Aktif
@@ -107,7 +107,7 @@
 @section('script')
     <script>
         // Handle dropdown item click
-        document.querySelectorAll('.dropdown-item .id').forEach(item => {
+        document.querySelectorAll('.dropdown-item').forEach(item => {
             item.addEventListener('click', () => {
                 const selectedSemester = item.getAttribute('data-semester');
                 showSkripsiDetail(selectedSemester);
