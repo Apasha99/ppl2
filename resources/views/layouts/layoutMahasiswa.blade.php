@@ -64,9 +64,9 @@
         <div class="nav flex-column nav-pills" aria-orientation="vertical">
             <a class="nav-link" href="dashboardMahasiswa">Home</a>
             <a class="nav-link" href="irs">IRS</a>
-            <a class="nav-link" href="#">KHS</a>
-            <a class="nav-link" href="#">PKL</a>
-            <a class="nav-link" href="#">Skripsi</a>
+            <a class="nav-link" href="khs">KHS</a>
+            <a class="nav-link" href="pkl">PKL</a>
+            <a class="nav-link" href="skripsi">Skripsi</a>
         </div>
         <div class="container-lg px-5 text-light">
             @yield('content')

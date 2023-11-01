@@ -118,7 +118,7 @@
 
     {{-- PKL --}}
     <div class="tab-pane fade" id="v-pills-pkl" role="tabpanel" aria-labelledby="v-pills-pkl-tab">...</div>
-    @include('pkl')
+    
     {{-- SKRIPSI --}}
     <div class="tab-pane fade" id="v-pills-skripsi" role="tabpanel" aria-labelledby="v-pills-skripsi-tab">...</div>
     </div>
