@@ -42,8 +42,7 @@ class AuthController extends Controller
                 return redirect()->intended('/dashboardDepartemen');
             }
             
-        }
-        ;
+        };
 
         return back()->with('loginError', 'Login Gagal');
     }

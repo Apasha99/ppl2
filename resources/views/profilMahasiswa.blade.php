@@ -11,6 +11,11 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('message') }}
+                </div>
+            @endif
             <div class="row my-4 g-4 justify-content-center align-items-center">
                 <div class="col-md-5 text-center text-md-start">
                     <form action="{{ route('mahasiswa.showEdit', [Auth::user()->id]) }}" method="get">
