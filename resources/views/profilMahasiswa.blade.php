@@ -3,19 +3,23 @@
 @section('content')
     <section id="profil-mhs">
         <div class="container-lg my-5 text-light">
-            <div class="text-center">
-                <h2>Edit Profil</h2>
-            </div>
             @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-person-fill-check"></i> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
             @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('message') }}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+
+            <div class="text-center mt-5">
+                <h2>Edit Profil</h2>
+            </div>
+
             <div class="row my-4 g-4 justify-content-center align-items-center">
                 <div class="col-md-5 text-center text-md-start">
                     <form action="{{ route('mahasiswa.showEdit', [Auth::user()->id]) }}" method="get">
@@ -35,16 +39,15 @@
                                 value="{{ $mahasiswas->nim }}" disabled>
                         </div>
 
+                        @error('username')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                         <label for="username" class="form-label">Username</label>
                         <div class="input-group mb-5">
                             <input type="username" class="form-control" id="username" name="username"
                                 value="{{ $user->username }}" disabled>
-                            @error('username')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary">Edit</button>
-                    </form>
                 </div>
 
                 <div class="col-md-4 text-center d-none d-md-block">
@@ -54,6 +57,7 @@
                         <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
+            </form>
             </div>
         </div>
 
