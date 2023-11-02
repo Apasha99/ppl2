@@ -96,4 +96,9 @@ class IRSController extends Controller
             return redirect()->route('irs.create')->with('error', 'Failed to add IRS');
         }
     }
+
+    public function status (Request $request){
+        return view('login');
+    }
+
 }

@@ -59,7 +59,7 @@
         </div>
     </nav>
 
-    <div class="d-flex align-items-start px-5 mt-2">
+    {{-- <div class="d-flex align-items-start px-5 mt-2">
         <nav id="navbar-mhs" class="nav flex-column nav-pills" aria-orientation="vertical">
             <a class="nav-link" href="/irs">IRS</a>
             <a class="nav-link" href="/khs">KHS</a>
@@ -69,6 +69,10 @@
         <div class="container-lg px-5 text-light" data-bs-target="navbar-mhs" data-bs-offset="0" tabindex="0">
             @yield('content')
         </div>
+    </div> --}}
+
+    <div class="container-lg py-2">
+        @yield('content')
     </div>
 
     <!-- Scripts -->

@@ -54,10 +54,15 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
     Route::post('/profilOperator-edit', [OperatorController::class, 'update'])->name('operator.update');
 });
 
+Route::middleware(['auth', 'only_dosen'])->group(function () {
+    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+});
+
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {
     Route::get('/irs', 'index')->name('irs.index');
     Route::get('/irs-create', 'create')->name('irs.create');
     Route::post('/irs-store', 'store')->name('irs.store');
+    Route::post('/irs-updateStatus', 'status')->name('irs.updateStatus');
 });
 
 Route::controller(KHSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {

@@ -60,8 +60,6 @@
         </div>
     </nav>
 
-    @yield('navbar')
-
     <div class="container-lg py-2">
         @yield('content')
     </div>
