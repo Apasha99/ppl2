@@ -75,30 +75,6 @@
                             </div>
                         </div>
 
-                        @error('username')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                            </div>
-                        @enderror
-                        <label for="username" class="form-label">Username:</label>
-                        <div class="input-group mb-4">
-                            <input type="text" class="form-control" id="username" name="username"
-                                placeholder="Generate Username Mahasiswa" required disabled>
-                            <button type="button" class="btn btn-outline-warning"
-                                onclick="generateUsername()">Generate</button>
-                        </div>
-
-                        @error('password')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                            </div>
-                        @enderror
-                        <label for="password" class="form-label">Password:</label>
-                        <div class="input-group mb-4">
-                            <input type="text" class="form-control" id="password" name="password"
-                                placeholder="Generate Password Mahasiswa" required disabled>
-                            <button type="button" class="btn btn-outline-warning"
-                                onclick="generatePassword()">Generate</button>
-                        </div>
-
                         @error('nip')
                             <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
@@ -128,20 +104,20 @@
 
 @section('script')
     <script>
-        // Function to generate a random username
-        function generateUsername() {
-            var usernameField = document.getElementById("username");
-            var namaField = document.getElementById("nama");
-            if (namaField.value) {
-                usernameField.value = namaField.value.replace(/\s/g, '');
-            }
-        }
+        // // Function to generate a random username
+        // function generateUsername() {
+        //     var usernameField = document.getElementById("username");
+        //     var namaField = document.getElementById("nama");
+        //     if (namaField.value) {
+        //         usernameField.value = namaField.value.replace(/\s/g, '');
+        //     }
+        // }
 
         // Function to generate a random password
-        function generatePassword() {
-            var passwordField = document.getElementById("password");
-            passwordField.value = Math.random().toString(36).substring(2,
-                10); // Generates an 8-character alphanumeric password
-        }
+        // function generatePassword() {
+        //     var passwordField = document.getElementById("password");
+        //     passwordField.value = Math.random().toString(36).substring(2,
+        //         10); // Generates an 8-character alphanumeric password
+        // }
     </script>
 @endsection

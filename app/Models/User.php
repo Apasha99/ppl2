@@ -21,7 +21,8 @@ class User extends Authenticatable
         'username',
         'password',
         'foto',
-        'role_id'
+        'role_id',
+        'cekProfil'
     ];
 
     /**

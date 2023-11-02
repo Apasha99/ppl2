@@ -14,7 +14,9 @@ class SkripsiController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $skripsiData = Skripsi::select('semester_aktif','nilai','lama_studi','tanggal_sidang','statusSkripsi','nim','status','scanSkripsi')->get();
+        $nim = $request->user()->mahasiswa->nim;
+        $skripsiData = Skripsi::where('nim',$nim)
+                    ->select('semester_aktif','nilai','lama_studi','tanggal_sidang','statusSkripsi','nim','status','scanSkripsi')->get();
 
         return view('skripsi', [
             'mahasiswa' => $mahasiswa,
@@ -43,6 +45,20 @@ class SkripsiController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $nim = $request->user()->mahasiswa->nim;
+        $latestSkripsi = Skripsi::where('nim', $nim)->orderBy('semester_aktif', 'desc')->first();
+        
+        if ($latestSkripsi) {
+            $latestSemester = $latestSkripsi->semester_aktif;
+            $inputSemester = $request->input('semester_aktif');
+
+            if ($inputSemester > $latestSemester + 1) {
+                // PKL diisi tidak sesuai urutan, berikan pesan kesalahan
+                return redirect()->route('skripsi.create')->with('error', 'Anda harus mengisi Skripsi sesuai urutan semester.');
+        }}elseif($request->input('semester_aktif') != 7){
+            return redirect()->route('skripsi.create')->with('error', 'Anda harus memulai dengan Skripsi semester 7.');
+        }
+
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric','unique:skripsi'], // Correct the validation rule syntax
             'statusSkripsi' => [Rule::in(['lulus', 'tidak lulus'])],

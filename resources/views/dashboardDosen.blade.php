@@ -2,22 +2,49 @@
 
 @section('content')
     <section>
-        <div class="container-lg my-5">
+        <div class="container-lg my-5 text-light">
             <div class="text-center text-light">
                 <div class="display-6">Welcome, {{ Auth::user()->username }}</div>
             </div>
 
+            <div class="d-flex ">
+                <div class="row mt-5 py-5 d-flex ">
+                    <div class="col-6 col-lg-3">
+                        <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-100 w-100" alt="foto-profil" />
+                    </div>
+
+                    <div class="col-lg-6 ms-4">
+                        <table>
+                            <tr>
+                                <td>Nama</td>
+                                <td>:</td>
+                                <td>{{ $dosens->nama }}</td>
+                            </tr>
+                            <tr>
+                                <td>NIP</td>
+                                <td>:</td>
+                                <td>{{ $dosens->nip }}</td>
+                            </tr>
+                            <tr>
+                                <td>Username</td>
+                                <td>:</td>
+                                <td>{{ $dosens->username }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
             <div class="row justify-content-center align-items-center gy-3 mt-5">
                 <div class="col-lg-3 mx-2 bg-light border border-dark border-2 rounded">
                     <div class="d-flex justify-content-between pt-3 pe-2">
-                        <p class="border border-dark border-1 rounded px-3">{{ $mahasiswaperwalian_count }}</p>
-                        <h6 class="align-items-center"><i class="bi bi-mortarboard-fill"></i> Mahasiswa Perwalian</h6>
+                        <p class="border border-dark border-1 rounded px-3 text-dark">{{ $mahasiswaPerwalianCount }}</p>
+                        <h6 class="align-items-center text-dark"><i class="bi bi-mortarboard-fill"></i> Mahasiswa Perwalian</h6>
                     </div>
                 </div>
                 <div class="col-lg-3 mx-2 bg-light border border-dark border-2 rounded">
                     <div class="d-flex justify-content-between pt-3 pe-2">
-                        <p class="border border-dark border-1 rounded px-3">{{ $mahasiswaCount }}</p>
-                        <h6 class="align-items-center"><i class="bi bi-backpack-fill"></i> Mahasiswa</h6>
+                        <p class="border border-dark border-1 rounded px-3 text-dark">{{ $mahasiswaCount }}</p>
+                        <h6 class="align-items-center text-dark"><i class="bi bi-backpack-fill"></i> Mahasiswa</h6>
                     </div>
                 </div>
             </div>
@@ -66,7 +93,7 @@
                         </tr>
                     </thead>
                     <tbody id="mahasiswaTable">
-                        @foreach ($mahasiswas as $mahasiswa)
+                        @foreach ($mahasiswaPerwalian as $mahasiswa)
                             <tr>
                                 <td>{{ $mahasiswa->nama }}</td>
                                 <td>{{ $mahasiswa->nim }}</td>

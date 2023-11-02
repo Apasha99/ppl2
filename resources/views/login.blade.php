@@ -22,10 +22,11 @@
                 </div>
                 <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
 
-                @if (session('status'))
-                    <div class="alert alert-danger">
-                        {{ session('message') }}
-                    </div>
+                @if (session('loginError'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
                 @endif
 
                     <form action="{{ route('login') }}" method="POST">

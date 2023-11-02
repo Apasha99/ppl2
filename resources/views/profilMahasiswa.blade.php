@@ -1,7 +1,7 @@
-@extends('layouts.layoutOperator')
+@extends('layouts.layoutMahasiswa')
 
 @section('content')
-    <section id="profil-oper">
+    <section id="profil-mhs">
         <div class="container-lg my-5 text-light">
             <div class="text-center">
                 <h2>Edit Profil</h2>
@@ -12,14 +12,13 @@
                 </div>
             @endif
             @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
+                <div class="alert alert-danger">
+                    {{ session('message') }}
+                </div>
             @endif
             <div class="row my-4 g-4 justify-content-center align-items-center">
                 <div class="col-md-5 text-center text-md-start">
-                    <form action="{{ route('operator.showEdit', [Auth::user()->id]) }}" method="get">
+                    <form action="{{ route('mahasiswa.showEdit', [Auth::user()->id]) }}" method="get">
                         @csrf
                         <label for="nama" class="form-label">Nama</label>
                         <div class="input-group mb-3">
@@ -27,13 +26,13 @@
                                 <i class="bi bi-person-fill"></i>
                             </span>
                             <input type="text" class="form-control" id="nama" name="nama"
-                                value="{{ $operators->nama }}" disabled>
+                                value="{{ $mahasiswas->nama }}" disabled>
                         </div>
 
-                        <label for="nip" class="form-label">NIP</label>
+                        <label for="nim" class="form-label">NIM</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="nip" name="nip"
-                                value="{{ $operators->nip }}" disabled>
+                            <input type="text" class="form-control" id="nim" name="nip"
+                                value="{{ $mahasiswas->nim }}" disabled>
                         </div>
 
                         <label for="username" class="form-label">Username</label>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use App\Models\User;
-use App\Models\IRS;
+use App\Models\Skripsi;
 use App\Models\KHS;
 use App\Models\PKL;
 use Illuminate\Http\Request;
@@ -21,18 +21,24 @@ class DashboardMahasiswaController extends Controller
                 ->where('mahasiswa.iduser', Auth::user()->id)
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama')
                 ->first();
-
+            $nim = $request->user()->mahasiswa->nim;
             $user = User::where('id', Auth::user()->id)->select('foto')->first();
-            $latestIRS = IRS::orderBy('created_at', 'desc')->first();
-            $semesterAktif = $latestIRS ? $latestIRS->semester_aktif : null;
-            $latestSKSKumulatif = KHS::orderBy('created_at', 'desc')->first();
+            $latestPKL = PKL::where('nim',$nim)
+                        ->orderBy('created_at', 'desc')->first();
+            $statusPKL = $latestPKL ? $latestPKL->statusPKL : null;
+            $latestSkripsi = Skripsi::where('nim',$nim)
+                        ->orderBy('created_at', 'desc')->first();
+            $statusSkripsi = $latestSkripsi ? $latestSkripsi->statusSkripsi : null;
+            $latestSKSKumulatif = KHS::where('nim',$nim)
+                                ->orderBy('created_at', 'desc')->first();
             $SKSKumulatif = $latestSKSKumulatif ? $latestSKSKumulatif->jumlah_sks_kumulatif : null;
-            $latestIPKumulatif = KHS::orderBy('created_at', 'desc')->first();
+            $latestIPKumulatif = KHS::where('nim',$nim)
+                                ->orderBy('created_at', 'desc')->first();
             $IPKumulatif = $latestIPKumulatif ? $latestIPKumulatif->ip_kumulatif : null;
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user, 'semesterAktif' => $semesterAktif,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
+                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user, 'statusPKL' => $statusPKL,'statusSkripsi'=>$statusSkripsi,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
             }
         }
 
