@@ -21,13 +21,16 @@ class DashboardMahasiswaController extends Controller
                 ->where('mahasiswa.iduser', Auth::user()->id)
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama')
                 ->first();
-
+            $nim = $request->user()->mahasiswa->nim;
             $user = User::where('id', Auth::user()->id)->select('foto')->first();
-            $latestIRS = IRS::orderBy('created_at', 'desc')->first();
+            $latestIRS = IRS::where('nim',$nim)
+                        ->orderBy('created_at', 'desc')->first();
             $semesterAktif = $latestIRS ? $latestIRS->semester_aktif : null;
-            $latestSKSKumulatif = KHS::orderBy('created_at', 'desc')->first();
+            $latestSKSKumulatif = KHS::where('nim',$nim)
+                                ->orderBy('created_at', 'desc')->first();
             $SKSKumulatif = $latestSKSKumulatif ? $latestSKSKumulatif->jumlah_sks_kumulatif : null;
-            $latestIPKumulatif = KHS::orderBy('created_at', 'desc')->first();
+            $latestIPKumulatif = KHS::where('nim',$nim)
+                                ->orderBy('created_at', 'desc')->first();
             $IPKumulatif = $latestIPKumulatif ? $latestIPKumulatif->ip_kumulatif : null;
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.

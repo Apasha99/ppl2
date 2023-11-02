@@ -81,7 +81,7 @@ class OperatorController extends Controller
             $mahasiswa->save();
         });
 
-        return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil ditambahkan. Username : '. $username . 'Password : '. $password)->withInput();
+        return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil ditambahkan. Username : '. $username . ' Password : '. $password)->withInput();
     }
 
     public function edit(Request $request): View

@@ -14,7 +14,9 @@ class PKLController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $pklData = PKL::select('semester_aktif','nilai','statusPKL','scanPKL','nim','status')->get();
+        $nim = $request->user()->mahasiswa->nim;
+        $pklData = PKL::where('nim',$nim)
+                ->select('semester_aktif','nilai','statusPKL','scanPKL','nim','status')->get();
         
         return view('pkl', [
             'mahasiswa' => $mahasiswa,
@@ -43,6 +45,19 @@ class PKLController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $nim = $request->user()->mahasiswa->nim;
+        $latestPKL = PKL::where('nim', $nim)->orderBy('semester_aktif', 'desc')->first();
+        
+        if ($latestPKL) {
+            $latestSemester = $latestPKL->semester_aktif;
+            $inputSemester = $request->input('semester_aktif');
+
+            if ($inputSemester > $latestSemester + 1) {
+                // PKL diisi tidak sesuai urutan, berikan pesan kesalahan
+                return redirect()->route('pkl.create')->with('error', 'Anda harus mengisi PKL sesuai urutan semester.');
+        }}elseif($request->input('semester_aktif') != 6){
+            return redirect()->route('pkl.create')->with('error', 'Anda harus memulai dengan PKL semester 6.');
+        }
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric','unique:pkl'], // Correct the validation rule syntax
             'statusPKL' => [Rule::in(['lulus', 'tidak lulus'])],

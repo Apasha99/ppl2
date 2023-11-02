@@ -14,7 +14,14 @@ class IRSController extends Controller
     public function index(Request $request)
     {
         $mahasiswa = Mahasiswa::select('nama', 'nim')->get();
-        $irsData = IRS::select('nim', 'status', 'jumlah_sks', 'semester_aktif','scanIRS')->get();
+
+        // Ambil NIM dari Mahasiswa yang saat ini sudah login
+        $nim = $request->user()->mahasiswa->nim;
+
+        // Ambil data IRS yang sesuai dengan NIM Mahasiswa yang sedang login
+        $irsData = IRS::where('nim', $nim)
+            ->select('nim', 'status', 'jumlah_sks', 'semester_aktif', 'scanIRS')
+            ->get();
 
         return view('irs', [
             'mahasiswa' => $mahasiswa,
@@ -29,6 +36,7 @@ class IRSController extends Controller
 
         if ($mahasiswa) {
             // Get the active semesters for the given student
+            $latestIRS = IRS::where('nim', $nim)->orderBy('semester_aktif', 'desc')->first();
             $semesterAktifIRS = IRS::where('nim', $nim)->pluck('semester_aktif')->toArray();
 
             // Create an array of available semesters by diffing the full range and active semesters
@@ -43,12 +51,29 @@ class IRSController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $nim = $request->user()->mahasiswa->nim;
+        $latestIRS = IRS::where('nim', $nim)->orderBy('semester_aktif', 'desc')->first();
+        
+        if ($latestIRS) {
+            $latestSemester = $latestIRS->semester_aktif;
+            $inputSemester = $request->input('semester_aktif');
+    
+            if ($inputSemester > $latestSemester + 1) {
+                // IRS diisi tidak sesuai urutan, berikan pesan kesalahan
+                return redirect()->route('irs.create')->with('error', 'Anda harus mengisi semester sebelumnya terlebih dahulu.');
+            }
+        }elseif($request->input('semester_aktif') != 1){
+            return redirect()->route('irs.create')->with('error', 'Anda harus memulai dengan IRS semester 1.');
+        }
+
+        // Lanjutkan dengan validasi input
         $validated = $request->validate([
-            'semester_aktif' => ['required', 'numeric','unique:irs'], // Correct the validation rule syntax
+            'semester_aktif' => ['required', 'numeric'], // Correct the validation rule syntax
             'jumlah_sks' => ['required', 'numeric', 'between:1,24'], // Correct the validation rule syntax
             'scanIRS' => ['required', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
         ]);
-
+        
+        // Lanjutkan dengan penyimpanan IRS
         $PDFPath = null;
 
         if ($request->hasFile('scanIRS') && $request->file('scanIRS')->isValid()) {
@@ -62,6 +87,7 @@ class IRSController extends Controller
         $irs->scanIRS = $PDFPath; // Assign the PDF path here
         $irs->nim = $request->user()->mahasiswa->nim;
         $irs->nip = $request->user()->mahasiswa->nip;
+        
         $saved = $irs->save();
 
         if ($saved) {
@@ -70,5 +96,4 @@ class IRSController extends Controller
             return redirect()->route('irs.create')->with('error', 'Failed to add IRS');
         }
     }
-
 }
