@@ -19,11 +19,12 @@ class DashboardDosenController extends Controller
                 ->select('dosen_wali.nama', 'dosen_wali.nip', 'users.username')
                 ->first();
             $mahasiswaCount = Mahasiswa::count();
-            $mahasiswaPerwalian = Mahasiswa::leftjoin('dosen_wali','mahasiswa.nip','=','dosen_wali.nip')
+            $mahasiswaPerwalian = Mahasiswa::join('dosen_wali','mahasiswa.nip','=','dosen_wali.nip')
                                     ->where('dosen_wali.iduser', Auth::user()->id)
                                     ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'dosen_wali.nip as dosen_wali_nip')
                                     ->get();
             $mahasiswaPerwalianCount = $mahasiswaPerwalian->count();
+            
             $user = User::where('id', Auth::user()->id)->select('foto')->first();
             if ($dosens) {
                 return view('dashboardDosen', ['dosens' => $dosens, 'user' => $user, 'mahasiswaCount'=> $mahasiswaCount,'mahasiswaPerwalian'=>$mahasiswaPerwalian,'mahasiswaPerwalianCount'=>$mahasiswaPerwalianCount]);
@@ -33,6 +34,31 @@ class DashboardDosenController extends Controller
         // Jika user tidak memiliki role_id 1 atau tidak ditemukan data mahasiswa yang sesuai, Anda dapat mengirimkan tampilan yang sesuai.
         return view('dashboardDosen'); // Misalnya, tampilan kosong.
     } 
+
+    public function searchMahasiswa(Request $request)
+    {
+        $search = $request->input('search');
+        $dosens = Dosen::leftJoin('users', 'dosen_wali.iduser', '=', 'users.id')
+                ->where('dosen_wali.iduser', Auth::user()->id)
+                ->select('dosen_wali.nama', 'dosen_wali.nip', 'users.username')
+                ->first();
+        $mahasiswaCount = Mahasiswa::count();
+        $mahasiswaPerwalian = Mahasiswa::join('dosen_wali','mahasiswa.nip','=','dosen_wali.nip')
+                                ->where('dosen_wali.iduser', Auth::user()->id)
+                                ->select('mahasiswa.nama as nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'dosen_wali.nip as dosen_wali_nip')
+                                ->get();
+        $mahasiswaPerwalianCount = $mahasiswaPerwalian->count();
+        
+        $user = User::where('id', Auth::user()->id)->select('foto')->first();
+        // Menggunakan metode WHERE LIKE untuk mencari buku yang sesuai
+        $mahasiswaPerwalian = Mahasiswa::where('mahasiswa.nama', 'like', '%' . $search . '%')
+            ->orWhere('mahasiswa.nim', 'like', '%' . $search . '%')
+            ->orWhere('mahasiswa.angkatan', 'like', '%' . $search . '%')
+            ->orWhere('mahasiswa.status', 'like', '%' . $search . '%')
+            ->get();
+        // dd($mahasiswaPerwalian);
+        return view('dashboardDosen', ['user' => $user,'dosens'=>$dosens,'mahasiswaCount'=>$mahasiswaCount,'mahasiswaPerwalian'=>$mahasiswaPerwalian,'mahasiswaPerwalianCount'=>$mahasiswaPerwalianCount]);
+    }
 }
 
 

@@ -1,4 +1,4 @@
-@extends('layouts.layoutOperator')
+@extends('layouts.layoutDosen')
 
 @section('content')
     <section>
@@ -53,26 +53,15 @@
 
     <section class="bg-light rounded">
         <div class="text-center my-5 pt-5">
-            <h1 class="display-6">Daftar Mahasiswa</h1>
+            <h1 class="display-6 text-dark">Daftar Mahasiswa</h1>
         </div>
-
-        <div class="col-lg-6 mx-2">
-            <form class="d-flex" role="search">
-                <select id="filterAngkatan" class="form-select me-2">
-                    <option value="" selected>Semua Angkatan</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                </select>
-
-                <input class="form-control me-2" type="search" id="searchInput"
-                    placeholder="Cari mahasiswa berdasarkan nama" aria-label="Search">
-                <button class="btn btn-outline-success" type="button" onclick="searchMahasiswa()">Search</button>
+        <div class="col-lg-10 mx-10">
+            <form action="{{ route('searchMhs') }}" method="GET">
+                <label for="search" style="color:#000">Cari Mahasiswa:</label>
+                <input type="text" class="input input-bordered w-full" id="search" name="search" value="{{ request('search') }}" placeholder="Cari berdasarkan nama/nim/angkatan/status">
+                <button type="submit" class="btn btn-primary w-full">Cari</button>
             </form>
         </div>
-
         <div class="container-lg my-5 pb-4">
             @if (session('status'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -100,7 +89,7 @@
                                 <td>{{ $mahasiswa->angkatan }}</td>
                                 <td>{{ $mahasiswa->status }}</td>
                                 <td>
-                                    <a href=" /mahasiswa-detail/{{$mahasiswa}} " class="btn btn-warning btn-sm">Detail</a>
+                                    <a href=" # " class="btn btn-warning btn-sm">Detail</a>
                                 </td>
                             </tr>
                         @endforeach

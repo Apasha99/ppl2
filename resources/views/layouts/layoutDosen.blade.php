@@ -41,8 +41,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active me-2" aria-current="page" href="dashboardDosen"><i
-                                class="bi bi-house-door-fill"></i> Home</a>
+                        <a class="nav-link active me-2" aria-current="page" href="{{route('dashboardDosen')}}"><i class="bi bi-house-door-fill"></i> Home</a>
                     </li>
 
                     <li class="nav-item dropdown">
@@ -51,7 +50,7 @@
                             <i class="bi bi-person-fill"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="{{ route('dosen.edit',[Auth::user()->id]) }}">Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Edit Profile</a></li>
                             <li><a class="dropdown-item" href="/logout">Logout</a></li>
                         </ul>
                     </li>
