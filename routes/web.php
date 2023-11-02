@@ -60,6 +60,7 @@ Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa'])-
     Route::get('/irs', 'index')->name('irs.index');
     Route::get('/irs-create', 'create')->name('irs.create');
     Route::post('/irs-store', 'store')->name('irs.store');
+    Route::post('/irs-updateStatus', 'status')->name('irs.updateStatus');
 });
 
 Route::controller(KHSController::class)->middleware(['auth', 'only_mahasiswa'])->group(function () {

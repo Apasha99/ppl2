@@ -1,4 +1,4 @@
-@extends('layouts.layoutOperator')
+@extends('layouts.layoutDosen')
 
 @section('content')
     <section>

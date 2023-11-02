@@ -71,4 +71,8 @@ class IRSController extends Controller
         }
     }
 
+    public function status (Request $request){
+        return view('login');
+    }
+
 }
