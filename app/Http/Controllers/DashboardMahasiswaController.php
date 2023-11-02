@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use App\Models\User;
-use App\Models\IRS;
+use App\Models\Skripsi;
 use App\Models\KHS;
 use App\Models\PKL;
 use Illuminate\Http\Request;
@@ -23,9 +23,12 @@ class DashboardMahasiswaController extends Controller
                 ->first();
             $nim = $request->user()->mahasiswa->nim;
             $user = User::where('id', Auth::user()->id)->select('foto')->first();
-            $latestIRS = IRS::where('nim',$nim)
+            $latestPKL = PKL::where('nim',$nim)
                         ->orderBy('created_at', 'desc')->first();
-            $semesterAktif = $latestIRS ? $latestIRS->semester_aktif : null;
+            $statusPKL = $latestPKL ? $latestPKL->statusPKL : null;
+            $latestSkripsi = Skripsi::where('nim',$nim)
+                        ->orderBy('created_at', 'desc')->first();
+            $statusSkripsi = $latestSkripsi ? $latestSkripsi->statusSkripsi : null;
             $latestSKSKumulatif = KHS::where('nim',$nim)
                                 ->orderBy('created_at', 'desc')->first();
             $SKSKumulatif = $latestSKSKumulatif ? $latestSKSKumulatif->jumlah_sks_kumulatif : null;
@@ -35,7 +38,7 @@ class DashboardMahasiswaController extends Controller
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user, 'semesterAktif' => $semesterAktif,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
+                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user, 'statusPKL' => $statusPKL,'statusSkripsi'=>$statusSkripsi,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
             }
         }
 

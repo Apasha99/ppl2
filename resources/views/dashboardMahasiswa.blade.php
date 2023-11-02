@@ -67,9 +67,27 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body ms-5">
-                                    <h5 class="card-title">IRS</h5>
-                                    <p class="card-text">Semester Aktif
-                                        <br><span class="small">{{ $semesterAktif }}</span>
+                                    <h5 class="card-title">PKL</h5>
+                                    <p class="card-text">Status PKL
+                                        <br><span class="small">{{ $statusPKL }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card bg-dark text-light border-light border-5 h-100 w-100">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <!-- Replace the <img> with a large icon -->
+                                <i class="bi bi-journals bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body ms-5">
+                                    <h5 class="card-title">Skripsi</h5>
+                                    <p class="card-text">Status Skripsi
+                                        <br><span class="small">{{ $statusSkripsi }}</span>
                                     </p>
                                 </div>
                             </div>

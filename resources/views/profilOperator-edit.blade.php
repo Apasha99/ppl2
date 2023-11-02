@@ -10,6 +10,12 @@
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
+            @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            @endif
             @endif
             <div class="row my-4 g-4 justify-content-center align-items-center">
                 <div class="col-md-5 text-center text-md-start">
