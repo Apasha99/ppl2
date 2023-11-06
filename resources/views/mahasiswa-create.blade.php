@@ -6,63 +6,63 @@
             <div class="text-center text-light">
                 <h2>Tambah Mahasiswa Baru</h2>
             </div>
+
             @if (session('success'))
-                <div class="alert alert-error">
+                <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
+
             @if (session('error'))
-                <div class="alert alert-error">
+                <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
             @endif
-
-            {{-- <input type="file" class="form-control mt-3" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  />   --}}
 
             <div class="row justify-content-center my-5 text-light">
                 <div class="col-lg-6">
                     <form action="{{ route('mahasiswa.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-                        @error('nama')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
-                        @enderror
-                        <label for="nama" class="form-label">Nama:</label>
-                        <div class="input-group mb-4">
-                            <input type="text" class="form-control" id="nama" name="nama"
+                        <div class="form-group">
+                            <label for="nama">Nama:</label>
+                            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama"
                                 placeholder="Masukkan Nama Mahasiswa" required>
+                            @error('nama')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
-                        @error('nim')
-                            <div class="text-danger mt-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                            </div>
-                        @enderror
-                        <label for="nim" class="form-label">NIM:</label>
-                        <div class="input-group mb-4">
-                            <input type="text" class="form-control" id="nim" name="nim"
+                        <div class="form-group">
+                            <label for="nim">NIM:</label>
+                            <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim"
                                 placeholder="Masukkan NIM Mahasiswa" required>
+                            @error('nim')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
-                        @error('angkatan')
-                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                            </div>
-                        @enderror
-                        <label for="angkatan" class="form-label">Angkatan:</label>
-                        <div class="input-group mb-4">
-                            <select class="form-select" name="angkatan" id="angkatan" required>
+                        <div class="form-group">
+                            <label for="angkatan">Angkatan:</label>
+                            <select class="form-select @error('angkatan') is-invalid @enderror" name="angkatan" id="angkatan" required>
                                 <option selected value="">-- Pilih Angkatan --</option>
                                 @for ($i = 18; $i <= 23; $i++)
                                     <option value="20{{ $i }}">20{{ $i }}</option>
                                 @endfor
                             </select>
+                            @error('angkatan')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
-                        @error('status')
-                            <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                            </div>
-                        @enderror
-                        <label for="status" class="form-label">Status:</label>
-                        <div class="mb-4">
+                        <div class="form-group">
+                            <label for="status">Status:</label>
                             <div class="form-check">
                                 <input type="radio" class="form-check-input" id="active" name="status" value="active"
                                     checked>
@@ -73,51 +73,34 @@
                                     value="inactive">
                                 <label class="form-check-label" for="inactive">Tidak aktif</label>
                             </div>
+                            @error('status')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
-                        @error('nip')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
-                        <label for="nip" class="form-label">Nama Dosen wali:</label>
-                        <div class="input-group mb-4">
-                            <select class="form-select" name="nip" id="nip" required>
+                        <div class="form-group">
+                            <label for="nip">Nama Dosen wali:</label>
+                            <select class="form-select @error('nip') is-invalid @enderror" name="nip" id="nip" required>
                                 <option value="">Pilih Dosen Wali</option>
                                 @foreach ($dosens as $dosen)
                                     <option value="{{ $dosen->nip }}">{{ $dosen->nama }}</option>
                                 @endforeach
                             </select>
+                            @error('nip')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
-                </div>
 
-                <div class="text-center my-5">
-                    <button type="submit" class="btn btn-primary px-3">Tambah Data</button>
+                        <div class="text-center my-5">
+                            <button type="submit" class="btn btn-primary px-3">Tambah Data</button>
+                        </div>
+                    </form>
                 </div>
-
-                </form>
             </div>
         </div>
-
-        </div>
-
     </section>
-@endsection
-
-@section('script')
-    <script>
-        // // Function to generate a random username
-        // function generateUsername() {
-        //     var usernameField = document.getElementById("username");
-        //     var namaField = document.getElementById("nama");
-        //     if (namaField.value) {
-        //         usernameField.value = namaField.value.replace(/\s/g, '');
-        //     }
-        // }
-
-        // Function to generate a random password
-        // function generatePassword() {
-        //     var passwordField = document.getElementById("password");
-        //     passwordField.value = Math.random().toString(36).substring(2,
-        //         10); // Generates an 8-character alphanumeric password
-        // }
-    </script>
 @endsection

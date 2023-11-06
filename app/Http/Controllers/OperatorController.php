@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Operator;
 use App\Models\Dosen;
+use App\Models\GenerateAkun;
 use App\Models\User;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use App\Imports\MahasiswaImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OperatorController extends Controller
 {
@@ -155,4 +158,113 @@ class OperatorController extends Controller
             return redirect()->route('operator.showEdit')->with('error', 'Gagal memperbarui profil.');
         }
     }
+
+    public function tambah()
+    {
+        $mahasiswas = Mahasiswa::join('dosen_wali','dosen_wali.nip','=','mahasiswa.nip')
+                                ->select('mahasiswa.nama as nama', 'mahasiswa.nim','mahasiswa.nip','mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip','dosen_wali.nama as dosen_nama','mahasiswa.username')
+                                ->whereNull('mahasiswa.iduser')->get();
+  
+        return view('tambahMahasiswa', compact('mahasiswas'));
+    }
+    /**
+    * @return \Illuminate\Support\Collection
+    */
+    public function import() 
+    {
+        Excel::import(new MahasiswaImport, request()->file('file'), 'Xlsx');
+        return redirect('tambahMahasiswa')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
+    }
+
+    public function daftarAkun(){
+        $mahasiswas = GenerateAkun::get();
+        return redirect('daftarAkun', compact('mahasiswas'));
+    }
+
+    // public function generateAkun(Request $request) {
+    //     // Get the Mahasiswa record related to this request
+    //     $mahasiswa = $request->nim;
+    
+    //     // Check if the "iduser" is null in the Mahasiswa record
+        // if ($mahasiswa->iduser == null) {
+        //     // Get the related nim from the Mahasiswa record
+        //     $nim = $mahasiswa->nim;
+        //     // Generate a username by removing spaces and making it lowercase
+        //     $username = strtolower(str_replace(' ', '', $nim->nama));
+    
+        //     // Check if the username already exists, and append a random number until it's unique
+        //     while (User::where('username', $username)->exists()) {
+        //         $username = strtolower(str_replace(' ', '', $nim->nama)) . rand(1, 100);
+        //     }
+    
+        //     $password = Str::random(8);
+    
+        //     DB::transaction(function () use ($mahasiswa, $username, $password) {
+        //         // Create a new User
+        //         $user = new User;
+        //         $user->username = $username;
+        //         $user->password = Hash::make($password); // Hash the password for security
+        //         $user->role_id = 1; 
+    
+        //         $user->save();
+    
+        //         // Update the Mahasiswa with the generated username and "iduser"
+        //         $mahasiswa->iduser = $user->id;
+        //         $mahasiswa->save();
+        //     });
+    
+    //         return redirect('daftarAkun')->with('status', 'Data Mahasiswa berhasil digenerate.');
+    //     } else {
+    //         // Handle the case where "iduser" is not null
+    //         return redirect('tambahMahasiswa')->with('error', 'ID User is not null for this Mahasiswa.');
+    //     }
+    // }    
+
+    public function generateAkun(Request $request) {
+        // Get the array of NIMs in the Mahasiswa table with a null "iduser"
+        $nimsWithNullIduser = Mahasiswa::whereNull('iduser')->pluck('nim');
+    
+        foreach ($nimsWithNullIduser as $generate_akun_nim) {
+            // Get the Mahasiswa record related to this NIM
+            $mahasiswa = Mahasiswa::where('nim', $generate_akun_nim)->first();
+    
+            if ($mahasiswa) {
+                // Generate a username by removing spaces and making it lowercase
+                $username = strtolower(str_replace(' ', '', $mahasiswa->nama));
+    
+                // Check if the username already exists, and append a random number until it's unique
+                while (User::where('username', $username)->exists()) {
+                    $username = strtolower(str_replace(' ', '', $mahasiswa->nama)) . rand(1, 100);
+                }
+    
+                $password = Str::random(8);
+    
+                DB::transaction(function () use ($mahasiswa, $username, $password) {
+                    // Create a new User
+                    $user = User::create([
+                        'username' => $username,
+                        'password' => Hash::make($password),
+                        'role_id' => 1,
+                    ]);
+    
+                    // Update the Mahasiswa with the generated username and "iduser"
+                    $mahasiswa->username = $username;
+                    $mahasiswa->iduser = $user->id;
+                    $mahasiswa->save();
+    
+                    // You can create GenerateAkun records here if needed
+                    // GenerateAkun::create([
+                    //     'username' => $username,
+                    //     'password' => $password,
+                    // ]);
+                });
+            } else {
+                // Handle the case where Mahasiswa record doesn't exist
+                return redirect('tambahMahasiswa')->with('error', 'Mahasiswa record not found for NIM: ' . $generate_akun_nim);
+            }
+        }
+    
+        return redirect('daftarAkun')->with('status', 'Data Mahasiswa berhasil digenerate.');
+    }    
+    
 }
