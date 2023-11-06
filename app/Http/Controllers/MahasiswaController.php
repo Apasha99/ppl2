@@ -15,7 +15,9 @@ class MahasiswaController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user();
+        $nim = $request->user()->mahasiswa->nim;
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
+                ->where('nim',$nim)
                 ->select('mahasiswa.nama', 'mahasiswa.nim','mahasiswa.angkatan','mahasiswa.status','mahasiswa.nip', 'users.id', 'users.username')
                 ->first();
         return view('profilMahasiswa', ['user' => $user,'mahasiswas'=>$mahasiswas]);
@@ -24,7 +26,9 @@ class MahasiswaController extends Controller
     public function showEdit(Request $request): View
     {
         $user = $request->user();
+        $nim = $request->user()->mahasiswa->nim;
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
+                ->where('nim',$nim)
                 ->select('mahasiswa.nama', 'mahasiswa.nim','mahasiswa.angkatan','mahasiswa.status','mahasiswa.nip', 
                 'mahasiswa.alamat','mahasiswa.kabkota','mahasiswa.provinsi','mahasiswa.noHandphone','users.id', 'users.username','users.password')
                 ->first();
@@ -98,7 +102,9 @@ class MahasiswaController extends Controller
     public function editProfil(Request $request): View
     {
         $user = $request->user();
+        $nim = $request->user()->mahasiswa->nim;
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
+                ->where('nim',$nim)
                 ->select('mahasiswa.nama', 'mahasiswa.nim','mahasiswa.angkatan','mahasiswa.status','mahasiswa.nip', 'users.id', 'users.username')
                 ->first();
         return view('editprofilMahasiswa', ['user' => $user,'mahasiswas'=>$mahasiswas]);
@@ -107,7 +113,9 @@ class MahasiswaController extends Controller
     public function showProfil(Request $request): View
     {
         $user = $request->user();
+        $nim = $request->user()->mahasiswa->nim;
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
+                ->where('nim',$nim)
                 ->select('mahasiswa.nama', 'mahasiswa.nim','mahasiswa.angkatan','mahasiswa.status','mahasiswa.nip', 
                 'mahasiswa.alamat','mahasiswa.kabkota','mahasiswa.provinsi','mahasiswa.noHandphone','users.id', 'users.username','users.password')
                 ->first();
