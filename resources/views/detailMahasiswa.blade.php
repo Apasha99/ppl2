@@ -1,53 +1,47 @@
 @extends('layouts.layoutDosen')
 
 @section('content')
-
     <section>
+        <div class="container-lg text-light">
+            <div class="text-center">
+                <h2>Progress Perkembangan Studi Mahasiswa</h2>
+                <h2>Fakultas Sains dan Matematika UNDIP Semarang</h2>
+            </div>
 
-        <div class="text-center text-light">
-            <h2>IRS</h2>
-        </div>
+            <hr>
 
-        <div>
-            <div class="row justify-content-center">
+            <div class="row my-5 g-5 justify-content-around align-items-center">
                 <div class="col-lg-6">
-                    <form action="{{ route('irs.updateStatus') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        @method('POST')
+                    <table>
+                        <tr>
+                            <td>Nama</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->nama }}</td>
+                        </tr>
+                        <tr>
+                            <td>NIM</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->nim }}</td>
+                        </tr>
+                        <tr>
+                            <td>Angkatan</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->angkatan }}</td>
+                        </tr>
+                        <tr>
+                            <td>Dosen Wali</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->nip }}</td>
+                        </tr>
+                    </table>
 
-                    @if ($irsData->count() > 0)
-                        <table class="table table-stripped table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Semester Aktif</th>
-                                    <th scope="col">Jumlah SKS</th>
-                                    <th scope="col">Scan IRS</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($irsData as $irs)
-                                    <tr class="irs-row" data-semester="{{ $irs->semester_aktif }}">
-                                        <td scope="row">{{ $irs->semester_aktif }}</td>
-                                        <td>{{ $irs->jumlah_sks }}</td>
-                                        <td>
-                                            <a href="{{ asset('storage/' . $irs->scanIRS) }}" target="_blank">Lihat IRS</a>
-                                        </td>
-                                        <td>
-                                            <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-check-circle-fill"></i></button>
-                                            <button type="submit" class="btn btn-sm btn-danger"><i class="bi bi-x-lg"></i></button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    @endif
-                    </form>
+                </div>
+
+                <div class="col-6 col-lg-4">
+                    <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-100 w-100" alt="foto-profil" />
                 </div>
             </div>
+
         </div>
-
     </section>
-
-
 @endsection

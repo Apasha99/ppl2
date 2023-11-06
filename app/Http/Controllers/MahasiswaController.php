@@ -50,7 +50,6 @@ class MahasiswaController extends Controller
             'foto' => 'max:10240|image|mimes:jpeg,png,jpg',
         ]);
 
-        
 
         if ($request->has('foto')) {
             $fotoPath = $request->file('foto')->store('profile', 'public');

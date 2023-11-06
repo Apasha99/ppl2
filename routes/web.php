@@ -55,7 +55,7 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
 });
 
 Route::middleware(['auth', 'only_dosen'])->group(function () {
-    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+    Route::get('/mahasiswa-detail/{nim}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {

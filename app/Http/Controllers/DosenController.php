@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 
 class DosenController extends Controller
 {
-    public function detail(Request $request, $mahasiswa){
-        $irsData = IRS::select('nim', 'jumlah_sks', 'semester_aktif', 'scanIRS')->orderBy('semester_aktif', 'asc')->get();
+    public function detail(Request $request, $nim){
+        $mahasiswa = Mahasiswa::find($nim)->get();
+        //$irsData = IRS::select('nim', 'jumlah_sks', 'semester_aktif', 'scanIRS')->orderBy('semester_aktif', 'asc')->get();
 
         return view('detailMahasiswa', [
             'mahasiswa' => $mahasiswa,
-            'irsData' => $irsData,
         ]);
     }
 }
