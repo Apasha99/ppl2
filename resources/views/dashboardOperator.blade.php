@@ -52,14 +52,13 @@
                 <table class="table table-hover table-bordered">
                     <thead class="table-dark">
                         <tr>
-                            <th scope="col">Mahasiswa</th>
+                            <th scope="col">Nama</th>
                             <th scope="col">NIM</th>
                             <th scope="col">Angkatan</th>
                             <th scope="col">Status</th>
                             <th scope="col">NIP Dosen Wali</th>
                             <th scope="col">Nama Dosen Wali</th>
                             <th scope="col">Username</th>
-                            <th scope="col">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -72,10 +71,6 @@
                             <td>{{ $mahasiswa->nip}}</td>
                             <td>{{ $mahasiswa->dosen_nama}}</td>
                             <td>{{ $mahasiswa->username }}</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm">Edit</button>
-                                <button class="btn btn-danger btn-sm">Delete</button>
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -83,7 +78,8 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <a href="/mahasiswa-create" class="btn btn-primary">+ Tambah Mahasiswa</a>
+                <a href="/mahasiswa-create" class="btn btn-primary" >+ Generate akun</a>
+                <a href="/tambahMahasiswa" class="btn btn-info">+ Upload Mahasiswa</a>
                 <!-- Ganti "/tambah-mahasiswa" dengan URL yang sesuai -->
             </div>
         </div>

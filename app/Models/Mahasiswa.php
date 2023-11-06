@@ -10,6 +10,7 @@ class Mahasiswa extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    protected $primaryKey = 'nim';
     protected $table = 'mahasiswa';
     protected $fillable = [
         'nama',

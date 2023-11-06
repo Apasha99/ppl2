@@ -195,4 +195,5 @@ class MahasiswaController extends Controller
                 ->with('error', 'Gagal memperbarui profil.');
         }
     }
+
 }
