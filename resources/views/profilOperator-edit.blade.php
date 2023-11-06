@@ -41,7 +41,7 @@
                         </div>
 
                         @error('username')
-                            <p class="text-danger"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
+                            <p class="text-danger mb-0"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
                         @enderror
                         <label for="username" class="form-label">Username</label>
                         <div class="input-group mb-3">
@@ -50,7 +50,7 @@
                         </div>
 
                         @error('current_password')
-                            <p class="text-danger"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
+                            <p class="text-danger mb-0"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
                         @enderror
                         <label for="current_password" class="form-label">Password Lama</label>
                         <div class="input-group mb-3">

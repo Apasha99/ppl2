@@ -71,6 +71,9 @@
                                     <p class="card-text">Status PKL
                                         <br><span class="small">{{ $statusPKL }}</span>
                                     </p>
+                                    <p class="card-text">Verifikasi
+                                        <br><span class="small">{{ $status }}</span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -88,6 +91,9 @@
                                     <h5 class="card-title">Skripsi</h5>
                                     <p class="card-text">Status Skripsi
                                         <br><span class="small">{{ $statusSkripsi }}</span>
+                                    </p>
+                                    <p class="card-text">Verifikasi
+                                        <br><span class="small">{{ $statusSkr }}</span>
                                     </p>
                                 </div>
                             </div>

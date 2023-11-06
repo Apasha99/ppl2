@@ -26,9 +26,11 @@ class DashboardMahasiswaController extends Controller
             $latestPKL = PKL::where('nim',$nim)
                         ->orderBy('created_at', 'desc')->first();
             $statusPKL = $latestPKL ? $latestPKL->statusPKL : null;
+            $status = $latestPKL ? $latestPKL->status : null;
             $latestSkripsi = Skripsi::where('nim',$nim)
                         ->orderBy('created_at', 'desc')->first();
             $statusSkripsi = $latestSkripsi ? $latestSkripsi->statusSkripsi : null;
+            $statusSkr = $latestSkripsi ? $latestSkripsi->status : null;
             $latestSKSKumulatif = KHS::where('nim',$nim)
                                 ->orderBy('created_at', 'desc')->first();
             $SKSKumulatif = $latestSKSKumulatif ? $latestSKSKumulatif->jumlah_sks_kumulatif : null;
@@ -38,7 +40,7 @@ class DashboardMahasiswaController extends Controller
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user, 'statusPKL' => $statusPKL,'statusSkripsi'=>$statusSkripsi,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
+                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user,'status'=>$status,'statusSkr'=>$statusSkr, 'statusPKL' => $statusPKL,'statusSkripsi'=>$statusSkripsi,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
             }
         }
 

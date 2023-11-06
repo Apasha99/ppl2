@@ -16,10 +16,6 @@
                 </div>
             @endif
 
-            <div class="alert alert-success mb-5" role="alert">
-                <i class="bi bi-person-fill-check"></i> Lengkapi data diri terlebih dahulu!
-            </div>
-
             <div class="text-center">
                 <h2>Edit Profil</h2>
             </div>
@@ -124,7 +120,7 @@
 
                         <div class="text-center my-5">
                             <button type="submit" class="btn btn-success me-2 px-3">Save</button>
-                            <a href="profilOperator" class="btn btn-secondary px-3">Cancel</a>
+                            <a href="profilMahasiswa" class="btn btn-secondary px-3">Cancel</a>
                         </div>
                     </form>
                 </div>
