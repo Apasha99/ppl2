@@ -91,7 +91,9 @@ class OperatorController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user();
+        $nip = $request->user()->operator->nip;
         $operators = Operator::join('users', 'operator.iduser', '=', 'users.id')
+                ->where('nip',$nip)
                 ->select('operator.nama', 'operator.nip', 'users.id', 'users.username')
                 ->first();
         return view('profilOperator', ['user' => $user,'operators'=>$operators]);
@@ -100,7 +102,9 @@ class OperatorController extends Controller
     public function showEdit(Request $request): View
     {
         $user = $request->user();
+        $nip = $request->user()->operator->nip;
         $operators = Operator::join('users', 'operator.iduser', '=', 'users.id')
+                ->where('nip',$nip)
                 ->select('operator.nama', 'operator.nip', 'users.id', 'users.username','users.password')
                 ->first();
         return view('profilOperator-edit', ['user' => $user,'operators'=>$operators]);

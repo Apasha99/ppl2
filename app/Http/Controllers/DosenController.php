@@ -25,7 +25,10 @@ class DosenController extends Controller
     public function edit(Request $request)
     {
         $user = $request->user();
+        $nip = $request->user()->dosen->nip;
+        
         $dosens = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+            ->where('nip',$nip)
             ->select('dosen_wali.nama', 'dosen_wali.nip', 'users.id', 'users.username')
             ->first();
         return view('profilDosen', ['user' => $user, 'dosens' => $dosens]);
@@ -34,7 +37,9 @@ class DosenController extends Controller
     public function showEdit(Request $request)
     {
         $user = $request->user();
+        $nip = $request->user()->dosen->nip;
         $dosens = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+            ->where('nip',$nip)
             ->select('dosen_wali.nama', 'dosen_wali.nip', 'users.id', 'users.username', 'users.password')
             ->first();
         return view('profilDosen-edit', ['user' => $user, 'dosens' => $dosens]);
