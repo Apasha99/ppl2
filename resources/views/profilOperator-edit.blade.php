@@ -81,7 +81,6 @@
                             <a href="profilOperator" class="btn btn-secondary px-3">Cancel</a>
                         </div>
                 </div>
-
                 <div class="col-md-4 ms-5 text-center d-none d-md-block">
                     @error('fotoProfil')
                     <p class="text-danger"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>

@@ -118,6 +118,17 @@
                             name="new_confirm_password" placeholder="Masukkan Konfirmasi Password Baru" required>
                         </div>
 
+                        <div class="col-md-4 ms-5 text-center d-none d-md-block">
+                            @error('foto')
+                            <p class="text-danger"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
+                            @enderror
+                            <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-50 w-50 mb-2"
+                                alt="foto-profil" />
+                            <h5>Foto Profil</h5>
+                            <input type="file" class="form-control mt-3" id="foto" name="foto"
+                                accept=".jpg, .jpeg, .png" required>
+                        </div>
+
                         <div class="text-center my-5">
                             <button type="submit" class="btn btn-success me-2 px-3">Save</button>
                             <a href="profilMahasiswa" class="btn btn-secondary px-3">Cancel</a>
@@ -125,20 +136,7 @@
                     </form>
                 </div>
 
-                <div class="col-md-4 ms-5 text-center d-none d-md-block">
-                    @error('foto')
-                    <p class="text-danger"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
-                    @enderror
-                    <img src="{{ Auth::user()->getImageURL() }}" class="img-thumbnail h-50 w-50 mb-2"
-                        alt="foto-profil" />
-                    <h5>Foto Profil</h5>
-                    <input type="file" class="form-control mt-3" id="foto" name="foto"
-                        accept=".jpg, .jpeg, .png" required>
-                </div>
-                </form>
             </div>
-
-        </div>
         </div>
     </section>
 @endsection
