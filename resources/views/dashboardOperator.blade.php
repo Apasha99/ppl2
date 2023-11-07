@@ -40,7 +40,12 @@
         <div class="text-center my-5 pt-5">
             <h1 class="display-6">Daftar Mahasiswa</h2>
         </div>
-
+        <div class="d-flex justify-content-end mt-4">
+            <form action="{{ route('export') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-secondary">Download Data</button>
+            </form>
+        </div>
         <div class="container-lg my-5 pb-4">
             @if(session('status'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -59,6 +64,7 @@
                             <th scope="col">NIP Dosen Wali</th>
                             <th scope="col">Nama Dosen Wali</th>
                             <th scope="col">Username</th>
+                            <th scope="col">Password</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,6 +77,7 @@
                             <td>{{ $mahasiswa->nip}}</td>
                             <td>{{ $mahasiswa->dosen_nama}}</td>
                             <td>{{ $mahasiswa->username }}</td>
+                            <td>{{ $mahasiswa->password }}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -80,7 +87,6 @@
             <div class="d-flex justify-content-end mt-4">
                 <a href="/mahasiswa-create" class="btn btn-primary" >+ Generate akun</a>
                 <a href="/tambahMahasiswa" class="btn btn-info">+ Upload Mahasiswa</a>
-                <!-- Ganti "/tambah-mahasiswa" dengan URL yang sesuai -->
             </div>
         </div>
     </section>
