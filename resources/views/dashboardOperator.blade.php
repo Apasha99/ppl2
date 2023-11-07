@@ -38,7 +38,7 @@
 
     <section class="bg-light rounded">
         <div class="text-center my-5 pt-5">
-            <h1 class="display-6">Daftar Mahasiswa</h2>
+            <h1 class="display-6">Daftar Mahasiswa</h1>
         </div>
         <div class="d-flex justify-content-end mt-4">
             <form action="{{ route('export') }}" method="POST">
@@ -54,38 +54,40 @@
                 </div>
             @endif
             <div class="justify-content-center">
-                <table class="table table-hover table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col">Nama</th>
-                            <th scope="col">NIM</th>
-                            <th scope="col">Angkatan</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">NIP Dosen Wali</th>
-                            <th scope="col">Nama Dosen Wali</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Password</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($mahasiswas as $mahasiswa)
-                        <tr>
-                            <td>{{ $mahasiswa->nama }}</td>
-                            <td>{{ $mahasiswa->nim }}</td>
-                            <td>{{ $mahasiswa->angkatan }}</td>
-                            <td>{{ $mahasiswa->status }}</td>
-                            <td>{{ $mahasiswa->nip}}</td>
-                            <td>{{ $mahasiswa->dosen_nama}}</td>
-                            <td>{{ $mahasiswa->username }}</td>
-                            <td>{{ $mahasiswa->password }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                <div class="table-responsive" style="overflow-x: auto; overflow-y: auto; max-height: 400px;">
+                    <table class="table table-hover table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th scope="col">Nama</th>
+                                <th scope="col">NIM</th>
+                                <th scope="col">Angkatan</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">NIP Dosen Wali</th>
+                                <th scope="col">Nama Dosen Wali</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($mahasiswas as $mahasiswa)
+                            <tr>
+                                <td>{{ $mahasiswa->nama }}</td>
+                                <td>{{ $mahasiswa->nim }}</td>
+                                <td>{{ $mahasiswa->angkatan }}</td>
+                                <td>{{ $mahasiswa->status }}</td>
+                                <td>{{ $mahasiswa->nip }}</td>
+                                <td>{{ $mahasiswa->dosen_nama }}</td>
+                                <td>{{ $mahasiswa->username }}</td>
+                                <td>{{ $mahasiswa->password }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <a href="/mahasiswa-create" class="btn btn-primary" >+ Generate akun</a>
+                <a href="/mahasiswa-create" class="btn btn-primary">+ Generate akun</a>
                 <a href="/tambahMahasiswa" class="btn btn-info">+ Upload Mahasiswa</a>
             </div>
         </div>
