@@ -50,21 +50,24 @@
                             <input type="text-area" class="form-control" id="alamat" name="alamat" value="{{ $mahasiswas->alamat }}" placeholder="Masukkan alamat anda">
                         </div>
 
-                        @error('provinsi')
-                            <div class="alert alert-danger">{{ $message }}</div>
-                        @enderror
                         <label for="provinsi" class="form-label">Provinsi</label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="provinsi" name="provinsi" value="{{ $mahasiswas->provinsi }}" placeholder="Masukkan provinsi anda">
-                        </div>
-                        
-                        @error('kabkota')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        @error('provinsi')
+                        <p class="text-danger mb-0"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
                         @enderror
+                        <select id="provinsi" name="provinsi" class="form-select">
+                            <option value="Jawa Tengah" @if($mahasiswas->provinsi === 'Jawa Tengah') selected @endif>Jawa Tengah</option>
+                            <option value="Jawa Barat" @if($mahasiswas->provinsi === 'Jawa Barat') selected @endif>Jawa Barat</option>
+                        </select>
+
                         <label for="kabkota" class="form-label">Kabupaten/Kota</label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="kabkota" name="kabkota" value="{{ $mahasiswas->kabkota }}" placeholder="Masukkan kabupaten/kota anda">
-                        </div>
+                        @error('kabkota')
+                        <p class="text-danger mb-0"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</p>
+                        @enderror
+                        <select id="kabkota" name="kabkota" class="form-select">
+                            @foreach($kabupatenKotaOptions as $kabkota)
+                                <option value="{{ $kabkota }}" @if($mahasiswas->kabkota === $kabkota) selected @endif>{{ $kabkota }}</option>
+                            @endforeach
+                        </select>
 
                         @error('noHandphone')
                             <div class="alert alert-danger">{{ $message }}</div>
@@ -112,6 +115,70 @@
                     </form>
                 </div>
 
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Data kabupaten/kota di Jawa Tengah (gantilah dengan data sebenarnya)
+                        var kabupatenKotaJateng = ["Kabupaten Demak", "Kabupaten Kudus", "Kabupaten Boyolali", "Kota Solo"];
+                        var kabupatenKotaJabar = ["Kota Bandung", "Kabupaten Ciamis", "Kabupaten Cianjur", "Kabupaten Cirebon"];
+
+                        // Fungsi untuk memperbarui pilihan kabupaten/kota
+                        function updateKabKotaOptions(selectedProvinsi) {
+                            var kabkotaSelect = $('#kabkota');
+                            kabkotaSelect.empty();
+
+                            if (selectedProvinsi === "Jawa Tengah") {
+                                // Jika provinsi yang dipilih adalah Jawa Tengah, tambahkan opsi kabupaten/kota Jateng
+                                $.each(kabupatenKotaJateng, function(index, kabkota) {
+                                    kabkotaSelect.append($("<option></option>")
+                                        .attr("value", kabkota)
+                                        .text(kabkota));
+                                });
+                            } else if (selectedProvinsi === "Jawa Barat") {
+                                // Jika provinsi yang dipilih adalah Jawa Barat, tambahkan opsi kabupaten/kota Jabar
+                                $.each(kabupatenKotaJabar, function(index, kabkota) {
+                                    kabkotaSelect.append($("<option></option>")
+                                        .attr("value", kabkota)
+                                        .text(kabkota));
+                                });
+                            }
+                        }
+
+                        // Panggil fungsi updateKabKotaOptions saat halaman dimuat
+                        updateKabKotaOptions($('#provinsi').val());
+
+                        // Fungsi untuk memeriksa apakah kabupaten/kota sudah ada dalam database
+                        function kabkotaSudahAda(kabkota) {
+                            var provinsi = $('#provinsi').val();
+
+                            // Lakukan permintaan AJAX untuk memeriksa keberadaan kabupaten/kota dalam database
+                            $.ajax({
+                                url: '/cek_kabkota', // Ganti dengan URL yang sesuai
+                                method: 'GET',
+                                data: {provinsi: provinsi, kabkota: kabkota},
+                                success: function(response) {
+                                    if (response.sudahAda) {
+                                        // Jika kabupaten/kota sudah ada dalam database, tambahkan ke pilihan
+                                        var kabkotaSelect = $('#kabkota');
+                                        kabkotaSelect.empty();
+                                        $.each(response.kabkotaOptions, function(index, kabkota) {
+                                            kabkotaSelect.append($("<option></option>")
+                                                .attr("value", kabkota)
+                                                .text(kabkota));
+                                        });
+                                    } else {
+                                        // Kabupaten/kota belum ada dalam database, tampilkan pesan atau lakukan tindakan yang sesuai
+                                        alert('Kabupaten/Kota belum tersedia dalam database.');
+                                    }
+                                },
+                                error: function() {
+                                    // Handle error, misalnya dengan menampilkan pesan kesalahan
+                                    alert('Terjadi kesalahan saat memeriksa data kabupaten/kota.');
+                                }
+                            });
+                        }
+                    });
+                </script>
             </div>
         </div>
     </section>

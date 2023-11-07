@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Skripsi;
 use App\Models\KHS;
 use App\Models\PKL;
+use App\Models\IRS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,16 +32,22 @@ class DashboardMahasiswaController extends Controller
                         ->orderBy('created_at', 'desc')->first();
             $statusSkripsi = $latestSkripsi ? $latestSkripsi->statusSkripsi : null;
             $statusSkr = $latestSkripsi ? $latestSkripsi->status : null;
-            $latestSKSKumulatif = KHS::where('nim',$nim)
+            $latestKHS = KHS::where('nim',$nim)
                                 ->orderBy('created_at', 'desc')->first();
-            $SKSKumulatif = $latestSKSKumulatif ? $latestSKSKumulatif->jumlah_sks_kumulatif : null;
-            $latestIPKumulatif = KHS::where('nim',$nim)
+            $SKSKumulatif = $latestKHS ? $latestKHS->jumlah_sks_kumulatif : null;
+            $IPKumulatif = $latestKHS ? $latestKHS->ip_kumulatif : null;
+            $statusKHS = $latestKHS ? $latestKHS->status : null;
+            $latestIRS = IRS::where('nim',$nim)
                                 ->orderBy('created_at', 'desc')->first();
-            $IPKumulatif = $latestIPKumulatif ? $latestIPKumulatif->ip_kumulatif : null;
+            $SemesterAktif = $latestIRS ? $latestIRS->semester_aktif : null;
+            $JumlahSKS = $latestIRS ? $latestIRS->jumlah_sks : null;
+            $statusIRS = $latestIRS ? $latestIRS->status : null;
             // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
             // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
             if ($mahasiswa) {
-                return view('dashboardMahasiswa', ['mahasiswa' => $mahasiswa, 'user' => $user,'status'=>$status,'statusSkr'=>$statusSkr, 'statusPKL' => $statusPKL,'statusSkripsi'=>$statusSkripsi,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
+                return view('dashboardMahasiswa', ['statusIRS'=>$statusIRS,'JumlahSKS'=>$JumlahSKS,'SemesterAktif'=>$SemesterAktif,'statusKHS'=>$statusKHS,
+                'mahasiswa' => $mahasiswa, 'user' => $user,'status'=>$status,'statusSkr'=>$statusSkr, 
+                'statusPKL' => $statusPKL,'statusSkripsi'=>$statusSkripsi,'SKSKumulatif'=>$SKSKumulatif,'IPKumulatif'=>$IPKumulatif]);
             }
         }
 
