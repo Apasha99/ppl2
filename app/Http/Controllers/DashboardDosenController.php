@@ -39,40 +39,30 @@ class DashboardDosenController extends Controller
     {
         $search = $request->input('search');
         $dosens = Dosen::leftJoin('users', 'dosen_wali.iduser', '=', 'users.id')
-                ->where('dosen_wali.iduser', Auth::user()->id)
-                ->select('dosen_wali.nama', 'dosen_wali.nip', 'users.username')
-                ->first();
+            ->where('dosen_wali.iduser', Auth::user()->id)
+            ->select('dosen_wali.nama', 'dosen_wali.nip', 'users.username')
+            ->first();
         $mahasiswaCount = Mahasiswa::count();
-        $mahasiswaPerwalian = Mahasiswa::join('dosen_wali','mahasiswa.nip','=','dosen_wali.nip')
-                                ->where('dosen_wali.iduser', Auth::user()->id)
-                                ->select('mahasiswa.nama as nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'dosen_wali.nip as dosen_wali_nip')
-                                ->get();
-        $mahasiswaPerwalianCount = $mahasiswaPerwalian->count();
-        
-        $user = User::where('id', Auth::user()->id)->select('foto')->first();
-        // Menggunakan metode WHERE LIKE untuk mencari buku yang sesuai
-        $mahasiswaPerwalian = Mahasiswa::where('mahasiswa.nama', 'like', '%' . $search . '%')
-            ->orWhere('mahasiswa.nim', 'like', '%' . $search . '%')
-            ->orWhere('mahasiswa.angkatan', 'like', '%' . $search . '%')
-            ->orWhere('mahasiswa.status', 'like', '%' . $search . '%')
+        $mahasiswaPerwalian = Mahasiswa::join('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
+            ->where('dosen_wali.iduser', Auth::user()->id)
+            ->select('mahasiswa.nama as nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'dosen_wali.nip as dosen_wali_nip')
             ->get();
-        // dd($mahasiswaPerwalian);
-        return view('dashboardDosen', ['user' => $user,'dosens'=>$dosens,'mahasiswaCount'=>$mahasiswaCount,'mahasiswaPerwalian'=>$mahasiswaPerwalian,'mahasiswaPerwalianCount'=>$mahasiswaPerwalianCount]);
-    }
-}
+        $mahasiswaPerwalianCount = $mahasiswaPerwalian->count();
 
+        $user = User::where('id', Auth::user()->id)->select('foto')->first();
 
-    //     $mahasiswas = Mahasiswa::join('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
-    //         ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'dosen_wali.nip as dosen_wali_nip')
-    //         ->get();
-
-    //     $mahasiswaCount = Mahasiswa::count();
-    //     $mahasiswaPerwalianCount = Dosen::count();
-
-    //     return view('dashboardDosen', [
-    //         'mahasiswas' => $mahasiswas,
-    //         'mahasiswaCount' => $mahasiswaCount,
-    //         'mahasiswaperwalian_count' => $mahasiswaPerwalianCount
-    //     ]);
+        // Menggunakan metode WHERE LIKE untuk mencari mahasiswa yang sesuai
+        $mahasiswaPerwalian = Dosen::where('dosen_wali.iduser', Auth::user()->id)
+            ->join('mahasiswa','mahasiswa.nip','=','dosen_wali.nip')
+            ->where(function ($query) use ($search) {
+                $query->where('mahasiswa.nama', 'like', '%' . $search . '%')
+                    ->orWhere('mahasiswa.nim', 'like', '%' . $search . '%')
+                    ->orWhere('mahasiswa.angkatan', 'like', '%' . $search . '%')
+                    ->orWhere('mahasiswa.status', 'like', '%' . $search . '%');
+            })
+            ->get();
         
-    // } 
+        return view('dashboardDosen', ['user' => $user, 'dosens' => $dosens, 'mahasiswaCount' => $mahasiswaCount, 'mahasiswaPerwalian' => $mahasiswaPerwalian, 'mahasiswaPerwalianCount' => $mahasiswaPerwalianCount]);
+    }
+
+}

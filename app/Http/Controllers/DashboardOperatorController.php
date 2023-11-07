@@ -9,6 +9,7 @@ use App\Models\Operator;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardOperatorController extends Controller
 {
@@ -31,4 +32,5 @@ class DashboardOperatorController extends Controller
                 ->first();
         return view('dashboardOperator', ['operators'=>$operators,'users'=>$users,'mahasiswas'=>$mahasiswas,'user_count'=> $userCount, 'mahasiswa_count'=>$mahasiswaCount,'dosen_count'=>$dosenCount, 'departemen_count'=>$departemenCount]);
     }    
+    
 }
