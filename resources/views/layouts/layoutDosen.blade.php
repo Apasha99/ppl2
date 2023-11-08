@@ -62,8 +62,9 @@
 
     <div class="d-flex align-items-start px-5 mt-2">
         <nav id="navbar-mhs" class="nav flex-column nav-pills" aria-orientation="vertical">
-            
             <a class="nav-link" href="/showAllVerifikasi">Verifikasi</a>
+            <a class="nav-link" href="/listPKL">List PKL</a>
+            <a class="nav-link" href="/listSkripsi">List Skripsi</a>
         </nav>
         <div class="container-lg px-5 text-light" data-bs-target="navbar-mhs" data-bs-offset="0" tabindex="0">
             @yield('content')

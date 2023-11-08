@@ -46,9 +46,9 @@
                         @endphp
                 
                         <div class="col">
-                            <div class="card p-5 {{ $cardClass }}">
+                            <div class="card p-2 {{ $cardClass }} w-75 h-75">
                                 <div class="card-body text-center">
-                                    <a href="#" class="h5 card-title">{{ $i }}</a>
+                                    <a href="#" class="h5 card-title small">{{ $i }}</a>
                                 </div>
                             </div>
                         </div>

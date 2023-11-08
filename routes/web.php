@@ -61,10 +61,12 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
 });
 
 Route::middleware(['auth', 'only_dosen'])->group(function () {
-    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+    Route::get('/detail/{mahasiswa}', [DosenController::class, 'detail'])->name('detail');
     Route::get('/profilDosen', [DosenController::class, 'edit'])->name('dosen.edit');
     Route::get('/profilDosen-edit', [DosenController::class, 'showEdit'])->name('dosen.showEdit');
     Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
+    Route::get('/listPKL',[DosenController::class,'listPKL'])->name('listPKL');
+    Route::get('/listSkripsi',[DosenController::class,'listSkripsi'])->name('listSkripsi');
 });
 
 Route::middleware(['auth', 'only_departemen'])->group(function () {
