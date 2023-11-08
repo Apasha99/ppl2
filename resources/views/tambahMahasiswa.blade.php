@@ -60,7 +60,10 @@
             </div>
 
             <div class="d-flex justify-content-end mt-4">
-                <a href="daftarAkun" class="btn btn-primary" >+ Generate Akun</a>
+                <form action="{{ route('generateAkun') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary">Generate Akun</button>
+                </form>
             </div>
         </div>
     </section>

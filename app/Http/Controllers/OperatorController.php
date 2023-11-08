@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use App\Imports\MahasiswaImport;
+use App\Exports\MahasiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OperatorController extends Controller
@@ -71,7 +72,6 @@ class OperatorController extends Controller
             $user->role_id = 1; // mengatur role_id menjadi 1
 
             $user->save();
-
             // Membuat mahasiswa baru
             $mahasiswa = new Mahasiswa;
             $mahasiswa->nama = $request->nama;
@@ -82,6 +82,12 @@ class OperatorController extends Controller
             $mahasiswa->username = $username; // menghubungkan ke user yang baru dibuat
             $mahasiswa->iduser = $user->id;
             $mahasiswa->save();
+
+            $generate_akun = new GenerateAkun;
+            $generate_akun->nim = $request->nim;
+            $generate_akun->username = $username;
+            $generate_akun->password = $password;
+            $generate_akun->save();
         });
 
         return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil ditambahkan. Username : '. $username . ' Password : '. $password)->withInput();
@@ -90,7 +96,9 @@ class OperatorController extends Controller
     public function edit(Request $request): View
     {
         $user = $request->user();
+        $nip = $request->user()->operator->nip;
         $operators = Operator::join('users', 'operator.iduser', '=', 'users.id')
+                ->where('nip',$nip)
                 ->select('operator.nama', 'operator.nip', 'users.id', 'users.username')
                 ->first();
         return view('profilOperator', ['user' => $user,'operators'=>$operators]);
@@ -99,7 +107,9 @@ class OperatorController extends Controller
     public function showEdit(Request $request): View
     {
         $user = $request->user();
+        $nip = $request->user()->operator->nip;
         $operators = Operator::join('users', 'operator.iduser', '=', 'users.id')
+                ->where('nip',$nip)
                 ->select('operator.nama', 'operator.nip', 'users.id', 'users.username','users.password')
                 ->first();
         return view('profilOperator-edit', ['user' => $user,'operators'=>$operators]);
@@ -172,78 +182,60 @@ class OperatorController extends Controller
     */
     public function import() 
     {
-        Excel::import(new MahasiswaImport, request()->file('file'), 'Xlsx');
-        return redirect('tambahMahasiswa')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
+        $file = request()->file('file');
+
+        if ($file) {
+            // Memeriksa apakah file yang diunggah adalah file Excel XLSX
+            if ($file->getClientOriginalExtension() === 'xlsx') {
+                Excel::import(new MahasiswaImport, $file, 'Xlsx');
+                return redirect('tambahMahasiswa')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
+            } else {
+                return redirect('tambahMahasiswa')->with('error', 'File yang diunggah harus dalam format Excel XLSX.');
+            }
+        } else {
+            return redirect('tambahMahasiswa')->with('error', 'Anda belum mengunggah file.');
+        }
     }
 
-    public function daftarAkun(){
-        $mahasiswas = GenerateAkun::get();
-        return redirect('daftarAkun', compact('mahasiswas'));
-    }
 
-    // public function generateAkun(Request $request) {
-    //     // Get the Mahasiswa record related to this request
-    //     $mahasiswa = $request->nim;
-    
-    //     // Check if the "iduser" is null in the Mahasiswa record
-        // if ($mahasiswa->iduser == null) {
-        //     // Get the related nim from the Mahasiswa record
-        //     $nim = $mahasiswa->nim;
-        //     // Generate a username by removing spaces and making it lowercase
-        //     $username = strtolower(str_replace(' ', '', $nim->nama));
-    
-        //     // Check if the username already exists, and append a random number until it's unique
-        //     while (User::where('username', $username)->exists()) {
-        //         $username = strtolower(str_replace(' ', '', $nim->nama)) . rand(1, 100);
-        //     }
-    
-        //     $password = Str::random(8);
-    
-        //     DB::transaction(function () use ($mahasiswa, $username, $password) {
-        //         // Create a new User
-        //         $user = new User;
-        //         $user->username = $username;
-        //         $user->password = Hash::make($password); // Hash the password for security
-        //         $user->role_id = 1; 
-    
-        //         $user->save();
-    
-        //         // Update the Mahasiswa with the generated username and "iduser"
-        //         $mahasiswa->iduser = $user->id;
-        //         $mahasiswa->save();
-        //     });
-    
-    //         return redirect('daftarAkun')->with('status', 'Data Mahasiswa berhasil digenerate.');
-    //     } else {
-    //         // Handle the case where "iduser" is not null
-    //         return redirect('tambahMahasiswa')->with('error', 'ID User is not null for this Mahasiswa.');
-    //     }
-    // }    
+    public function export()
+    {
+        return Excel::download(new MahasiswaExport, 'mahasiswa.xlsx');
+    }
 
     public function generateAkun(Request $request) {
         // Get the array of NIMs in the Mahasiswa table with a null "iduser"
         $nimsWithNullIduser = Mahasiswa::whereNull('iduser')->pluck('nim');
     
-        foreach ($nimsWithNullIduser as $generate_akun_nim) {
-            // Get the Mahasiswa record related to this NIM
-            $mahasiswa = Mahasiswa::where('nim', $generate_akun_nim)->first();
+        // Memulai transaksi database
+        DB::beginTransaction();
     
-            if ($mahasiswa) {
-                // Generate a username by removing spaces and making it lowercase
-                $username = strtolower(str_replace(' ', '', $mahasiswa->nama));
+        try {
+            foreach ($nimsWithNullIduser as $generate_akun_nim) {
+                // Get the Mahasiswa record related to this NIM
+                $mahasiswa = Mahasiswa::where('nim', $generate_akun_nim)->first();
     
-                // Check if the username already exists, and append a random number until it's unique
-                while (User::where('username', $username)->exists()) {
-                    $username = strtolower(str_replace(' ', '', $mahasiswa->nama)) . rand(1, 100);
-                }
+                if ($mahasiswa) {
+                    // Generate a username by removing spaces and making it lowercase
+                    $username = strtolower(str_replace(' ', '', $mahasiswa->nama));
     
-                $password = Str::random(8);
+                    // Check if the username already exists, and append a random number until it's unique
+                    while (User::where('username', $username)->exists()) {
+                        $username = strtolower(str_replace(' ', '', $mahasiswa->nama)) . rand(1, 100);
+                    }
     
-                DB::transaction(function () use ($mahasiswa, $username, $password) {
-                    // Create a new User
+                    $password = Str::random(8);
+                    
+                    GenerateAkun::create([
+                        'nim' => $generate_akun_nim,
+                        'username' => $username,
+                        'password' => $password, // Password belum di-hash
+                    ]);
+    
+                    // Create a new User in the "user" table
                     $user = User::create([
                         'username' => $username,
-                        'password' => Hash::make($password),
+                        'password' => Hash::make($password), // Hash the password
                         'role_id' => 1,
                     ]);
     
@@ -251,20 +243,21 @@ class OperatorController extends Controller
                     $mahasiswa->username = $username;
                     $mahasiswa->iduser = $user->id;
                     $mahasiswa->save();
-    
-                    // You can create GenerateAkun records here if needed
-                    // GenerateAkun::create([
-                    //     'username' => $username,
-                    //     'password' => $password,
-                    // ]);
-                });
-            } else {
-                // Handle the case where Mahasiswa record doesn't exist
-                return redirect('tambahMahasiswa')->with('error', 'Mahasiswa record not found for NIM: ' . $generate_akun_nim);
+                } else {
+                    // Handle the case where Mahasiswa record doesn't exist
+                    DB::rollBack();
+                    return redirect('tambahMahasiswa')->with('error', 'Mahasiswa record not found for NIM: ' . $generate_akun_nim);
+                }
             }
+    
+            // Commit the transaction
+            DB::commit();
+    
+            return redirect('dashboardOperator')->with('status', 'Data Mahasiswa berhasil digenerate.');
+        } catch (\Exception $e) {
+            // Rollback the transaction in case of any errors
+            DB::rollBack();
+            return redirect('tambahMahasiswa')->with('error', 'Gagal menggenerate akun Mahasiswa.');
         }
-    
-        return redirect('daftarAkun')->with('status', 'Data Mahasiswa berhasil digenerate.');
     }    
-    
 }

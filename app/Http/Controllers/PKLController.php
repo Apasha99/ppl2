@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Session;
 
 class PKLController extends Controller
 {
@@ -28,6 +29,15 @@ class PKLController extends Controller
     {
         $nim = $request->user()->mahasiswa->nim; // Use the logged-in user to get the nim
         $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+        // Periksa apakah data PKL sudah ada untuk semester yang dipilih
+        $existingPKL = PKL::where('nim', $nim)->first();
+
+        if ($existingPKL) {
+            $errorMessage = "Anda telah memasukkan progress PKL";
+            Session :: flash ('error', $errorMessage);
+            // Jika data PKL sudah ada, lakukan pembaruan daripada penambahan
+            return $this->update($request, $existingPKL);
+        }
 
         if ($mahasiswa) {
             // Get the active semesters for the given student
@@ -45,24 +55,12 @@ class PKLController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $nim = $request->user()->mahasiswa->nim;
-        $latestPKL = PKL::where('nim', $nim)->orderBy('semester_aktif', 'desc')->first();
-        
-        if ($latestPKL) {
-            $latestSemester = $latestPKL->semester_aktif;
-            $inputSemester = $request->input('semester_aktif');
 
-            if ($inputSemester > $latestSemester + 1) {
-                // PKL diisi tidak sesuai urutan, berikan pesan kesalahan
-                return redirect()->route('pkl.create')->with('error', 'Anda harus mengisi PKL sesuai urutan semester.');
-        }}elseif($request->input('semester_aktif') != 6){
-            return redirect()->route('pkl.create')->with('error', 'Anda harus memulai dengan PKL semester 6.');
-        }
         $validated = $request->validate([
-            'semester_aktif' => ['required', 'numeric','unique:pkl'], // Correct the validation rule syntax
+            'semester_aktif' => ['required', 'numeric'],
             'statusPKL' => [Rule::in(['lulus', 'tidak lulus'])],
-            'nilai'=>[Rule::in(['A', 'B','C','D','E'])],
-            'scanPKL' => ['required', 'file', 'mimes:pdf', 'max:10240'], // Correct the validation rule syntax
+            'nilai' => [Rule::in(['A', 'B', 'C', 'D', 'E'])],
+            'scanPKL' => ['required', 'file', 'mimes:pdf', 'max:10240'],
         ]);
 
         $PDFPath = null;
@@ -85,6 +83,33 @@ class PKLController extends Controller
             return redirect()->route('pkl.index')->with('success', 'PKL added successfully');
         } else {
             return redirect()->route('pkl.create')->with('error', 'Failed to add PKL');
+        }
+    }
+
+    private function update(Request $request, PKL $existingPKL): RedirectResponse
+    {
+        $validated = $request->validate([
+            'statusPKL' => [Rule::in(['lulus', 'tidak lulus'])],
+            'nilai' => [Rule::in(['A', 'B', 'C', 'D', 'E'])],
+            'scanPKL' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        ]);
+
+        $PDFPath = null;
+
+        if ($request->hasFile('scanPKL') && $request->file('scanPKL')->isValid()) {
+            $PDFPath = $request->file('scanPKL')->store('file', 'public');
+        }
+
+        $existingPKL->statusPKL = $request->input('statusPKL');
+        $existingPKL->nilai = $request->input('nilai');
+        $existingPKL->status = 'pending';
+        $existingPKL->scanPKL = $PDFPath; // Assign the PDF path here
+        $saved = $existingPKL->save();
+
+        if ($saved) {
+            return redirect()->route('pkl.index')->with('success', 'PKL updated successfully');
+        } else {
+            return redirect()->route('pkl.create')->with('error', 'Failed to update PKL');
         }
     }
 

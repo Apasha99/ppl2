@@ -54,11 +54,15 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
     Route::post('/profilOperator-edit', [OperatorController::class, 'update'])->name('operator.update');
     Route::get('/tambahMahasiswa',[OperatorController::class,'tambah']);
     Route::post('/tambahMahasiswa',[OperatorController::class,'import'])->name('import');
-    Route::get('/daftarAkun',[OperatorController::class,'daftarAkun'])->name('daftarAkun');
+    Route::post('/generateAkun',[OperatorController::class,'generateAkun'])->name('generateAkun');
+    Route::post('/dashboardOperator', [OperatorController::class,'export'])->name('export');
 });
 
 Route::middleware(['auth', 'only_dosen'])->group(function () {
-    Route::get('/mahasiswa-detail/{nim}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+    Route::get('/profilDosen', [DosenController::class, 'edit'])->name('dosen.edit');
+    Route::get('/profilDosen-edit', [DosenController::class, 'showEdit'])->name('dosen.showEdit');
+    Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {

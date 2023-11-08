@@ -18,7 +18,7 @@ class MahasiswaController extends Controller
         $nim = $request->user()->mahasiswa->nim;
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
             ->where('nim', $nim)
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'users.id', 'users.username')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'users.id', 'users.username','users.foto')
             ->first();
         return view('profilMahasiswa', ['user' => $user, 'mahasiswas' => $mahasiswas]);
     }
@@ -27,11 +27,12 @@ class MahasiswaController extends Controller
     {
         $user = $request->user();
         $nim = $request->user()->mahasiswa->nim;
+        $kabupatenKotaOptions = ["Kabupaten Demak", "Kabupaten Kudus", "Kabupaten Boyolali", "Kota Solo","Kota Bandung", "Kabupaten Ciamis", "Kabupaten Cianjur", "Kabupaten Cirebon"];
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
             ->where('nim', $nim)
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'mahasiswa.alamat', 'mahasiswa.kabkota', 'mahasiswa.provinsi', 'mahasiswa.noHandphone', 'users.id', 'users.username', 'users.password')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'mahasiswa.alamat', 'mahasiswa.kabkota', 'mahasiswa.provinsi', 'mahasiswa.noHandphone', 'users.id', 'users.username', 'users.password','users.foto')
             ->first();
-        return view('profilMahasiswa-edit', ['user' => $user, 'mahasiswas' => $mahasiswas]);
+        return view('profilMahasiswa-edit', ['user' => $user, 'mahasiswas' => $mahasiswas,'kabupatenKotaOptions'=>$kabupatenKotaOptions]);
     }
 
     public function update(Request $request)
@@ -109,9 +110,10 @@ class MahasiswaController extends Controller
     {
         $user = $request->user();
         $nim = $request->user()->mahasiswa->nim;
+        
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
             ->where('nim', $nim)
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'users.id', 'users.username')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'users.id', 'users.username','users.foto')
             ->first();
         return view('editprofilMahasiswa', ['user' => $user, 'mahasiswas' => $mahasiswas]);
     }
@@ -120,11 +122,12 @@ class MahasiswaController extends Controller
     {
         $user = $request->user();
         $nim = $request->user()->mahasiswa->nim;
+        $kabupatenKotaOptions = ["Kabupaten Demak", "Kabupaten Kudus", "Kabupaten Boyolali", "Kota Solo","Kota Bandung", "Kabupaten Ciamis", "Kabupaten Cianjur", "Kabupaten Cirebon"];
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.iduser', '=', 'users.id')
             ->where('nim', $nim)
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'mahasiswa.alamat', 'mahasiswa.kabkota', 'mahasiswa.provinsi', 'mahasiswa.noHandphone', 'users.id', 'users.username', 'users.password')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip', 'mahasiswa.alamat', 'mahasiswa.kabkota', 'mahasiswa.provinsi', 'mahasiswa.noHandphone', 'users.id', 'users.username', 'users.password','users.foto')
             ->first();
-        return view('editprofilMahasiswa-show', ['user' => $user, 'mahasiswas' => $mahasiswas]);
+        return view('editprofilMahasiswa-show', ['user' => $user, 'mahasiswas' => $mahasiswas,'kabupatenKotaOptions'=>$kabupatenKotaOptions]);
     }
 
     public function updateProfil(Request $request)

@@ -38,7 +38,8 @@
                 <div class="col-lg-3 mx-2 bg-light border border-dark border-2 rounded">
                     <div class="d-flex justify-content-between pt-3 pe-2">
                         <p class="border border-dark border-1 rounded px-3 text-dark">{{ $mahasiswaPerwalianCount }}</p>
-                        <h6 class="align-items-center text-dark"><i class="bi bi-mortarboard-fill"></i> Mahasiswa Perwalian</h6>
+                        <h6 class="align-items-center text-dark"><i class="bi bi-mortarboard-fill"></i> Mahasiswa Perwalian
+                        </h6>
                     </div>
                 </div>
                 <div class="col-lg-3 mx-2 bg-light border border-dark border-2 rounded">
@@ -62,6 +63,7 @@
                 <button type="submit" class="btn btn-primary w-full">Cari</button>
             </form>
         </div>
+        
         <div class="container-lg my-5 pb-4">
             @if (session('status'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -97,42 +99,6 @@
                 </table>
             </div>
         </div>
-
-        <div id="searchError" class="alert alert-danger mt-2" style="display: none;"></div>
-
-        <script>
-            function searchMahasiswa() {
-                var input = document.getElementById('searchInput').value.toLowerCase();
-                var filterAngkatan = document.getElementById('filterAngkatan').value;
-                var table = document.getElementById('mahasiswaTable');
-                var rows = table.getElementsByTagName('tr');
-                var errorDiv = document.getElementById('searchError');
-        
-                errorDiv.style.display = 'none';
-        
-                var resultFound = false;
-        
-                for (var i = 0; i < rows.length; i++) {
-                    var nama = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
-                    var nim = rows[i].getElementsByTagName('td')[1].textContent; // Dapatkan NIM dari kolom ke-2
-                    var angkatan = rows[i].getElementsByTagName('td')[2].textContent;
-        
-                    if ((nama.includes(input) || nim.includes(input)) && (filterAngkatan === "" || angkatan === filterAngkatan)) {
-                        rows[i].style.display = '';
-                        resultFound = true;
-                    } else {
-                        rows[i].style.display = 'none';
-                    }
-                }
-        
-                if (!resultFound) {
-                    errorDiv.innerHTML = 'Nama atau NIM tidak ada di dalam daftar mahasiswa';
-                    errorDiv.style.display = 'block';
-                } else {
-                    errorDiv.style.display = 'none';
-                }
-            }
-        </script>        
 
     </section>
 @endsection

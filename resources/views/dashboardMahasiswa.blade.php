@@ -116,6 +116,33 @@
                                     <p class="card-text">IP Kumulatif
                                         <br><span class="small">{{ $IPKumulatif }}</span>
                                     </p>
+                                    <p class="card-text">Status KHS
+                                        <br><span class="small">{{ $statusKHS }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card bg-dark text-light border-light border-5 h-100 w-100">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <!-- Replace the <img> with a large icon -->
+                                    <i class="bi bi-journal-medical bi-light bi-fluid ps-4" style="font-size: 7rem;"></i>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body ms-5">
+                                        <h5 class="card-title">IRS</h5>
+                                        <p class="card-text">Semester Aktif
+                                            <br><span class="small">{{ $SemesterAktif }}</span>
+                                        </p>
+                                        <p class="card-text">SKS Yang Diambil
+                                            <br><span class="small">{{ $JumlahSKS }}</span>
+                                        </p>
+                                        <p class="card-text">Status IRS
+                                            <br><span class="small">{{ $statusIRS }}</span>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

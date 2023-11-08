@@ -10,7 +10,9 @@ class Dosen extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'dosen_wali';
+    protected $primaryKey = 'nip';
     protected $fillable = [
+        'nip',
         'nama',
         'username',
     ];
