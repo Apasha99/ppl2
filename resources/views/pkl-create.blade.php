@@ -32,14 +32,6 @@
                         </select>
                     </div>
 
-                    @error('scanPKL')
-                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
-                    @enderror
-                    <label for="scanPKL" class="form-labef">Scan PKL (PDF)</label>
-                    <div class="input-group mb-4">
-                        <input type="file" class="form-control" id="scanPKL" name="scanPKL" accept=".pdf">
-                    </div>
-
                     @error('nilai')
                         <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
                         </div>
@@ -65,6 +57,15 @@
                             <option value="tidak lulus">Tidak Lulus</option>
                         </select>
                     </div>
+
+                    @error('scanPKL')
+                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                    @enderror
+                    <label for="scanPKL" class="form-labef">Scan PKL (PDF)</label>
+                    <div class="input-group mb-4">
+                        <input type="file" class="form-control" id="scanPKL" name="scanPKL" accept=".pdf">
+                    </div>
+                    
                     <div class="text-center my-5">
                         <button type="submit" class="btn btn-primary me-2 px-3">Simpan PKL</button>
                         <a href="{{ route('pkl.index') }}" class="btn btn-secondary px-3">Kembali</a>

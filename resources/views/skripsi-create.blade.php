@@ -51,14 +51,6 @@
                         value="{{ old('tanggal_sidang', date('Y-m-d')) }}">
                     </div>
 
-                    @error('scanSkripsi')
-                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
-                    @enderror
-                    <label for="scanSkripsi" class="form-label">Scan Skripsi (PDF)</label>
-                    <div class="input-group mb-4">
-                        <input type="file" class="form-control" id="scanSkripsi" name="scanSkripsi" accept=".pdf">
-                    </div>
-
                     @error('nilai')
                         <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
                         </div>
@@ -80,6 +72,14 @@
                             <option value="lulus">Lulus</option>
                             <option value="tidak lulus">Tidak Lulus</option>
                         </select>
+                    </div>
+
+                    @error('scanSkripsi')
+                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}</div>
+                    @enderror
+                    <label for="scanSkripsi" class="form-label">Scan Skripsi (PDF)</label>
+                    <div class="input-group mb-4">
+                        <input type="file" class="form-control" id="scanSkripsi" name="scanSkripsi" accept=".pdf">
                     </div>
 
                     <div class="text-center my-5">
