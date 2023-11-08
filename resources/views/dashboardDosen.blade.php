@@ -91,7 +91,7 @@
                                 <td>{{ $mahasiswa->angkatan }}</td>
                                 <td>{{ $mahasiswa->status }}</td>
                                 <td>
-                                    <a href=" # " class="btn btn-warning btn-sm">Detail</a>
+                                    <a href=" {{route('mahasiswa.detail',$mahasiswa->nim) }} " class="btn btn-warning btn-sm">Detail</a>
                                 </td>
                             </tr>
                         @endforeach

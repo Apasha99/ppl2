@@ -8,9 +8,10 @@ use App\Http\Controllers\PKLController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\DashboardDosenController;
 use App\Http\Controllers\DashboardOperatorController;
 use App\Http\Controllers\DashboardMahasiswaController;
@@ -43,7 +44,7 @@ Route::get('dashboardMahasiswa', [DashboardMahasiswaController::class,'dashboard
 Route::get('dashboardDosen', [DashboardDosenController::class,'dashboardDosen'])->middleware(['auth','only_dosen'])->name('dashboardDosen');
 Route::get('/searchMahasiswa', [DashboardDosenController::class,'searchMahasiswa'])->middleware(['auth','only_dosen'])->name('searchMhs');
 Route::get('dashboardOperator', [DashboardOperatorController::class,'dashboardOperator'])->middleware(['auth','only_operator']);
-Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware(['auth','only_departemen']);
+Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware(['auth','only_departemen'])->name('dashboardDepartemen');
 Route::get('daftar_akun', [UserController::class,'daftar_akun'])->middleware(['auth','only_operator']);
 
 
@@ -64,6 +65,10 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
     Route::get('/profilDosen', [DosenController::class, 'edit'])->name('dosen.edit');
     Route::get('/profilDosen-edit', [DosenController::class, 'showEdit'])->name('dosen.showEdit');
     Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
+});
+
+Route::middleware(['auth', 'only_departemen'])->group(function () {
+    Route::get('/listMahasiswa', [DepartemenController::class, 'index_list'])->name('mahasiswa.list');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {

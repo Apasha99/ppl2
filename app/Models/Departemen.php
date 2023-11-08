@@ -10,7 +10,9 @@ class Departemen extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'departemen';
+    protected $primaryKey = 'kode';
     protected $fillable = [
+        'kode',
         'nama',
         'username',
     ];

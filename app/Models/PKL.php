@@ -34,14 +34,7 @@ class PKL extends Model
                 new Exists('mahasiswa', 'nim', function ($query) use ($nim) {
                     $query->where('nim', $nim);
                 }),
-            ],
-            'nip' => [
-                'required',
-                'exists:mahasiswa,nip',
-                new Exists('mahasiswa', 'nip', function ($query) use ($nim) {
-                    $query->where('nim', $nim);
-                }),
-            ],
+            ]
         ];
     }
 
