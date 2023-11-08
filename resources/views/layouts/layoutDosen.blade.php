@@ -65,6 +65,8 @@
             <a class="nav-link" href="/showAllVerifikasi">Verifikasi</a>
             <a class="nav-link" href="/listPKL">List PKL</a>
             <a class="nav-link" href="/listSkripsi">List Skripsi</a>
+            <a class="nav-link" href="/RekapPKL">Rekap PKL</a>
+            <a class="nav-link" href="/RekapSkripsi">Rekap Skripsi</a>
         </nav>
         <div class="container-lg px-5 text-light" data-bs-target="navbar-mhs" data-bs-offset="0" tabindex="0">
             @yield('content')

@@ -42,7 +42,7 @@ class DosenController extends Controller
                 ->join('mahasiswa','mahasiswa.nip','=','dosen_wali.nip')
                 ->where('dosen_wali.nip',$nip)
                 ->join('pkl','pkl.nim','=','mahasiswa.nim')
-                ->select('mahasiswa.nama','mahasiswa.nim','mahasiswa.angkatan','pkl.semester_aktif','pkl.scanPKL','pkl.nilai','pkl.status')
+                ->select('mahasiswa.nama','mahasiswa.nim','mahasiswa.angkatan','pkl.semester_aktif','pkl.scanPKL','pkl.nilai','pkl.status','pkl.statusPKL')
                 ->get();
         return view('listPKL', ['pkl'=>$pkl]);
     }
@@ -53,11 +53,46 @@ class DosenController extends Controller
                 ->join('mahasiswa','mahasiswa.nip','=','dosen_wali.nip')
                 ->where('dosen_wali.nip',$nip)
                 ->join('skripsi','skripsi.nim','=','mahasiswa.nim')
-                ->select('mahasiswa.nama','mahasiswa.nim','mahasiswa.angkatan','skripsi.semester_aktif','skripsi.scanSkripsi','skripsi.nilai','skripsi.status')
+                ->select('mahasiswa.nama','mahasiswa.nim','mahasiswa.angkatan','skripsi.semester_aktif','skripsi.scanSkripsi','skripsi.nilai','skripsi.status','skripsi.statusSkripsi')
                 ->get();
         return view('listSkripsi', ['skripsi'=>$skripsi]);
     }
 
+    public function RekapPKL(Request $request){
+        $nip = $request->user()->dosen->nip;
+    
+        $result = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+                ->join('mahasiswa', 'mahasiswa.nip', '=', 'dosen_wali.nip')
+                ->join('pkl', 'pkl.nim', '=', 'mahasiswa.nim')
+                ->where('dosen_wali.nip', $nip)
+                ->where('pkl.nip', $nip) 
+                ->select('mahasiswa.angkatan')
+                ->selectRaw('SUM(CASE WHEN pkl.statusPKL = "lulus" THEN 1 ELSE 0 END) as luluspkl')
+                ->selectRaw('SUM(CASE WHEN pkl.statusPKL = "tidak lulus" THEN 1 ELSE 0 END) as tdkluluspkl')
+                ->groupBy('mahasiswa.angkatan')
+                ->get();
+    
+        return view('RekapPKL', ['data' => $result]);
+    }
+
+    public function RekapSkripsi(Request $request){
+        $nip = $request->user()->dosen->nip;
+    
+        $result = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+                ->join('mahasiswa', 'mahasiswa.nip', '=', 'dosen_wali.nip')
+                ->join('skripsi', 'skripsi.nim', '=', 'mahasiswa.nim')
+                ->where('dosen_wali.nip', $nip)
+                ->where('skripsi.nip', $nip)
+                ->select('mahasiswa.angkatan')
+                ->selectRaw('SUM(CASE WHEN skripsi.statusSkripsi = "lulus" THEN 1 ELSE 0 END) as lulusskripsi')
+                ->selectRaw('SUM(CASE WHEN skripsi.statusSkripsi = "tidak lulus" THEN 1 ELSE 0 END) as tdklulusskripsi')
+                ->groupBy('mahasiswa.angkatan')
+                ->get();
+    
+        return view('RekapSkripsi', ['data' => $result]);
+    }
+    
+    
     public function edit(Request $request)
     {
         $user = $request->user();

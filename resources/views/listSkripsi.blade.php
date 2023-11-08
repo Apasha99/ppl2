@@ -31,6 +31,7 @@
                                     <th scope="col">Angkatan</th>
                                     <th scope="col">Semester Aktif</th>
                                     <th scope="col">Nilai</th>
+                                    <th scope="col">Status Skripsi</th>
                                     <th scope="col">Scan Skripsi</th>
                                     <th scope="col">Status</th>
                                 </tr>
@@ -43,6 +44,7 @@
                                     <td>{{ $skrips->angkatan }}</td>
                                     <td>{{ $skrips->semester_aktif }}</td>
                                     <td>{{ $skrips->nilai }}</td>
+                                    <td>{{ $skrips->statusSkripsi }}</td>
                                     <td>
                                         <a href="{{ asset('storage/' . $skrips->scanSkripsi) }}" target="_blank">Lihat Skripsi</a>
                                     </td>

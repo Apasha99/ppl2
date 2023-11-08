@@ -68,6 +68,8 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
     Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
     Route::get('/listPKL',[DosenController::class,'listPKL'])->name('listPKL');
     Route::get('/listSkripsi',[DosenController::class,'listSkripsi'])->name('listSkripsi');
+    Route::get('/RekapPKL',[DosenController::class,'RekapPKL'])->name('RekapPKL');
+    Route::get('/RekapSkripsi',[DosenController::class,'RekapSkripsi'])->name('RekapSkripsi');
 });
 
 Route::controller(ListController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {

@@ -122,6 +122,7 @@
                                     <th scope="col">NIM</th>
                                     <th scope="col">Semester Aktif</th>
                                     <th scope="col">Nilai</th>
+                                    <th scope="col">Status PKL</th>
                                     <th scope="col">Scan PKL</th>
                                     <th scope="col">Aksi</th>
                                     <th scope="col">Aksi</th>
@@ -134,6 +135,7 @@
                                     <td>{{ $pk->nim }}</td>
                                     <td>{{ $pk->semester_aktif }}</td>
                                     <td>{{ $pk->nilai }}</td>
+                                    <td>{{ $pk->statusPKL }}</td>
                                     <td>
                                         <a href="{{ asset('storage/' . $pk->scanPKL) }}" target="_blank">Lihat PKL</a>
                                     </td>
@@ -165,6 +167,7 @@
                                     <th scope="col">NIM</th>
                                     <th scope="col">Semester Aktif</th>
                                     <th scope="col">Nilai</th>
+                                    <th scope="col">Status Skripsi</th>
                                     <th scope="col">Scan Skripsi</th>
                                     <th scope="col">Aksi</th>
                                     <th scope="col">Aksi</th>
@@ -177,6 +180,7 @@
                                     <td>{{ $skrips->nim }}</td>
                                     <td>{{ $skrips->semester_aktif }}</td>
                                     <td>{{ $skrips->nilai }}</td>
+                                    <td>{{ $skrips->statusSkripsi }}</td>
                                     <td>
                                         <a href="{{ asset('storage/' . $skrips->scanSkripsi) }}" target="_blank">Lihat Skripsi</a>
                                     </td>

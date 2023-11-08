@@ -31,6 +31,7 @@
                                     <th scope="col">Angkatan</th>
                                     <th scope="col">Semester Aktif</th>
                                     <th scope="col">Nilai</th>
+                                    <th scope="col">Status PKL</th>
                                     <th scope="col">Scan PKL</th>
                                     <th scope="col">Status</th>
                                 </tr>
@@ -43,6 +44,7 @@
                                     <td>{{ $pk->angkatan }}</td>
                                     <td>{{ $pk->semester_aktif }}</td>
                                     <td>{{ $pk->nilai }}</td>
+                                    <td>{{ $pk->statusPKL }}</td>
                                     <td>
                                         <a href="{{ asset('storage/' . $pk->scanPKL) }}" target="_blank">Lihat PKL</a>
                                     </td>

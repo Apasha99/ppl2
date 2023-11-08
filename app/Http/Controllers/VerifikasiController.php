@@ -34,14 +34,14 @@ class VerifikasiController extends Controller
                 ->where('dosen_wali.nip',$nip)
                 ->join('pkl','pkl.nim','=','mahasiswa.nim')
                 ->where('pkl.status','pending')
-                ->select('mahasiswa.nama','mahasiswa.nim','pkl.semester_aktif','pkl.scanPKL','pkl.nilai')
+                ->select('mahasiswa.nama','mahasiswa.nim','pkl.semester_aktif','pkl.scanPKL','pkl.nilai','pkl.statusPKL')
                 ->get();
         $skripsi = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
                 ->join('mahasiswa','mahasiswa.nip','=','dosen_wali.nip')
                 ->where('dosen_wali.nip',$nip)
                 ->join('skripsi','skripsi.nim','=','mahasiswa.nim')
                 ->where('skripsi.status','pending')
-                ->select('mahasiswa.nama','mahasiswa.nim','skripsi.semester_aktif','skripsi.scanSkripsi','skripsi.nilai')
+                ->select('mahasiswa.nama','mahasiswa.nim','skripsi.semester_aktif','skripsi.scanSkripsi','skripsi.nilai','skripsi.statusSkripsi')
                 ->get();
         return view('showAllVerifikasi', ['irs'=>$irs,'khs'=>$khs,'pkl'=>$pkl,'skripsi'=>$skripsi]);
     }
