@@ -43,7 +43,7 @@ Route::get('dashboardMahasiswa', [DashboardMahasiswaController::class,'dashboard
 Route::get('dashboardDosen', [DashboardDosenController::class,'dashboardDosen'])->middleware(['auth','only_dosen'])->name('dashboardDosen');
 Route::get('/searchMahasiswa', [DashboardDosenController::class,'searchMahasiswa'])->middleware(['auth','only_dosen'])->name('searchMhs');
 Route::get('dashboardOperator', [DashboardOperatorController::class,'dashboardOperator'])->middleware(['auth','only_operator']);
-Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware(['auth','only_departemen']);
+Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware(['auth','only_departemen'])->name('dashboardDepartemen');
 Route::get('daftar_akun', [UserController::class,'daftar_akun'])->middleware(['auth','only_operator']);
 
 
@@ -68,6 +68,12 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
 
 Route::middleware(['auth', 'only_departemen'])->group(function () {
     Route::get('/listMahasiswa', [DepartemenController::class, 'index_list'])->name('mahasiswa.list');
+    Route::get('/listMahasiswa/{tahun}/{status}', [ListController::class, 'list'])->name('list');
+
+});
+
+Route::controller(RekapController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
+    Route::get('/rekap', 'index')->name('rekap.index');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {

@@ -11,4 +11,6 @@ class DashboardDepartemenController extends Controller
         //dd('ini halaman dashboard');
         return view('dashboardDepartemen');
     }
+
 }
+
