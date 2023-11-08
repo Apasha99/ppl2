@@ -1,10 +1,10 @@
 @extends('layouts.layoutDepartemen')
 
 @section('content')
-<section class="text-light">
-    <div class="container-lg">
+<section>
+    <div class="container-lg text-light">
         <div class="text-center my-5">
-            <h2>Daftar ___ ___ Mahasiswa Informatika</h2>
+            <h2>Daftar Sudah/Belum Lulus PKL Mahasiswa Informatika</h2>
             <h2>Fakultas Sains dan Matematika UNDIP Semarang</h2>
         </div>
 
