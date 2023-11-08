@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Session;
 
 class SkripsiController extends Controller
 {
@@ -28,6 +29,15 @@ class SkripsiController extends Controller
     {
         $nim = $request->user()->mahasiswa->nim; // Use the logged-in user to get the nim
         $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+        // Periksa apakah data PKL sudah ada untuk semester yang dipilih
+        $existingSkripsi = Skripsi::where('nim', $nim)->first();
+
+        if ($existingSkripsi) {
+            $errorMessage = "Anda telah memasukkan progress Skripsi";
+            Session :: flash ('error', $errorMessage);
+            // Jika data PKL sudah ada, lakukan pembaruan daripada penambahan
+            return $this->update($request, $existingSkripsi);
+        }
 
         if ($mahasiswa) {
             // Get the active semesters for the given student
@@ -45,20 +55,6 @@ class SkripsiController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $nim = $request->user()->mahasiswa->nim;
-        $latestSkripsi = Skripsi::where('nim', $nim)->orderBy('semester_aktif', 'desc')->first();
-        
-        if ($latestSkripsi) {
-            $latestSemester = $latestSkripsi->semester_aktif;
-            $inputSemester = $request->input('semester_aktif');
-
-            if ($inputSemester > $latestSemester + 1) {
-                // PKL diisi tidak sesuai urutan, berikan pesan kesalahan
-                return redirect()->route('skripsi.create')->with('error', 'Anda harus mengisi Skripsi sesuai urutan semester.');
-        }}elseif($request->input('semester_aktif') != 7){
-            return redirect()->route('skripsi.create')->with('error', 'Anda harus memulai dengan Skripsi semester 7.');
-        }
-
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric','unique:skripsi'], // Correct the validation rule syntax
             'statusSkripsi' => [Rule::in(['lulus', 'tidak lulus'])],
@@ -93,4 +89,30 @@ class SkripsiController extends Controller
         }
     }
 
+    private function update(Request $request, Skripsi $existingSkripsi): RedirectResponse
+    {
+        $validated = $request->validate([
+            'statusSkripsi' => [Rule::in(['lulus', 'tidak lulus'])],
+            'nilai' => [Rule::in(['A', 'B', 'C', 'D', 'E'])],
+            'scanSkripsi' => ['required', 'file', 'mimes:pdf', 'max:10240'],
+        ]);
+
+        $PDFPath = null;
+
+        if ($request->hasFile('scanSkripsi') && $request->file('scanSkripsi')->isValid()) {
+            $PDFPath = $request->file('scanSkripsi')->store('file', 'public');
+        }
+
+        $existingSkripsi->statusSkripsi = $request->input('statusSkripsi');
+        $existingSkripsi->nilai = $request->input('nilai');
+        $existingSkripsi->status = 'pending';
+        $existingSkripsi->scanSkripsi = $PDFPath; // Assign the PDF path here
+        $saved = $existingSkripsi->save();
+
+        if ($saved) {
+            return redirect()->route('skripsi.index')->with('success', 'Skripsi updated successfully');
+        } else {
+            return redirect()->route('skripsi.create')->with('error', 'Failed to update Skripsi');
+        }
+    }
 }
