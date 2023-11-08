@@ -8,9 +8,10 @@ use App\Http\Controllers\PKLController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DosenController;
-use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\SkripsiController;
 use App\Http\Controllers\OperatorController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\DashboardDosenController;
 use App\Http\Controllers\DashboardOperatorController;
 use App\Http\Controllers\DashboardMahasiswaController;
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
     Route::get('/profilDosen', [DosenController::class, 'edit'])->name('dosen.edit');
     Route::get('/profilDosen-edit', [DosenController::class, 'showEdit'])->name('dosen.showEdit');
     Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
+});
+
+Route::middleware(['auth', 'only_departemen'])->group(function () {
+    Route::get('/listMahasiswa', [DepartemenController::class, 'index_list'])->name('mahasiswa.list');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {
