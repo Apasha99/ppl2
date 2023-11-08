@@ -60,6 +60,11 @@ class IRS extends Model
         return $this->belongsTo(Dosen::class, 'dosen_wali', 'nip');
     }
 
+    public function pkl()
+    {
+        return $this->belongsTo(PKL::class, 'nim', 'nim');
+    }
+
 }
 
 
