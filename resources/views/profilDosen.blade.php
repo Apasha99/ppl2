@@ -1,7 +1,7 @@
 @extends('layouts.layoutDosen')
 
 @section('content')
-    <section id="profil-oper">
+    <section id="profil-dosen">
         <div class="container-lg my-5 text-light">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">

@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\IRS;
 use App\Models\Dosen;
 use App\Models\Mahasiswa;
-use App\Models\Dosen; // Pastikan mengimpor model Dosen
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DosenController extends Controller
 {
@@ -24,15 +25,37 @@ class DosenController extends Controller
 
         $irsData = IRS::with('mahasiswa', 'pkl')
                 ->where('irs.nim', $nim)
-                ->select('irs.semester_aktif', 'irs.nim', 'irs.jumlah_sks', 'irs.semester_aktif', 'irs.scanIRS', 'pkl.scanPKL', 'pkl.nilai')
+                ->select('irs.semester_aktif', 'irs.nim', 'irs.jumlah_sks', 'irs.semester_aktif', 'irs.scanIRS')
                 ->orderBy('semester_aktif', 'asc')
                 ->get();
 
-        return view('detailMahasiswa', [
+        return view('detail', [
             'mahasiswa' => $mahasiswa,
             'dosen' => $dosen,
             'irsData' => $irsData
         ]);
+    }
+
+    public function listPKL(Request $request){
+        $nip = $request->user()->dosen->nip;
+        $pkl = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+                ->join('mahasiswa','mahasiswa.nip','=','dosen_wali.nip')
+                ->where('dosen_wali.nip',$nip)
+                ->join('pkl','pkl.nim','=','mahasiswa.nim')
+                ->select('mahasiswa.nama','mahasiswa.nim','mahasiswa.angkatan','pkl.semester_aktif','pkl.scanPKL','pkl.nilai','pkl.status')
+                ->get();
+        return view('listPKL', ['pkl'=>$pkl]);
+    }
+
+    public function listSkripsi(Request $request){
+        $nip = $request->user()->dosen->nip;
+        $skripsi = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+                ->join('mahasiswa','mahasiswa.nip','=','dosen_wali.nip')
+                ->where('dosen_wali.nip',$nip)
+                ->join('skripsi','skripsi.nim','=','mahasiswa.nim')
+                ->select('mahasiswa.nama','mahasiswa.nim','mahasiswa.angkatan','skripsi.semester_aktif','skripsi.scanSkripsi','skripsi.nilai','skripsi.status')
+                ->get();
+        return view('listSkripsi', ['skripsi'=>$skripsi]);
     }
 
     public function edit(Request $request)

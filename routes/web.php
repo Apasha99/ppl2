@@ -17,6 +17,7 @@ use App\Http\Controllers\DashboardDosenController;
 use App\Http\Controllers\DashboardOperatorController;
 use App\Http\Controllers\DashboardMahasiswaController;
 use App\Http\Controllers\DashboardDepartemenController;
+use App\Http\Controllers\VerifikasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,10 +62,12 @@ Route::middleware(['auth', 'only_operator'])->group(function () {
 });
 
 Route::middleware(['auth', 'only_dosen'])->group(function () {
-    Route::get('/mahasiswa-detail/{mahasiswa}', [DosenController::class, 'detail'])->name('mahasiswa.detail');
+    Route::get('/detail/{mahasiswa}', [DosenController::class, 'detail'])->name('detail');
     Route::get('/profilDosen', [DosenController::class, 'edit'])->name('dosen.edit');
     Route::get('/profilDosen-edit', [DosenController::class, 'showEdit'])->name('dosen.showEdit');
     Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
+    Route::get('/listPKL',[DosenController::class,'listPKL'])->name('listPKL');
+    Route::get('/listSkripsi',[DosenController::class,'listSkripsi'])->name('listSkripsi');
 });
 
 Route::controller(ListController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
@@ -104,4 +107,16 @@ Route::controller(MahasiswaController::class)->middleware(['auth', 'only_mahasis
     Route::get('/editprofilMahasiswa-show', 'showProfil')->name('mahasiswa.showProfil')->middleware('verified');
     Route::post('/editprofilMahasiswa-show', 'updateProfil')->name('mahasiswa.updateProfil')->middleware('verified');
     
+});
+
+Route::controller(VerifikasiController::class)->middleware(['auth','only_dosen'])->group(function () {
+    Route::get('/showAllVerifikasi','showAll')->name('showAll');
+    Route::post('/verifikasi/{nim}/{semester_aktif}','verifikasi')->name('verifikasi');
+    Route::post('/rejected/{nim}/{semester_aktif}','rejected')->name('rejected');
+    Route::post('/verifikasiKHS/{nim}/{semester_aktif}','verifikasiKHS')->name('verifikasiKHS');
+    Route::post('/rejectedKHS/{nim}/{semester_aktif}','rejectedKHS')->name('rejectedKHS');
+    Route::post('/verifikasiPKL/{nim}/{semester_aktif}','verifikasiPKL')->name('verifikasiPKL');
+    Route::post('/rejectedPKL/{nim}/{semester_aktif}','rejectedPKL')->name('rejectedPKL');
+    Route::post('/verifikasiSkripsi/{nim}/{semester_aktif}','verifikasiSkripsi')->name('verifikasiSkripsi');
+    Route::post('/rejectedSkripsi/{nim}/{semester_aktif}','rejectedSkripsi')->name('rejectedSkripsi');
 });

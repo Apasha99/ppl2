@@ -32,15 +32,6 @@
                         </select>
                     </div>
 
-                    @error('scanIRS')
-                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                        </div>
-                    @enderror
-                    <label for="scanIRS" class="form-label">Scan IRS (PDF)</label>
-                    <div class="input-group mb-4">
-                        <input type="file" class="form-control" id="scanIRS" name="scanIRS" accept=".pdf">
-                    </div>
-
                     @error('jumlah_sks')
                         <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
                         </div>
@@ -49,6 +40,15 @@
                     <div class="input-group mb-4">
                         <input type="number" class="form-control" id="jumlah_sks" name="jumlah_sks" min="1"
                             max="24">
+                    </div>
+
+                    @error('scanIRS')
+                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                        </div>
+                    @enderror
+                    <label for="scanIRS" class="form-label">Scan IRS (PDF)</label>
+                    <div class="input-group mb-4">
+                        <input type="file" class="form-control" id="scanIRS" name="scanIRS" accept=".pdf">
                     </div>
 
                     <div class="text-center my-5">

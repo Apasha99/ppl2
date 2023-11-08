@@ -32,15 +32,6 @@
                         </select>
                     </div>
 
-                    @error('scanKHS')
-                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
-                        </div>
-                    @enderror
-                    <label for="scanKHS" class="form-label">Scan KHS (PDF)</label>
-                    <div class="input-group mb-4">
-                        <input type="file" class="form-control" id="scanKHS" name="scanKHS" accept=".pdf">
-                    </div>
-
                     @error('jumlah_sks')
                         <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
                         </div>
@@ -77,6 +68,15 @@
                     <label for="ip_kumulatif" class="form-label">IP Kumulatif</label>
                     <div class="input-group mb-4">
                         <input type="decimal" class="form-control" id="ip_kumulatif" name="ip_kumulatif">
+                    </div>
+
+                    @error('scanKHS')
+                        <div class="text-danger mb-2"><i class="bi bi-exclamation-circle-fill"></i> {{ $message }}
+                        </div>
+                    @enderror
+                    <label for="scanKHS" class="form-label">Scan KHS (PDF)</label>
+                    <div class="input-group mb-4">
+                        <input type="file" class="form-control" id="scanKHS" name="scanKHS" accept=".pdf">
                     </div>
 
                     <div class="text-center my-5">
