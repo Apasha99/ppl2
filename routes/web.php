@@ -6,6 +6,7 @@ use App\Http\Controllers\IRSController;
 use App\Http\Controllers\KHSController;
 use App\Http\Controllers\PKLController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ListController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\SkripsiController;
@@ -66,14 +67,8 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
     Route::post('/profilDosen-edit', [DosenController::class, 'update'])->name('dosen.update');
 });
 
-Route::middleware(['auth', 'only_departemen'])->group(function () {
-    Route::get('/listMahasiswa', [DepartemenController::class, 'index_list'])->name('mahasiswa.list');
-    Route::get('/listMahasiswa/{tahun}/{status}', [ListController::class, 'list'])->name('list');
-
-});
-
-Route::controller(RekapController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
-    Route::get('/rekap', 'index')->name('rekap.index');
+Route::controller(ListController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
+    Route::get('/list/{angkatan}/{status}', 'index')->name('list.index');
 });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {

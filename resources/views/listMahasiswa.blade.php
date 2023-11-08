@@ -11,26 +11,29 @@
         <div>
             <table class="table">
                 <thead>
-                  <tr>
-                    <th scope="col">No</th>
-                    <th scope="col">NIM</th>
-                    <th scope="col">Nama</th>
-                    <th scope="col">Angkatan</th>
-                    <th scope="col">Nilai</th>
-                  </tr>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">NIM</th>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Angkatan</th>
+                        <th scope="col">Nilai</th>
+                    </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $counter = 1;
+                    @endphp
                     @foreach ($mahasiswas as $mahasiswa)
                     <tr>
-                        <th scope="row">1</th>
-                        <td> {{ $mahasiswa->nim }} </td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td> </td>
+                        <th scope="row">{{ $counter++ }}</th>
+                        <td>{{ $mahasiswa->nim }}</td>
+                        <td>{{ $mahasiswa->nama }}</td>
+                        <td>{{ $mahasiswa->angkatan }}</td>
+                        <td>{{ $mahasiswa->nilai }}</td>
                     </tr>
                     @endforeach
                 </tbody>
-              </table>
+            </table>            
         </div>
     </div>
 </section>
