@@ -56,7 +56,7 @@ class SkripsiController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'semester_aktif' => ['required', 'numeric','unique:skripsi'], // Correct the validation rule syntax
+            'semester_aktif' => ['required', 'numeric'], // Correct the validation rule syntax
             'statusSkripsi' => [Rule::in(['lulus', 'tidak lulus'])],
             'nilai'=>[Rule::in(['A', 'B','C','D','E'])],
             'lama_studi'=>[Rule::in(['3', '4','5','6','7'])],

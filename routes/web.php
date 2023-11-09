@@ -72,9 +72,9 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
     Route::get('/RekapSkripsi',[DosenController::class,'RekapSkripsi'])->name('RekapSkripsi');
 });
 
-Route::controller(ListController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
-    Route::get('/list/{angkatan}/{status}', 'index')->name('list.index');
-});
+// Route::controller(ListController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
+//     Route::get('/list/{angkatan}/{status}', 'index')->name('list.index');
+// });
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {
     Route::get('/irs', 'index')->name('irs.index');
@@ -121,4 +121,11 @@ Route::controller(VerifikasiController::class)->middleware(['auth','only_dosen']
     Route::post('/rejectedPKL/{nim}/{semester_aktif}','rejectedPKL')->name('rejectedPKL');
     Route::post('/verifikasiSkripsi/{nim}/{semester_aktif}','verifikasiSkripsi')->name('verifikasiSkripsi');
     Route::post('/rejectedSkripsi/{nim}/{semester_aktif}','rejectedSkripsi')->name('rejectedSkripsi');
+});
+
+Route::controller(DepartemenController::class)->middleware(['auth','only_departemen'])->group(function (){
+    Route::get('/listPKLDepartemen','listPKL');
+    Route::get('/listSkripsiDepartemen','listSkripsi');
+    Route::get('/RekapPKLDepartemen','RekapPKL');
+    Route::get('/RekapSkripsiDepartemen','RekapSkripsi');
 });

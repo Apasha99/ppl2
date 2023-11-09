@@ -22,28 +22,32 @@ class DashboardMahasiswaController extends Controller
                 ->where('mahasiswa.iduser', Auth::user()->id)
                 ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama')
                 ->first();
+
             $nim = $request->user()->mahasiswa->nim;
             $user = User::where('id', Auth::user()->id)->select('foto')->first();
+
             $latestPKL = PKL::where('nim',$nim)
                         ->orderBy('created_at', 'desc')->first();
             $statusPKL = $latestPKL ? $latestPKL->statusPKL : null;
             $status = $latestPKL ? $latestPKL->status : null;
+
             $latestSkripsi = Skripsi::where('nim',$nim)
                         ->orderBy('created_at', 'desc')->first();
             $statusSkripsi = $latestSkripsi ? $latestSkripsi->statusSkripsi : null;
             $statusSkr = $latestSkripsi ? $latestSkripsi->status : null;
+
             $latestKHS = KHS::where('nim',$nim)
-                                ->orderBy('created_at', 'desc')->first();
+                            ->orderBy('created_at', 'desc')->first();
             $SKSKumulatif = $latestKHS ? $latestKHS->jumlah_sks_kumulatif : null;
             $IPKumulatif = $latestKHS ? $latestKHS->ip_kumulatif : null;
             $statusKHS = $latestKHS ? $latestKHS->status : null;
+
             $latestIRS = IRS::where('nim',$nim)
-                                ->orderBy('created_at', 'desc')->first();
+                            ->orderBy('created_at', 'desc')->first();
             $SemesterAktif = $latestIRS ? $latestIRS->semester_aktif : null;
             $JumlahSKS = $latestIRS ? $latestIRS->jumlah_sks : null;
             $statusIRS = $latestIRS ? $latestIRS->status : null;
-            // Lebih baik mengecek jika $mahasiswa tidak null sebelum mengirimkannya ke tampilan.
-            // Ini untuk menghindari kesalahan jika tidak ada data mahasiswa yang sesuai dengan user yang sedang login.
+            
             if ($mahasiswa) {
                 return view('dashboardMahasiswa', ['statusIRS'=>$statusIRS,'JumlahSKS'=>$JumlahSKS,'SemesterAktif'=>$SemesterAktif,'statusKHS'=>$statusKHS,
                 'mahasiswa' => $mahasiswa, 'user' => $user,'status'=>$status,'statusSkr'=>$statusSkr, 
