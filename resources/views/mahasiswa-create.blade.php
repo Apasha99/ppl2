@@ -62,6 +62,21 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="jalur_masuk">Jalur Masuk:</label>
+                            <select class="form-select @error('jalur_masuk') is-invalid @enderror" name="jalur_masuk" id="jalur_masuk" required>
+                                <option selected value="">-- Pilih Jalur Masuk --</option>
+                                <option  value="SNMPTN">SNMPTN</option>
+                                <option  value="SBMPTN">SBMPTN</option>
+                                <option  value="MANDIRI">MANDIRI</option>
+                            </select>
+                            @error('jalur_masuk')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label for="status">Status:</label>
                             <div class="form-check">
                                 <input type="radio" class="form-check-input" id="active" name="status" value="active"

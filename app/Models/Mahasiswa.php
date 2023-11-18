@@ -22,7 +22,10 @@ class Mahasiswa extends Model
         'kabkota',
         'provinsi',
         'username',
-        'noHandphone'
+        'noHandphone',
+        'jalur_masuk',
+        'cekPKL',
+        'cekSkripsi'
     ];
 
     public function irs()
@@ -31,7 +34,7 @@ class Mahasiswa extends Model
     }
 
     public function pkl(){
-        return $this->hasMany(PKL::class, 'nim', 'nim');
+        return $this->hasOne(PKL::class, 'nim', 'nim');
     }
     
     public function khs()
@@ -39,6 +42,9 @@ class Mahasiswa extends Model
         return $this->hasMany(KHS::class, 'nim', 'nim');
     }
 
+    public function skripsi(){
+        return $this->hasOne(Skripsi::class, 'nim', 'nim');
+    }
     
 
 }

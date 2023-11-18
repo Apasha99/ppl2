@@ -20,20 +20,11 @@ class DashboardDepartemenController extends Controller
                 ->select('departemen.nama', 'departemen.kode', 'users.username')
                 ->first();
 
-            $mahasiswas = DB::table('mahasiswa as m')
-                ->leftJoin('pkl as p', 'm.nim', '=', 'p.nim')
-                ->select('m.angkatan', DB::raw('COALESCE(SUM(CASE WHEN p.statusPKL = "lulus" THEN 1 ELSE 0 END), 0) as lulus_count'), 
-                                        DB::raw('COALESCE(SUM(CASE WHEN p.statusPKL = "tidak lulus" THEN 1 ELSE 0 END), 0) as tidak_lulus_count'))
-                ->groupBy('m.angkatan')
-                ->get();
-
             // $user = User::where('id', Auth::user()->id)->select('foto')->first();
             if ($departemen) {
-                return view('dashboardDepartemen', ['departemen' => $departemen, 'mahasiswas' => $mahasiswas]);
+                return view('dashboardDepartemen', ['departemen' => $departemen]);
             }
         }
-        // $request->session()->flush();
-        //dd('ini halaman dashboard');
         return view('dashboardDepartemen');
     }
 }

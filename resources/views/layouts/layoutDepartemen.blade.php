@@ -41,7 +41,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active me-2" aria-current="page" href="dashboardOperator"><i
+                        <a class="nav-link active me-2" aria-current="page" href="{{route('dashboardDepartemen')}}"><i
                                 class="bi bi-house-door-fill"></i> Home</a>
                     </li>
 
@@ -62,8 +62,6 @@
 
     <div class="d-flex align-items-start px-5 mt-2">
         <nav id="navbar-mhs" class="nav flex-column nav-pills" aria-orientation="vertical">
-            <a class="nav-link" href="/listPKLDepartemen">List PKL</a>
-            <a class="nav-link" href="/listSkripsiDepartemen">List Skripsi</a>
             <a class="nav-link" href="/RekapPKLDepartemen">Rekap PKL</a>
             <a class="nav-link" href="/RekapSkripsiDepartemen">Rekap Skripsi</a>
         </nav>

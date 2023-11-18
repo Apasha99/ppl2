@@ -4,7 +4,7 @@
 <section>
     <div class="container-lg text-light">
         <div class="text-center my-5">
-            <h2>Daftar Lulus PKL Mahasiswa Informatika</h2>
+            <h2>Daftar Belum Lulus Skripsi Mahasiswa Informatika</h2>
             <h2>Fakultas Sains dan Matematika UNDIP Semarang</h2>
         </div>
 
@@ -16,7 +16,6 @@
                         <th scope="col">NIM</th>
                         <th scope="col">Nama</th>
                         <th scope="col">Angkatan</th>
-                        <th scope="col">Nilai</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,13 +28,12 @@
                         <td>{{ $mahasiswa->nim }}</td>
                         <td>{{ $mahasiswa->nama }}</td>
                         <td>{{ $mahasiswa->angkatan }}</td>
-                        <td>{{ $mahasiswa->nilai }}</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
             <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-primary" onclick="openPDFModal()">+ Cetak List PKL</button>
+                    <button type="button" class="btn btn-primary" onclick="openPDFModal()">+ Cetak List Skripsi</button>
                 </div>
             </div>
         </div>
@@ -46,7 +44,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="pdfModalLabel">Preview List PKL</h5>
+                    <h5 class="modal-title" id="pdfModalLabel">Preview List Skripsi</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -54,7 +52,7 @@
                     <iframe id="pdfViewer" width="100%" height="600px" frameborder="0"></iframe>
                 </div>
                 <div class="modal-footer">
-                    <a id="downloadLink" class="btn btn-primary" href="#" download="list_pkl.pdf">Unduh PDF</a>
+                    <a id="downloadLink" class="btn btn-primary" href="#" download="list_belum_skripsi.pdf">Unduh PDF</a>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -63,8 +61,8 @@
     <script>
         // Fungsi untuk membuka modal dan menampilkan PDF di dalamnya
         function openPDFModal() {
-            const pdfUrl = "{{ route('generateListPKLLulus',['angkatan' => $mahasiswa->angkatan, 'status' => 'verified']) }}";
-            const pdfUrl2 = "{{ route('PreviewListPKLLulus',['angkatan' => $mahasiswa->angkatan, 'status' => 'verified']) }}";
+            const pdfUrl = "{{ route('generateListSkripsiBelum',['angkatan' => $mahasiswa->angkatan, 'status' => 'pending']) }}";
+            const pdfUrl2 = "{{ route('PreviewListSkripsiBelum',['angkatan' => $mahasiswa->angkatan, 'status' => 'pending']) }}";
 
             const pdfViewer = document.getElementById('pdfViewer');
             const downloadLink = document.getElementById('downloadLink');
@@ -94,7 +92,7 @@
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
-                a.download = 'list_lulus_pkl.pdf';
+                a.download = 'list_belum_skripsi.pdf';
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);

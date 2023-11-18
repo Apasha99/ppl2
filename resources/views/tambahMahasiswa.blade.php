@@ -40,6 +40,7 @@
                             <th scope="col">NIM</th>
                             <th scope="col">Angkatan</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Jalur Masuk</th>
                             <th scope="col">NIP Dosen Wali</th>
                             <th scope="col">Nama Dosen Wali</th>
                         </tr>
@@ -51,6 +52,7 @@
                             <td>{{ $mahasiswa->nim }}</td>
                             <td>{{ $mahasiswa->angkatan }}</td>
                             <td>{{ $mahasiswa->status }}</td>
+                            <td>{{ $mahasiswa->jalur_masuk }}</td>
                             <td>{{ $mahasiswa->nip}}</td>
                             <td>{{ $mahasiswa->dosen_nama}}</td>
                         </tr>

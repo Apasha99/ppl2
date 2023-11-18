@@ -46,7 +46,7 @@ class VerifikasiController extends Controller
         return view('showAllVerifikasi', ['irs'=>$irs,'khs'=>$khs,'pkl'=>$pkl,'skripsi'=>$skripsi]);
     }
 
-    public function verifikasi($nim, $semester_aktif)
+    public function verifikasi(Request $request,$nim, $semester_aktif)
     {
         $irs = IRS::where('nim', $nim)
                 ->where('semester_aktif', $semester_aktif)

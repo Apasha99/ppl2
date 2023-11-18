@@ -55,7 +55,7 @@ class PKLController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-
+        
         $validated = $request->validate([
             'semester_aktif' => ['required', 'numeric'],
             'statusPKL' => [Rule::in(['lulus', 'tidak lulus'])],
@@ -78,7 +78,7 @@ class PKLController extends Controller
         $pkl->nim = $request->user()->mahasiswa->nim;
         $pkl->nip = $request->user()->mahasiswa->nip;
         $saved = $pkl->save();
-
+        
         if ($saved) {
             return redirect()->route('pkl.index')->with('success', 'PKL added successfully');
         } else {

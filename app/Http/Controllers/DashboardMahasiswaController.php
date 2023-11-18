@@ -20,7 +20,7 @@ class DashboardMahasiswaController extends Controller
             $mahasiswa = Mahasiswa::leftJoin('users', 'mahasiswa.iduser', '=', 'users.id')
                 ->leftJoin('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
                 ->where('mahasiswa.iduser', Auth::user()->id)
-                ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama')
+                ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'dosen_wali.nama as dosen_nama','mahasiswa.jalur_masuk')
                 ->first();
 
             $nim = $request->user()->mahasiswa->nim;

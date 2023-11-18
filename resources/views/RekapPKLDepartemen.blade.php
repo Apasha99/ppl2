@@ -16,36 +16,35 @@
                         <table class="table table-bordered text-light">
                             <thead>
                                 <tr>
-                                    <th colspan="12" class="text-center mt-3">Angkatan</th>
+                                    <th colspan="{{ 2*count($data) }}" class="text-center mt-3">Angkatan</th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2" class="text-center mt-3">2018</th>
-                                    <th colspan="2" class="text-center mt-3">2019</th>
-                                    <th colspan="2" class="text-center mt-3">2020</th>
-                                    <th colspan="2" class="text-center mt-3">2021</th>
-                                    <th colspan="2" class="text-center mt-3">2022</th>
-                                    <th colspan="2" class="text-center mt-3">2023</th>
+                                    @foreach ($data as $item)
+                                        <th colspan="2" class="text-center mt-3">{{ $item->angkatan }}</th>
+                                    @endforeach
+                                </tr>
+                                <tr>
+                                    @foreach ($data as $item)
+                                        <td>Lulus</td>
+                                        <td>Tidak Lulus</td>
+                                    @endforeach
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Lulus</td>
-                                    <td>Tidak Lulus</td>
-                                    <td>Lulus</td>
-                                    <td>Tidak Lulus</td>
-                                    <td>Lulus</td>
-                                    <td>Tidak Lulus</td>
-                                    <td>Lulus</td>
-                                    <td>Tidak Lulus</td>
-                                    <td>Lulus</td>
-                                    <td>Tidak Lulus</td>
-                                    <td>Lulus</td>
-                                    <td>Tidak Lulus</td>
-                                </tr>
-                                <tr>
                                     @foreach ($data as $item)
-                                        <td>{{ $item->luluspkl }}</td>
-                                        <td>{{ $item->tdkluluspkl }}</td>
+                                        <td>
+                                            <a href="{{ route('list.index', ['angkatan' => $mahasiswa->angkatan, 'status' => 'verified']) }}"
+                                            class="text-decoration-none">
+                                                {{  $item->lulus_count ?? 'Data tidak tersedia' }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('list.index2', ['angkatan' => $mahasiswa->angkatan, 'status' => 'verified']) }}"
+                                            class="text-decoration-none">
+                                                {{  $item->tidak_lulus_count ?? 'Data tidak tersedia' }}
+                                            </a>
+                                        </td>
                                     @endforeach
                                 </tr>
                             </tbody>

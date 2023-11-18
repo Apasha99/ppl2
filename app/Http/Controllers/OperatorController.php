@@ -16,6 +16,8 @@ use Illuminate\View\View;
 use App\Imports\MahasiswaImport;
 use App\Exports\MahasiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
+
 
 class OperatorController extends Controller
 {
@@ -23,7 +25,7 @@ class OperatorController extends Controller
     {
         $mahasiswas = Mahasiswa::join('users', 'mahasiswa.username', '=', 'users.username')
             ->join('dosen_wali', 'mahasiswa.nip', '=', 'dosen_wali.nip')
-            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'users.password','dosen_wali.nip', 'dosen_wali.nama as dosen_nama')
+            ->select('mahasiswa.nama', 'mahasiswa.nim', 'mahasiswa.angkatan', 'mahasiswa.status', 'users.username', 'users.password','dosen_wali.nip', 'dosen_wali.nama as dosen_nama','mahasiswa.jalur_masuk')
             ->get();
 
         $users = User::join('roles', 'users.role_id', '=', 'roles.id')
@@ -46,7 +48,7 @@ class OperatorController extends Controller
     public function store(Request $request)
     {   
         $validated = $request->validate([
-            'nama' => 'required',
+            'nama' => 'required|regex:/^[a-zA-Z\s]+$/u',
             'nim' => [
                 'required',
                 'string',
@@ -55,6 +57,11 @@ class OperatorController extends Controller
             'angkatan' => 'required|integer',
             'status' => 'required',
             'nip' => 'required|exists:dosen_wali,nip',
+            'jalur_masuk' => [
+                'required',
+                'regex:/^(SNMPTN|SBMPTN|MANDIRI)$/', // Jalur masuk harus di antara tiga pilihan ini
+                'uppercase', // Tulisan harus kapital
+            ],
         ]);
         $username = strtolower(str_replace(' ', '', $request->nama));
         // Cek apakah username sudah digunakan, jika ya, tambahkan angka acak
@@ -81,6 +88,7 @@ class OperatorController extends Controller
             $mahasiswa->nip = $request->nip;
             $mahasiswa->username = $username; // menghubungkan ke user yang baru dibuat
             $mahasiswa->iduser = $user->id;
+            $mahasiswa->jalur_masuk = $request->jalur_masuk;
             $mahasiswa->save();
 
             $generate_akun = new GenerateAkun;
@@ -172,7 +180,7 @@ class OperatorController extends Controller
     public function tambah()
     {
         $mahasiswas = Mahasiswa::join('dosen_wali','dosen_wali.nip','=','mahasiswa.nip')
-                                ->select('mahasiswa.nama as nama', 'mahasiswa.nim','mahasiswa.nip','mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip','dosen_wali.nama as dosen_nama','mahasiswa.username')
+                                ->select('mahasiswa.nama as nama', 'mahasiswa.nim','mahasiswa.nip','mahasiswa.angkatan', 'mahasiswa.status', 'mahasiswa.nip','dosen_wali.nama as dosen_nama','mahasiswa.username','mahasiswa.jalur_masuk')
                                 ->whereNull('mahasiswa.iduser')->get();
   
         return view('tambahMahasiswa', compact('mahasiswas'));
@@ -180,22 +188,53 @@ class OperatorController extends Controller
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function import() 
+    public function import(Request $request)
     {
-        $file = request()->file('file');
+        $request->validate([
+            'file' => 'required|mimes:xlsx', // Validasi file yang diunggah
+        ]);
+
+        $file = $request->file('file');
 
         if ($file) {
-            // Memeriksa apakah file yang diunggah adalah file Excel XLSX
-            if ($file->getClientOriginalExtension() === 'xlsx') {
-                Excel::import(new MahasiswaImport, $file, 'Xlsx');
-                return redirect('tambahMahasiswa')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
-            } else {
+            if ($file->getClientOriginalExtension() !== 'xlsx') {
                 return redirect('tambahMahasiswa')->with('error', 'File yang diunggah harus dalam format Excel XLSX.');
             }
+
+            $import = Excel::toArray(new MahasiswaImport, $file);
+            $data = $import[0]; // Mengambil data dari file Excel
+
+            foreach ($data as $row) {
+                $validator = Validator::make($row, [
+                    'nama' => 'required|regex:/^[a-zA-Z\s]+$/u', // Nama harus string tanpa angka dan simbol
+                    'nim' => [
+                        'required',
+                        'string',
+                        'regex:/^\d{1,20}$/',
+                    ],
+                    'angkatan' => 'required|integer',
+                    'status' => 'required',
+                    'nip' => 'required|exists:dosen_wali,nip',
+                    'jalur_masuk' => [
+                        'required',
+                        'regex:/^(SNMPTN|SBMPTN|MANDIRI)$/', // Jalur masuk harus di antara tiga pilihan ini
+                        'uppercase', // Tulisan harus kapital
+                    ],
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect('tambahMahasiswa')->withErrors($validator)->withInput();
+                    // Mengembalikan dengan error dan input sebelumnya jika validasi gagal
+                }
+            }
+
+            Excel::import(new MahasiswaImport, $file, 'Xlsx');
+            return redirect('tambahMahasiswa')->with('status', 'Data Mahasiswa berhasil ditambahkan.');
         } else {
             return redirect('tambahMahasiswa')->with('error', 'Anda belum mengunggah file.');
         }
     }
+
 
 
     public function export()
@@ -260,4 +299,16 @@ class OperatorController extends Controller
             return redirect('tambahMahasiswa')->with('error', 'Gagal menggenerate akun Mahasiswa.');
         }
     }    
+
+    public function editStatus(Request $request){
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'status' => 'nullable|string',
+            'current_password' => 'nullable|string',
+            'new_password' => 'nullable|string|min:8',
+            'new_confirm_password' => 'nullable|same:new_password',
+            'foto' => 'max:10240|image|mimes:jpeg,png,jpg',
+        ]);
+    }
 }

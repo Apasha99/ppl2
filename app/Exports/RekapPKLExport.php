@@ -37,8 +37,8 @@ class RekapPKLExport implements FromCollection
     public function exportToPDF() {
         $data = $this->collection();
                 
-        //$pdf = PDF::loadView('rekap-pdf', compact('data'));
+        // $pdf = PDF::loadView('rekap-pdf', compact('data'));
      
-        //return $pdf->download('rekap-pkl.pdf');
+        // return $pdf->download('rekap-pkl.pdf');
     }
 }

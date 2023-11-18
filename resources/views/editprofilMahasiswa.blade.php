@@ -26,18 +26,55 @@
 
                         <label for="nim" class="form-label">NIM</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="nim" name="nip"
+                            <input type="text" class="form-control" id="nim" name="nim"
                                 value="{{ $mahasiswas->nim }}" disabled>
                         </div>
 
                         <label for="username" class="form-label">Username</label>
-                        <div class="input-group mb-5">
+                        <div class="input-group mb-3">
                             <input type="username" class="form-control" id="username" name="username"
                                 value="{{ $user->username }}" disabled>
                             @error('username')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <label for="alamat" class="form-label">Alamat</label>
+                        <div class="input-group mb-3">
+                            <input type="alamat" class="form-control" id="alamat" name="alamat"
+                                value="{{ $mahasiswas->alamat }}" disabled>
+                            @error('alamat')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <label for="provinsi" class="form-label">Provinsi</label>
+                        <div class="input-group mb-3">
+                            <input type="provinsi" class="form-control" id="provinsi" name="provinsi"
+                                value="{{ $mahasiswas->provinsi }}" disabled>
+                            @error('provinsi')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <label for="kabkota" class="form-label">Kab/Kota</label>
+                        <div class="input-group mb-3">
+                            <input type="kabkota" class="form-control" id="kabkota" name="kabkota"
+                                value="{{ $mahasiswas->kabkota }}" disabled>
+                            @error('kabkota')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <label for="noHandphone" class="form-label">Nomor Handphone</label>
+                        <div class="input-group mb-5">
+                            <input type="noHandphone" class="form-control" id="noHandphone" name="noHandphone"
+                                value="{{ $mahasiswas->noHandphone }}" disabled>
+                            @error('noHandphone')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="btn btn-primary">Edit</button>
                     </form>
                 </div>

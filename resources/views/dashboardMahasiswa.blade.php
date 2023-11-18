@@ -36,6 +36,11 @@
                             <td>{{ $mahasiswa->status }}</td>
                         </tr>
                         <tr>
+                            <td>Jalur Masuk</td>
+                            <td>:</td>
+                            <td>{{ $mahasiswa->jalur_masuk }}</td>
+                        </tr>
+                        <tr>
                             <td>Program Studi</td>
                             <td>:</td>
                             <td>Teknik Informatika</td>

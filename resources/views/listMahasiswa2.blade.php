@@ -4,7 +4,7 @@
 <section>
     <div class="container-lg text-light">
         <div class="text-center my-5">
-            <h2>Daftar Lulus PKL Mahasiswa Informatika</h2>
+            <h2>Daftar Belum Lulus PKL Mahasiswa Informatika</h2>
             <h2>Fakultas Sains dan Matematika UNDIP Semarang</h2>
         </div>
 
@@ -16,7 +16,6 @@
                         <th scope="col">NIM</th>
                         <th scope="col">Nama</th>
                         <th scope="col">Angkatan</th>
-                        <th scope="col">Nilai</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +28,6 @@
                         <td>{{ $mahasiswa->nim }}</td>
                         <td>{{ $mahasiswa->nama }}</td>
                         <td>{{ $mahasiswa->angkatan }}</td>
-                        <td>{{ $mahasiswa->nilai }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -63,8 +61,8 @@
     <script>
         // Fungsi untuk membuka modal dan menampilkan PDF di dalamnya
         function openPDFModal() {
-            const pdfUrl = "{{ route('generateListPKLLulus',['angkatan' => $mahasiswa->angkatan, 'status' => 'verified']) }}";
-            const pdfUrl2 = "{{ route('PreviewListPKLLulus',['angkatan' => $mahasiswa->angkatan, 'status' => 'verified']) }}";
+            const pdfUrl = "{{ route('generateListPKLBelum',['angkatan' => $mahasiswa->angkatan, 'status' => 'pending']) }}";
+            const pdfUrl2 = "{{ route('PreviewListPKLBelum',['angkatan' => $mahasiswa->angkatan, 'status' => 'pending']) }}";
 
             const pdfViewer = document.getElementById('pdfViewer');
             const downloadLink = document.getElementById('downloadLink');
@@ -94,7 +92,7 @@
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
-                a.download = 'list_lulus_pkl.pdf';
+                a.download = 'list_belum_pkl.pdf';
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);

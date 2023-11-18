@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class DosenController extends Controller
 {
@@ -75,6 +77,40 @@ class DosenController extends Controller
         return view('RekapPKL', ['data' => $result]);
     }
 
+    public function DownloadRekapPKL(Request $request) {
+        $nip = $request->user()->dosen->nip;
+    
+        $result = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+            ->join('mahasiswa', 'mahasiswa.nip', '=', 'dosen_wali.nip')
+            ->join('pkl', 'pkl.nim', '=', 'mahasiswa.nim')
+            ->where('dosen_wali.nip', $nip)
+            ->where('pkl.nip', $nip)
+            ->select('mahasiswa.angkatan')
+            ->selectRaw('SUM(CASE WHEN pkl.statusPKL = "lulus" THEN 1 ELSE 0 END) as luluspkl')
+            ->selectRaw('SUM(CASE WHEN pkl.statusPKL = "tidak lulus" THEN 1 ELSE 0 END) as tdkluluspkl')
+            ->groupBy('mahasiswa.angkatan')
+            ->get();
+    
+        // Generate HTML view
+        $html = view('DownloadRekapPKL', ['data' => $result])->render();
+
+        // Generate PDF
+        $pdf = new Dompdf();
+        $pdf->loadHtml($html);
+
+        // (Opsional) Set konfigurasi PDF
+        $pdf->setPaper('A4', 'portrait');
+
+        // Render PDF (generate)
+        $pdf->render();
+
+        // Save PDF file
+        $pdfFileName = 'rekap_pkl_' . time() . '.pdf'; // Generate unique filename
+        $pdf->stream(storage_path('app/public/pdfs/' . $pdfFileName)); // Simpan PDF di storage
+
+        return view('DownloadRekapPKL', ['data' => $result, 'pdfFileName' => $pdfFileName]);
+    }
+
     public function RekapSkripsi(Request $request){
         $nip = $request->user()->dosen->nip;
     
@@ -92,6 +128,39 @@ class DosenController extends Controller
         return view('RekapSkripsi', ['data' => $result]);
     }
     
+    public function DownloadRekapSkripsi(Request $request) {
+        $nip = $request->user()->dosen->nip;
+    
+        $result = Dosen::join('users', 'dosen_wali.iduser', '=', 'users.id')
+            ->join('mahasiswa', 'mahasiswa.nip', '=', 'dosen_wali.nip')
+            ->join('skripsi', 'skripsi.nim', '=', 'mahasiswa.nim')
+            ->where('dosen_wali.nip', $nip)
+            ->where('skripsi.nip', $nip)
+            ->select('mahasiswa.angkatan')
+            ->selectRaw('SUM(CASE WHEN skripsi.statusSkripsi = "lulus" THEN 1 ELSE 0 END) as lulusskripsi')
+            ->selectRaw('SUM(CASE WHEN skripsi.statusSkripsi = "tidak lulus" THEN 1 ELSE 0 END) as tdklulusskripsi')
+            ->groupBy('mahasiswa.angkatan')
+            ->get();
+    
+        // Generate HTML view
+        $html = view('DownloadRekapSkripsi', ['data' => $result])->render();
+
+        // Generate PDF
+        $pdf = new Dompdf();
+        $pdf->loadHtml($html);
+
+        // (Opsional) Set konfigurasi PDF
+        $pdf->setPaper('A4', 'portrait');
+
+        // Render PDF (generate)
+        $pdf->render();
+
+        // Save PDF file
+        $pdfFileName = 'rekap_skripsi_' . time() . '.pdf'; // Generate unique filename
+        $pdf->stream(storage_path('app/public/pdfs/' . $pdfFileName)); // Simpan PDF di storage
+
+        return view('DownloadRekapSkripsi', ['data' => $result, 'pdfFileName' => $pdfFileName]);
+    }
     
     public function edit(Request $request)
     {

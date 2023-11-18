@@ -82,6 +82,10 @@ class SkripsiController extends Controller
         $skripsi->nip = $request->user()->mahasiswa->nip;
         $saved = $skripsi->save();
 
+        $cekSkripsiValue = 1; // Nilai yang akan diupdate ke 'cekPKL'
+
+
+
         if ($saved) {
             return redirect()->route('skripsi.index')->with('success', 'Skripsi added successfully');
         } else {

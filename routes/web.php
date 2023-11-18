@@ -38,13 +38,13 @@ Route::get('login', [AuthController::class,'login'])->name('login');
 Route::post('login', [AuthController::class, 'authenticate']);
 
 Route::controller(AuthController::class)->middleware('auth')->group(function(){
-    Route::get('logout', 'logout');
+    Route::get('logout', 'logout')->name('logout');
 });
 
 Route::get('dashboardMahasiswa', [DashboardMahasiswaController::class,'dashboardMahasiswa'])->middleware(['auth','only_mahasiswa','verified'])->name('dashboardMahasiswa');
 Route::get('dashboardDosen', [DashboardDosenController::class,'dashboardDosen'])->middleware(['auth','only_dosen'])->name('dashboardDosen');
 Route::get('/searchMahasiswa', [DashboardDosenController::class,'searchMahasiswa'])->middleware(['auth','only_dosen'])->name('searchMhs');
-Route::get('dashboardOperator', [DashboardOperatorController::class,'dashboardOperator'])->middleware(['auth','only_operator']);
+Route::get('dashboardOperator', [DashboardOperatorController::class,'dashboardOperator'])->middleware(['auth','only_operator'])->name('dashboardOperator');
 Route::get('dashboardDepartemen', [DashboardDepartemenController::class,'dashboardDepartemen'])->middleware(['auth','only_departemen'])->name('dashboardDepartemen');
 Route::get('daftar_akun', [UserController::class,'daftar_akun'])->middleware(['auth','only_operator']);
 
@@ -72,9 +72,20 @@ Route::middleware(['auth', 'only_dosen'])->group(function () {
     Route::get('/RekapSkripsi',[DosenController::class,'RekapSkripsi'])->name('RekapSkripsi');
 });
 
-// Route::controller(ListController::class)->middleware(['auth', 'only_departemen','verified'])->group(function () {
-//     Route::get('/list/{angkatan}/{status}', 'index')->name('list.index');
-// });
+Route::controller(ListController::class)->middleware(['auth', 'only_departemen'])->group(function () {
+    Route::get('/listMahasiswa/{angkatan}/{status}', 'index')->name('list.index');
+    Route::get('/listMahasiswaSkripsi/{angkatan}/{status}', 'skripsi')->name('list.skripsi');
+    Route::get('/listMahasiswa2/{angkatan}/{status}', 'index2')->name('list.index2'); //tidak lulus
+    Route::get('/listMahasiswaSkripsi2/{angkatan}/{status}', 'skripsi2')->name('list.skripsi2'); //tidak lulus
+    Route::get('/DownloadListPKLDepartemenLulus/{angkatan}/{status}', 'ListPDFPKLLulus')->name('generateListPKLLulus');
+    Route::get('/DownloadListPKLDepartLulus/{angkatan}/{status}','PreviewListPKLLulus')->name('PreviewListPKLLulus');
+    Route::get('/DownloadListPKLDepartemeBelum/{angkatan}/{status}', 'ListPDFPKLBelum')->name('generateListPKLBelum');
+    Route::get('/DownloadListPKLDepartBelum/{angkatan}/{status}','PreviewListPKLBelum')->name('PreviewListPKLBelum');
+    Route::get('/DownloadListSkripsiDepartemenLulus/{angkatan}/{status}', 'ListPDFSkripsiLulus')->name('generateListSkripsiLulus');
+    Route::get('/DownloadListSkripsiDepartLulus/{angkatan}/{status}','PreviewListSkripsiLulus')->name('PreviewListSkripsiLulus');
+    Route::get('/DownloadListSkripsiDepartemeBelum/{angkatan}/{status}', 'ListPDFSkripsiBelum')->name('generateListSkripsiBelum');
+    Route::get('/DownloadListSkripsiDepartBelum/{angkatan}/{status}','PreviewListSkripsiBelum')->name('PreviewListSkripsiBelum');
+});
 
 Route::controller(IRSController::class)->middleware(['auth', 'only_mahasiswa','verified'])->group(function () {
     Route::get('/irs', 'index')->name('irs.index');
@@ -124,8 +135,10 @@ Route::controller(VerifikasiController::class)->middleware(['auth','only_dosen']
 });
 
 Route::controller(DepartemenController::class)->middleware(['auth','only_departemen'])->group(function (){
-    Route::get('/listPKLDepartemen','listPKL');
-    Route::get('/listSkripsiDepartemen','listSkripsi');
-    Route::get('/RekapPKLDepartemen','RekapPKL');
-    Route::get('/RekapSkripsiDepartemen','RekapSkripsi');
+    Route::get('/RekapPKLDepartemen','RekapPKL')->name('rekapPKL');
+    Route::get('/RekapSkripsiDepartemen','RekapSkripsi')->name('rekapSkripsi');
+    Route::get('/DownloadRekapPKLDepartemen', 'RekapPDFPKL')->name('generateRekapPKL');
+    Route::get('/DownloadRekapSkripsiDepartemen', 'RekapPDFSkripsi')->name('generateRekapSkripsi');
+    Route::get('/DownloadRekapPKLDepart','PreviewPKL')->name('PreviewPKL');
+    Route::get('/DownloadRekapSkripsiDepart','PreviewSkripsi')->name('PreviewSkripsi');
 });
